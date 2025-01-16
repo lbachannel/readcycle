@@ -41,4 +41,8 @@ public class UserService {
     public boolean handleCheckExistsByEmail(String email) {
         return this.userRepository.existsByEmail(email);
     }
+
+    public User handleGetUserByUsername(String username) {
+        return this.userRepository.findByEmail(username);
+    }
 }
