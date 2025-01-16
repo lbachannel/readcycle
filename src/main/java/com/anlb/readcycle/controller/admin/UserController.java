@@ -3,7 +3,10 @@ package com.anlb.readcycle.controller.admin;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.anlb.readcycle.domain.User;
+import com.anlb.readcycle.domain.dto.RegisterDTO;
 import com.anlb.readcycle.service.UserService;
+
+import jakarta.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,8 +24,9 @@ public class UserController {
     }
 
     @PostMapping("/users")
-    public ResponseEntity<User> createNewUser(@RequestBody User reqUser) {
-        User newUser = this.userService.handleCreateUser(reqUser);
+    public ResponseEntity<User> createNewUser(@Valid @RequestBody RegisterDTO registerDTO) {
+        User newUser = this.userService.registerDTOtoUser(registerDTO);
+        this.userService.handleCreateUser(newUser);
         return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
     }
     
