@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.anlb.readcycle.domain.User;
 import com.anlb.readcycle.domain.dto.RegisterDTO;
@@ -11,6 +12,7 @@ import com.anlb.readcycle.repository.UserRepository;
 import com.anlb.readcycle.utils.exception.RegisterValidator;
 
 @Service
+@Transactional
 public class UserService {
     private final UserRepository userRepository;
 
