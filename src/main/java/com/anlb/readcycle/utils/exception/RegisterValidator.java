@@ -134,12 +134,14 @@ public class RegisterValidator implements ConstraintValidator<RegisterChecked, R
             valid = false;
         }
 
-        if (user.getPassword().length() <= 2) {
-            context.buildConstraintViolationWithTemplate("Password must be greater or equal 3")
-                    .addPropertyNode("password")
-                    .addConstraintViolation()
-                    .disableDefaultConstraintViolation();
-            valid = false;
+        if (valid) {
+            if (user.getPassword().length() <= 2) {
+                context.buildConstraintViolationWithTemplate("Password must be greater or equal 3")
+                        .addPropertyNode("password")
+                        .addConstraintViolation()
+                        .disableDefaultConstraintViolation();
+                valid = false;
+            }
         }
 
         // validation confirm password
@@ -151,12 +153,14 @@ public class RegisterValidator implements ConstraintValidator<RegisterChecked, R
             valid = false;
         }
 
-        if (user.getConfirmPassword().length() <= 2) {
-            context.buildConstraintViolationWithTemplate("Confirm password must be greater or equal 3")
-                    .addPropertyNode("confirmPassword")
-                    .addConstraintViolation()
-                    .disableDefaultConstraintViolation();
-            valid = false;
+        if (valid) {
+            if (user.getConfirmPassword().length() <= 2) {
+                context.buildConstraintViolationWithTemplate("Confirm password must be greater or equal 3")
+                        .addPropertyNode("confirmPassword")
+                        .addConstraintViolation()
+                        .disableDefaultConstraintViolation();
+                valid = false;
+            }
         }
 
         // compare password and confirm-password
