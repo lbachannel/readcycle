@@ -25,93 +25,70 @@ public class RegisterValidator implements ConstraintValidator<RegisterChecked, R
         boolean valid = true;
 
         // validation first name
-        if (user.getFirstName() == "") {
+        if (user.getFirstName().isEmpty()) {
             context.buildConstraintViolationWithTemplate("First name is required")
+                    .addPropertyNode("firstName")
+                    .addConstraintViolation()
+                    .disableDefaultConstraintViolation();
+            valid = false;
+        } else if (user.getFirstName().length() <= 1) {
+            context.buildConstraintViolationWithTemplate("First name must be greater than 1")
                     .addPropertyNode("firstName")
                     .addConstraintViolation()
                     .disableDefaultConstraintViolation();
             valid = false;
         }
 
-        if (valid) {
-            if (user.getFirstName().length() <= 1) {
-                context.buildConstraintViolationWithTemplate("First name must be greater than 1")
-                        .addPropertyNode("firstName")
-                        .addConstraintViolation()
-                        .disableDefaultConstraintViolation();
-                valid = false;
-            }
-        }
-
         // validation last name
-        if (user.getLastName() == "") {
+        if (user.getLastName().isEmpty()) {
             context.buildConstraintViolationWithTemplate("Last name is required")
+                    .addPropertyNode("lastName")
+                    .addConstraintViolation()
+                    .disableDefaultConstraintViolation();
+            valid = false;
+        } else if (user.getLastName().length() <= 1) {
+            context.buildConstraintViolationWithTemplate("Last name must be greater than 1")
                     .addPropertyNode("lastName")
                     .addConstraintViolation()
                     .disableDefaultConstraintViolation();
             valid = false;
         }
 
-        if (valid) {
-            if (user.getLastName().length() <= 1) {
-                context.buildConstraintViolationWithTemplate("Last name must be greater than 1")
-                        .addPropertyNode("lastName")
-                        .addConstraintViolation()
-                        .disableDefaultConstraintViolation();
-                valid = false;
-            }
-        }
-
         // validation email
-        if (user.getEmail() == "") {
+        if (user.getEmail().isEmpty()) {
             context.buildConstraintViolationWithTemplate("Email is required")
+                    .addPropertyNode("email")
+                    .addConstraintViolation()
+                    .disableDefaultConstraintViolation();
+            valid = false;
+        } else if (!(user.getEmail().matches("^[a-z]{4,}@[a-z0-9.-]+\\.[a-z]{2,}$"))) {
+            context.buildConstraintViolationWithTemplate("Invalid email format")
+                    .addPropertyNode("email")
+                    .addConstraintViolation()
+                    .disableDefaultConstraintViolation();
+            valid = false;
+        } else if (this.userService.handleCheckExistsByEmail(user.getEmail())) {
+            context.buildConstraintViolationWithTemplate("Email already exists")
                     .addPropertyNode("email")
                     .addConstraintViolation()
                     .disableDefaultConstraintViolation();
             valid = false;
         }
 
-        if (valid) {
-            if (!(user.getEmail().matches("^[a-z]{4,}@[a-z0-9.-]+\\.[a-z]{2,}$"))) {
-                context.buildConstraintViolationWithTemplate("Invalid email format")
-                        .addPropertyNode("email")
-                        .addConstraintViolation()
-                        .disableDefaultConstraintViolation();
-                valid = false;
-            }
-        }
-
-        if (valid) {
-            if (this.userService.handleCheckExistsByEmail(user.getEmail())) {
-                context.buildConstraintViolationWithTemplate("Email already exist")
-                        .addPropertyNode("email")
-                        .addConstraintViolation()
-                        .disableDefaultConstraintViolation();
-                valid = false;
-            }
-        }
-
         // validation date of birth
-        if (user.getDateOfBirth() == null) {
+        if (user.getDateOfBirth().isEmpty()) {
             context.buildConstraintViolationWithTemplate("Date of birth is required")
                     .addPropertyNode("dateOfBirth")
                     .addConstraintViolation()
                     .disableDefaultConstraintViolation();
             valid = false;
-        }
-
-        if (valid) {
-            boolean checkDateOfBirth = isValidDateFormat(user.getDateOfBirth());
-            if (!checkDateOfBirth) {
-                context.buildConstraintViolationWithTemplate("Invalid date of birth format")
+        } else if (!isValidDateFormat(user.getDateOfBirth())) {
+            context.buildConstraintViolationWithTemplate("Invalid date of birth format")
                     .addPropertyNode("dateOfBirth")
                     .addConstraintViolation()
                     .disableDefaultConstraintViolation();
-                valid = false;
-            }
-        }
-
-        if (valid) {
+            valid = false;
+        } else {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             LocalDate yob = LocalDate.parse(user.getDateOfBirth(), formatter);
             LocalDate today = LocalDate.now();
@@ -126,17 +103,39 @@ public class RegisterValidator implements ConstraintValidator<RegisterChecked, R
         }
 
         // validation password
-        if (user.getPassword() == "") {
+        if (user.getPassword().isEmpty()) {
             context.buildConstraintViolationWithTemplate("Password is required")
+                    .addPropertyNode("password")
+                    .addConstraintViolation()
+                    .disableDefaultConstraintViolation();
+            valid = false;
+        } else if (user.getPassword().length() <= 2) {
+            context.buildConstraintViolationWithTemplate("Password must be greater than or equal to 3")
                     .addPropertyNode("password")
                     .addConstraintViolation()
                     .disableDefaultConstraintViolation();
             valid = false;
         }
 
+        // validation confirm password
+        if (user.getConfirmPassword().isEmpty()) {
+            context.buildConstraintViolationWithTemplate("Confirm password is required")
+                    .addPropertyNode("confirmPassword")
+                    .addConstraintViolation()
+                    .disableDefaultConstraintViolation();
+            valid = false;
+        } else if (user.getConfirmPassword().length() <= 2) {
+            context.buildConstraintViolationWithTemplate("Confirm password must be greater than or equal to 3")
+                    .addPropertyNode("confirmPassword")
+                    .addConstraintViolation()
+                    .disableDefaultConstraintViolation();
+            valid = false;
+        }
+
+        // compare password and confirm-password
         if (valid) {
-            if (user.getPassword().length() <= 2) {
-                context.buildConstraintViolationWithTemplate("Password must be greater or equal 3")
+            if (!user.getPassword().equals(user.getConfirmPassword())) {
+                context.buildConstraintViolationWithTemplate("Incorrect password, please check again")
                         .addPropertyNode("password")
                         .addConstraintViolation()
                         .disableDefaultConstraintViolation();
@@ -144,39 +143,9 @@ public class RegisterValidator implements ConstraintValidator<RegisterChecked, R
             }
         }
 
-        // validation confirm password
-        if (user.getConfirmPassword() == "") {
-            context.buildConstraintViolationWithTemplate("Confirm password is required")
-                    .addPropertyNode("confirmPassword")
-                    .addConstraintViolation()
-                    .disableDefaultConstraintViolation();
-            valid = false;
-        }
-
-        if (valid) {
-            if (user.getConfirmPassword().length() <= 2) {
-                context.buildConstraintViolationWithTemplate("Confirm password must be greater or equal 3")
-                        .addPropertyNode("confirmPassword")
-                        .addConstraintViolation()
-                        .disableDefaultConstraintViolation();
-                valid = false;
-            }
-        }
-
-        // compare password and confirm-password
-        if (valid) {
-            if (!user.getPassword().equals(user.getConfirmPassword())) {
-                context.buildConstraintViolationWithTemplate("Incorrect password, please check again")
-                        .addPropertyNode("confirmPassword")
-                        .addConstraintViolation()
-                        .disableDefaultConstraintViolation();
-                valid = false;
-            }
-        }
-        
         return valid;
     }
-    
+
     public static boolean isValidDateFormat(String date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         try {

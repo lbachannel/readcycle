@@ -28,7 +28,7 @@ public class GlobalExceptionHandler {
         List<String> errors = fieldErrors.stream()
                                 .map(f -> f.getDefaultMessage())
                                 .collect(Collectors.toList());
-        res.setMessage(errors.size() > 1 ? errors : errors.get(0));
+        res.setMessage(errors);
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
     }
