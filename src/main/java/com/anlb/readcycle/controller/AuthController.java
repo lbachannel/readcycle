@@ -1,5 +1,7 @@
 package com.anlb.readcycle.controller;
 
+import java.net.URI;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -7,9 +9,11 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.anlb.readcycle.domain.User;
@@ -55,6 +59,22 @@ public class AuthController {
         // send email
         this.emailService.sendEmailFromTemplateSync(newUser, "ReadCycle - Verify your email", "verify-email");
         return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
+    }
+
+    @GetMapping("/auth/verify-email")
+    public ResponseEntity<Void> verifyEmail(@RequestParam("token") String token) {
+        if (!this.userService.validateToken(token)) {
+            return ResponseEntity
+                .status(HttpStatus.FOUND)
+                .location(URI.create("http://127.0.0.1:5500/verify-email-failed.html"))
+                .build();
+        }
+        
+        this.userService.handleVerifyEmail(token);
+        return ResponseEntity
+            .status(HttpStatus.FOUND)
+            .location(URI.create("http://127.0.0.1:5500/verify-email-success.html"))
+            .build();
     }
 
     @PostMapping("/login")

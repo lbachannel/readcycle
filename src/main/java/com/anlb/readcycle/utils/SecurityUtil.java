@@ -14,7 +14,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class SecurityUtil {
+
     public static final MacAlgorithm JWT_ALGORITHM = MacAlgorithm.HS512;
+
     private final JwtEncoder jwtEncoder;
 
     public SecurityUtil(JwtEncoder jwtEncoder) {
@@ -32,7 +34,7 @@ public class SecurityUtil {
                 .issuedAt(now)
                 .expiresAt(validity)
                 .subject(email)
-                .claim("user", email)
+                .claim("email", email)
                 .build();
         JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITHM).build();
         return this.jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).getTokenValue();

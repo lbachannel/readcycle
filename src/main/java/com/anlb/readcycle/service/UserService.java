@@ -1,8 +1,12 @@
 package com.anlb.readcycle.service;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,11 +21,14 @@ import com.anlb.readcycle.utils.exception.RegisterValidator;
 public class UserService {
     private final UserRepository userRepository;
     private final SecurityUtil securityUtil;
+    private final JwtDecoder jwtDecoder;
 
     public UserService(UserRepository userRepository,
-                        SecurityUtil securityUtil) {
+                        SecurityUtil securityUtil,
+                        JwtDecoder jwtDecoder) {
         this.userRepository = userRepository;
         this.securityUtil = securityUtil;
+        this.jwtDecoder = jwtDecoder;
     }
 
     // mapper DTO -> User
@@ -51,5 +58,25 @@ public class UserService {
 
     public User handleGetUserByUsername(String username) {
         return this.userRepository.findByEmail(username);
+    }
+
+    public User handleVerifyEmail(String token) {
+        User user = this.userRepository.findByVerificationEmailToken(token).get();
+        user.setEmailVerified(true);
+        user.setVerificationEmailToken(null);
+        return this.userRepository.save(user);
+    }
+
+    public boolean validateToken(String token) {
+        try {
+            Jwt jwt = jwtDecoder.decode(token);
+            Instant expirationTime = jwt.getExpiresAt();
+            if (expirationTime.isBefore(Instant.now())) {
+                return false;
+            }
+            return true;
+        } catch (JwtException e) {
+            return false;
+        }
     }
 }
