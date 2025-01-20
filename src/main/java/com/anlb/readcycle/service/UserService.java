@@ -9,15 +9,19 @@ import org.springframework.transaction.annotation.Transactional;
 import com.anlb.readcycle.domain.User;
 import com.anlb.readcycle.domain.dto.RegisterDTO;
 import com.anlb.readcycle.repository.UserRepository;
+import com.anlb.readcycle.utils.SecurityUtil;
 import com.anlb.readcycle.utils.exception.RegisterValidator;
 
 @Service
 @Transactional
 public class UserService {
     private final UserRepository userRepository;
+    private final SecurityUtil securityUtil;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository,
+                        SecurityUtil securityUtil) {
         this.userRepository = userRepository;
+        this.securityUtil = securityUtil;
     }
 
     // mapper DTO -> User
@@ -35,6 +39,9 @@ public class UserService {
     }
 
     public User handleCreateUser(User user) {
+        String verifyEmailToken = this.securityUtil.createVerifyEmailToken(user.getEmail());
+        user.setEmailVerified(false);
+        user.setVerificationEmailToken(verifyEmailToken);
         return this.userRepository.save(user);
     }
 

@@ -2,6 +2,7 @@ package com.anlb.readcycle.domain;
 
 import java.time.LocalDate;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,4 +21,9 @@ public class User {
     private String email;
     private String password;
     private LocalDate dateOfBirth;
+
+    private boolean emailVerified;
+
+    @Column(columnDefinition = "MEDIUMTEXT")
+    private String verificationEmailToken;
 }
