@@ -30,6 +30,9 @@ public class FormatResultResponse implements ResponseBodyAdvice<Object> {
 
         ResultResponse<Object> restResponse = new ResultResponse<>();
         restResponse.setStatusCode(status);
+        if (body instanceof String) {
+            return body;
+        }
         if (status >= 400) {
             return body;
         }
