@@ -38,7 +38,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
                                 .orElse(authException.getMessage());
 
         res.setError(errorMessage);
-        res.setMessage("JWT error: An error occurred while attempting to decode the Jwt: Malformed token");
+        res.setMessage("Bad credentials");
         mapper.writeValue(response.getWriter(), res);
     }
 }

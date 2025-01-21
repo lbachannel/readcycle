@@ -32,4 +32,16 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
     }
+
+    // handle verify email exception
+    @ExceptionHandler(value = {
+        InvalidException.class
+    })
+    public ResponseEntity<ResultResponse<Object>> handleInvalidException(Exception ex) {
+        ResultResponse<Object> response = new ResultResponse<Object>();
+        response.setStatusCode(HttpStatus.UNAUTHORIZED.value());
+        response.setError(ex.getMessage());
+        response.setMessage(ex.getMessage());
+        return ResponseEntity.badRequest().body(response);
+    }
 }

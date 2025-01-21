@@ -24,6 +24,7 @@ import com.anlb.readcycle.domain.response.LoginResponse.UserLogin;
 import com.anlb.readcycle.service.EmailService;
 import com.anlb.readcycle.service.UserService;
 import com.anlb.readcycle.utils.SecurityUtil;
+import com.anlb.readcycle.utils.exception.InvalidException;
 
 import jakarta.validation.Valid;
 
@@ -81,7 +82,15 @@ public class AuthController {
     }
 
     @PostMapping("/auth/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginDTO loginDTO) {
+    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginDTO loginDTO) throws InvalidException {
+        User dbUser = this.userService.handleGetUserByUsername(loginDTO.getUsername());
+        if (dbUser == null) {
+            throw new InvalidException("Bad credentials");
+        }
+
+        if (!dbUser.isEmailVerified()) {
+            throw new InvalidException("Your account has not been verified");
+        }
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginDTO.getUsername(), loginDTO.getPassword());
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
@@ -90,7 +99,6 @@ public class AuthController {
         LoginResponse response = new LoginResponse();
         // response user info
         UserLogin user = response.new UserLogin();
-        User dbUser = this.userService.handleGetUserByUsername(loginDTO.getUsername());
         user.setId(dbUser.getId());
         user.setEmail(dbUser.getEmail());
         user.setName(dbUser.getName());
@@ -98,5 +106,6 @@ public class AuthController {
         // response access-token
         response.setAccessToken(accessToken);
         return ResponseEntity.ok().body(response);
+
     }
 }
