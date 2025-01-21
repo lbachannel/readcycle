@@ -20,6 +20,7 @@ import com.anlb.readcycle.domain.User;
 import com.anlb.readcycle.domain.dto.LoginDTO;
 import com.anlb.readcycle.domain.dto.RegisterDTO;
 import com.anlb.readcycle.domain.response.LoginResponse;
+import com.anlb.readcycle.domain.response.LoginResponse.UserLogin;
 import com.anlb.readcycle.service.EmailService;
 import com.anlb.readcycle.service.UserService;
 import com.anlb.readcycle.utils.SecurityUtil;
@@ -79,7 +80,7 @@ public class AuthController {
             .build();
     }
 
-    @PostMapping("/login")
+    @PostMapping("/auth/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginDTO loginDTO) {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginDTO.getUsername(), loginDTO.getPassword());
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
@@ -87,6 +88,14 @@ public class AuthController {
         String accessToken = this.securityUtil.createToken(authentication);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         LoginResponse response = new LoginResponse();
+        // response user info
+        UserLogin user = response.new UserLogin();
+        User dbUser = this.userService.handleGetUserByUsername(loginDTO.getUsername());
+        user.setId(dbUser.getId());
+        user.setEmail(dbUser.getEmail());
+        user.setName(dbUser.getName());
+        response.setUser(user);
+        // response access-token
         response.setAccessToken(accessToken);
         return ResponseEntity.ok().body(response);
     }
