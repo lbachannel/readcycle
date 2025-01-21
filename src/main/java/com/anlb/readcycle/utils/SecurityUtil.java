@@ -14,11 +14,30 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class SecurityUtil {
+
     public static final MacAlgorithm JWT_ALGORITHM = MacAlgorithm.HS512;
+
     private final JwtEncoder jwtEncoder;
 
     public SecurityUtil(JwtEncoder jwtEncoder) {
         this.jwtEncoder = jwtEncoder;
+    }
+
+    // verify email
+    @Value("${anlb.jwt.verify-email-token-validity-in-seconds}")
+    private long verifyEmailExpired;
+    public String createVerifyEmailToken(String email) {
+        Instant now = Instant.now();
+        Instant validity = now.plus(this.verifyEmailExpired, ChronoUnit.SECONDS);
+
+        JwtClaimsSet claims = JwtClaimsSet.builder()
+                .issuedAt(now)
+                .expiresAt(validity)
+                .subject(email)
+                .claim("email", email)
+                .build();
+        JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITHM).build();
+        return this.jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).getTokenValue();
     }
 
     @Value("${anlb.jwt.token-validity-in-seconds}")
