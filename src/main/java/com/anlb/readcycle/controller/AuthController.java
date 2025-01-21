@@ -12,6 +12,8 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -100,8 +102,6 @@ public class AuthController {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginDTO.getUsername(), loginDTO.getPassword());
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
-        // create access token
-        String accessToken = this.securityUtil.createAccessToken(authentication);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         LoginResponse response = new LoginResponse();
         // response user info
@@ -110,6 +110,9 @@ public class AuthController {
         user.setEmail(dbUser.getEmail());
         user.setName(dbUser.getName());
         response.setUser(user);
+
+        // create access token
+        String accessToken = this.securityUtil.createAccessToken(authentication.getName(), response.getUser());
         // response access-token
         response.setAccessToken(accessToken);
 
@@ -136,6 +139,94 @@ public class AuthController {
                     .ok()
                     .header(HttpHeaders.SET_COOKIE, responseCookie.toString())
                     .body(response);
+
+    }
+
+    // get account (f5 - refresh page)
+    @GetMapping("/auth/account")
+    public ResponseEntity<LoginResponse.UserLogin> getAccount() {
+        String email = SecurityUtil.getCurrentUserLogin().isPresent()
+                       ? SecurityUtil.getCurrentUserLogin().get() : "";
+        User dbUser = this.userService.handleGetUserByUsername(email);
+        LoginResponse response = new LoginResponse();
+        UserLogin userLogin = response.new UserLogin();
+        if (dbUser != null) {
+            userLogin.setId(dbUser.getId());
+            userLogin.setEmail(dbUser.getEmail());
+            userLogin.setName(dbUser.getName());
+        }
+        return ResponseEntity.ok().body(userLogin);
+    }
+
+    // get refresh token in db
+    @GetMapping("/auth/refresh")
+    public ResponseEntity<LoginResponse> getRefreshToken(@CookieValue(name = "refresh_token") String refresh_token) throws InvalidException {
+        // decode check token is real or fake
+        Jwt decodedToken = this.securityUtil.checkValidRefreshToken(refresh_token);
+        String email = decodedToken.getSubject();
+
+        // check user by token and email
+        User dbUser = this.userService.handleGetUserByRefreshTokenAndEmail(refresh_token, email);
+        if (dbUser == null) {
+            throw new InvalidException("Refresh token is not valid");
+        }
+
+        // issue new token/set refresh token as cookies
+        LoginResponse response = new LoginResponse();
+        User dbUser2 = this.userService.handleGetUserByUsername(email);
+        if(dbUser2 != null) {
+            LoginResponse.UserLogin userLogin = response.new UserLogin(dbUser2.getId(), dbUser2.getEmail(), dbUser2.getName());
+            response.setUser(userLogin);
+        }
+        UserLogin userLogin = response.new UserLogin();
+
+        // create access token
+        String access_token = this.securityUtil.createAccessToken(email, userLogin);
+        response.setAccessToken(access_token);
+
+        // create refresh token
+        String new_refresh_token = this.securityUtil.createRefreshToken(email, response);
+
+        // update user
+        this.userService.handleUpdateRefreshTokenIntoUser(new_refresh_token, email);
+        // set cookies
+        ResponseCookie responseCookie = ResponseCookie
+                                                .from("refresh_token", new_refresh_token)
+                                                .httpOnly(true)
+                                                .secure(true)
+                                                .path("/")
+                                                .maxAge(refreshTokenExpired)
+                                                .build();
+
+        return ResponseEntity
+                        .ok()
+                        .header(HttpHeaders.SET_COOKIE, responseCookie.toString())
+                        .body(response);
+    }
+
+    @PostMapping("/auth/logout")
+    public ResponseEntity<Void> logout() throws InvalidException {
+        String email = SecurityUtil.getCurrentUserLogin().isPresent()
+                        ? SecurityUtil.getCurrentUserLogin().get() : "";
+        if (email.equals("")) {
+            throw new InvalidException("Access Token invalid");
+        }
+
+        // update refresh token = null
+        this.userService.handleUpdateRefreshTokenIntoUser(null, email);
+
+        // remove refresh token cookie
+        ResponseCookie deletResponseCookie = ResponseCookie
+                        .from("refresh_token", null)
+                        .httpOnly(true)
+                        .secure(true)
+                        .path("/")
+                        .maxAge(0)
+                        .build();
+        return ResponseEntity
+                    .ok()
+                    .header(HttpHeaders.SET_COOKIE, deletResponseCookie.toString())
+                    .body(null);
 
     }
 }
