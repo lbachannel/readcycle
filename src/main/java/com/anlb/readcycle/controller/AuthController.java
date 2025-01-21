@@ -2,7 +2,10 @@ package com.anlb.readcycle.controller;
 
 import java.net.URI;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -36,6 +39,9 @@ public class AuthController {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
+
+    @Value("${anlb.jwt.refresh-token-validity-in-seconds}")
+    private long refreshTokenExpired;
 
     public AuthController(AuthenticationManagerBuilder authenticationManagerBuilder, 
                         SecurityUtil securityUtil,
@@ -94,7 +100,8 @@ public class AuthController {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginDTO.getUsername(), loginDTO.getPassword());
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
-        String accessToken = this.securityUtil.createToken(authentication);
+        // create access token
+        String accessToken = this.securityUtil.createAccessToken(authentication);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         LoginResponse response = new LoginResponse();
         // response user info
@@ -105,7 +112,30 @@ public class AuthController {
         response.setUser(user);
         // response access-token
         response.setAccessToken(accessToken);
-        return ResponseEntity.ok().body(response);
+
+        // create refresh token
+        String refreshToken = this.securityUtil.createRefreshToken(loginDTO.getUsername(), response);
+        // save refresh token into user
+        this.userService.handleUpdateRefreshTokenIntoUser(refreshToken, loginDTO.getUsername());
+
+        /**
+         * set cookies
+         * .httpOnly(true): only server can use
+         * .secure(true): cookies only use with https. for localhost it has no effect
+         * .path("/"): allow all api using cookies
+         * .maxAge(60): cookies expiration time. defaullt is session 
+         * .domain(): my website url
+         */
+        ResponseCookie responseCookie = ResponseCookie
+                                                .from("refresh_token", refreshToken)
+                                                .httpOnly(true)
+                                                .path("/")
+                                                .maxAge(refreshTokenExpired)
+                                                .build();
+        return ResponseEntity
+                    .ok()
+                    .header(HttpHeaders.SET_COOKIE, responseCookie.toString())
+                    .body(response);
 
     }
 }

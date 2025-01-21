@@ -21,6 +21,8 @@ public class User {
     private String email;
     private String password;
     private LocalDate dateOfBirth;
+    @Column(columnDefinition = "MEDIUMTEXT")
+    private String refreshToken;
 
     private boolean emailVerified;
 
