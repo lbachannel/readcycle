@@ -79,4 +79,17 @@ public class UserService {
             return false;
         }
     }
+
+    public String extractEmailFromToken(String token) {
+        try {
+            Jwt jwt = jwtDecoder.decode(token);
+            return jwt.getClaimAsString("email");
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public void handleDeleteUserByEmail(String email) {
+        this.userRepository.deleteByEmail(email);
+    }
 }

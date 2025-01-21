@@ -64,6 +64,8 @@ public class AuthController {
     @GetMapping("/auth/verify-email")
     public ResponseEntity<Void> verifyEmail(@RequestParam("token") String token) {
         if (!this.userService.validateToken(token)) {
+            String email = this.userService.extractEmailFromToken(token);
+            this.userService.handleDeleteUserByEmail(email);
             return ResponseEntity
                 .status(HttpStatus.FOUND)
                 .location(URI.create("http://127.0.0.1:5500/verify-email-failed.html"))
