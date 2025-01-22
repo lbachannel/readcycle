@@ -25,6 +25,7 @@ import com.anlb.readcycle.domain.User;
 import com.anlb.readcycle.domain.dto.LoginDTO;
 import com.anlb.readcycle.domain.dto.RegisterDTO;
 import com.anlb.readcycle.domain.response.LoginResponse;
+import com.anlb.readcycle.domain.response.LoginResponse.UserGetAccount;
 import com.anlb.readcycle.domain.response.LoginResponse.UserLogin;
 import com.anlb.readcycle.service.EmailService;
 import com.anlb.readcycle.service.UserService;
@@ -144,18 +145,20 @@ public class AuthController {
 
     // get account (f5 - refresh page)
     @GetMapping("/auth/account")
-    public ResponseEntity<LoginResponse.UserLogin> getAccount() {
+    public ResponseEntity<LoginResponse.UserGetAccount> getAccount() {
         String email = SecurityUtil.getCurrentUserLogin().isPresent()
                        ? SecurityUtil.getCurrentUserLogin().get() : "";
         User dbUser = this.userService.handleGetUserByUsername(email);
         LoginResponse response = new LoginResponse();
         UserLogin userLogin = response.new UserLogin();
+        UserGetAccount userGetAccount = new UserGetAccount();
         if (dbUser != null) {
             userLogin.setId(dbUser.getId());
             userLogin.setEmail(dbUser.getEmail());
             userLogin.setName(dbUser.getName());
+            userGetAccount.setUser(userLogin);
         }
-        return ResponseEntity.ok().body(userLogin);
+        return ResponseEntity.ok().body(userGetAccount);
     }
 
     // get refresh token in db

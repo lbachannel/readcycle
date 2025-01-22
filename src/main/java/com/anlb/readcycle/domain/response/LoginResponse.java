@@ -17,4 +17,11 @@ public class LoginResponse {
         private String email;
         private String name;
     }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class UserGetAccount {
+        private UserLogin user;
+    }
 }
