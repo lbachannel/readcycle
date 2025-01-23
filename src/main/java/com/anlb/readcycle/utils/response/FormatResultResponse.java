@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import com.anlb.readcycle.domain.response.ResultResponse;
+import com.anlb.readcycle.utils.anotation.ApiMessage;
 
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -36,8 +37,9 @@ public class FormatResultResponse implements ResponseBodyAdvice<Object> {
         if (status >= 400) {
             return body;
         }
-        restResponse.setMessage("Call API successfully!");
         restResponse.setData(body);
+        ApiMessage message = returnType.getMethodAnnotation(ApiMessage.class);
+        restResponse.setMessage(message != null ? message.value() : "Call API successfully!");
         return restResponse;
     }
     

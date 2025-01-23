@@ -30,6 +30,7 @@ import com.anlb.readcycle.domain.response.LoginResponse.UserLogin;
 import com.anlb.readcycle.service.EmailService;
 import com.anlb.readcycle.service.UserService;
 import com.anlb.readcycle.utils.SecurityUtil;
+import com.anlb.readcycle.utils.anotation.ApiMessage;
 import com.anlb.readcycle.utils.exception.InvalidException;
 
 import jakarta.validation.Valid;
@@ -59,6 +60,7 @@ public class AuthController {
     }
 
     @PostMapping("/auth/register")
+    @ApiMessage("Register account")
     public ResponseEntity<User> createNewUser(@Valid @RequestBody RegisterDTO registerDTO) {
         // hash password
         String hashPassword = this.passwordEncoder.encode(registerDTO.getPassword());
@@ -91,6 +93,7 @@ public class AuthController {
     }
 
     @PostMapping("/auth/login")
+    @ApiMessage("Login")
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginDTO loginDTO) throws InvalidException {
         User dbUser = this.userService.handleGetUserByUsername(loginDTO.getUsername());
         if (dbUser == null) {
@@ -145,6 +148,7 @@ public class AuthController {
 
     // get account (f5 - refresh page)
     @GetMapping("/auth/account")
+    @ApiMessage("Get current user login")
     public ResponseEntity<LoginResponse.UserGetAccount> getAccount() {
         String email = SecurityUtil.getCurrentUserLogin().isPresent()
                        ? SecurityUtil.getCurrentUserLogin().get() : "";
@@ -163,6 +167,7 @@ public class AuthController {
 
     // get refresh token in db
     @GetMapping("/auth/refresh")
+    @ApiMessage("Get refresh token")
     public ResponseEntity<LoginResponse> getRefreshToken(@CookieValue(name = "refresh_token") String refresh_token) throws InvalidException {
         // decode check token is real or fake
         Jwt decodedToken = this.securityUtil.checkValidRefreshToken(refresh_token);
