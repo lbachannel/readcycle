@@ -1,9 +1,9 @@
-package com.anlb.readcycle.domain.response;
+package com.anlb.readcycle.domain.dto.response;
 
 import lombok.Data;
 
 @Data
-public class ResultResponse<T> {
+public class ResultResponseDTO<T> {
     private int statusCode;
     private String error;
 

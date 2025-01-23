@@ -22,11 +22,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.anlb.readcycle.domain.User;
-import com.anlb.readcycle.domain.dto.LoginDTO;
-import com.anlb.readcycle.domain.dto.RegisterDTO;
-import com.anlb.readcycle.domain.response.LoginResponse;
-import com.anlb.readcycle.domain.response.LoginResponse.UserGetAccount;
-import com.anlb.readcycle.domain.response.LoginResponse.UserLogin;
+import com.anlb.readcycle.domain.dto.request.LoginRequestDTO;
+import com.anlb.readcycle.domain.dto.request.RegisterRequestDTO;
+import com.anlb.readcycle.domain.dto.response.LoginResponseDTO;
+import com.anlb.readcycle.domain.dto.response.LoginResponseDTO.UserGetAccount;
+import com.anlb.readcycle.domain.dto.response.LoginResponseDTO.UserLogin;
 import com.anlb.readcycle.service.EmailService;
 import com.anlb.readcycle.service.UserService;
 import com.anlb.readcycle.utils.SecurityUtil;
@@ -61,7 +61,7 @@ public class AuthController {
 
     @PostMapping("/auth/register")
     @ApiMessage("Register account")
-    public ResponseEntity<User> createNewUser(@Valid @RequestBody RegisterDTO registerDTO) {
+    public ResponseEntity<User> createNewUser(@Valid @RequestBody RegisterRequestDTO registerDTO) {
         // hash password
         String hashPassword = this.passwordEncoder.encode(registerDTO.getPassword());
         registerDTO.setPassword(hashPassword);
@@ -94,7 +94,7 @@ public class AuthController {
 
     @PostMapping("/auth/login")
     @ApiMessage("Login")
-    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginDTO loginDTO) throws InvalidException {
+    public ResponseEntity<LoginResponseDTO> login(@Valid @RequestBody LoginRequestDTO loginDTO) throws InvalidException {
         User dbUser = this.userService.handleGetUserByUsername(loginDTO.getUsername());
         if (dbUser == null) {
             throw new InvalidException("Bad credentials");
@@ -107,7 +107,7 @@ public class AuthController {
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        LoginResponse response = new LoginResponse();
+        LoginResponseDTO response = new LoginResponseDTO();
         // response user info
         UserLogin user = response.new UserLogin();
         user.setId(dbUser.getId());
@@ -149,11 +149,11 @@ public class AuthController {
     // get account (f5 - refresh page)
     @GetMapping("/auth/account")
     @ApiMessage("Get current user login")
-    public ResponseEntity<LoginResponse.UserGetAccount> getAccount() {
+    public ResponseEntity<LoginResponseDTO.UserGetAccount> getAccount() {
         String email = SecurityUtil.getCurrentUserLogin().isPresent()
                        ? SecurityUtil.getCurrentUserLogin().get() : "";
         User dbUser = this.userService.handleGetUserByUsername(email);
-        LoginResponse response = new LoginResponse();
+        LoginResponseDTO response = new LoginResponseDTO();
         UserLogin userLogin = response.new UserLogin();
         UserGetAccount userGetAccount = new UserGetAccount();
         if (dbUser != null) {
@@ -168,7 +168,7 @@ public class AuthController {
     // get refresh token in db
     @GetMapping("/auth/refresh")
     @ApiMessage("Get refresh token")
-    public ResponseEntity<LoginResponse> getRefreshToken(@CookieValue(name = "refresh_token") String refresh_token) throws InvalidException {
+    public ResponseEntity<LoginResponseDTO> getRefreshToken(@CookieValue(name = "refresh_token") String refresh_token) throws InvalidException {
         // decode check token is real or fake
         Jwt decodedToken = this.securityUtil.checkValidRefreshToken(refresh_token);
         String email = decodedToken.getSubject();
@@ -180,10 +180,10 @@ public class AuthController {
         }
 
         // issue new token/set refresh token as cookies
-        LoginResponse response = new LoginResponse();
+        LoginResponseDTO response = new LoginResponseDTO();
         User dbUser2 = this.userService.handleGetUserByUsername(email);
         if(dbUser2 != null) {
-            LoginResponse.UserLogin userLogin = response.new UserLogin(dbUser2.getId(), dbUser2.getEmail(), dbUser2.getName());
+            LoginResponseDTO.UserLogin userLogin = response.new UserLogin(dbUser2.getId(), dbUser2.getEmail(), dbUser2.getName());
             response.setUser(userLogin);
         }
         UserLogin userLogin = response.new UserLogin();

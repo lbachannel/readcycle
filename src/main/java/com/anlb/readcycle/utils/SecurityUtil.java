@@ -21,7 +21,7 @@ import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.stereotype.Service;
 
-import com.anlb.readcycle.domain.response.LoginResponse;
+import com.anlb.readcycle.domain.dto.response.LoginResponseDTO;
 import com.nimbusds.jose.util.Base64;
 
 @Service
@@ -56,7 +56,7 @@ public class SecurityUtil {
     @Value("${anlb.jwt.access-token-validity-in-seconds}")
     private long accessTokenExpired;
 
-    public String createAccessToken(String email, LoginResponse.UserLogin user) {
+    public String createAccessToken(String email, LoginResponseDTO.UserLogin user) {
         Instant now = Instant.now();
         Instant validity = now.plus(this.accessTokenExpired, ChronoUnit.SECONDS);
 
@@ -74,7 +74,7 @@ public class SecurityUtil {
     @Value("${anlb.jwt.refresh-token-validity-in-seconds}")
     private long refreshTokenExpired;
 
-    public String createRefreshToken(String email, LoginResponse loginResponse) {
+    public String createRefreshToken(String email, LoginResponseDTO loginResponse) {
         Instant now = Instant.now();
         Instant validity = now.plus(this.refreshTokenExpired, ChronoUnit.SECONDS);
 

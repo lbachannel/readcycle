@@ -9,7 +9,7 @@ import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthen
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
-import com.anlb.readcycle.domain.response.ResultResponse;
+import com.anlb.readcycle.domain.dto.response.ResultResponseDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.servlet.ServletException;
@@ -30,7 +30,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
             AuthenticationException authException) throws IOException, ServletException {
         this.delegate.commence(request, response, authException);
         response.setContentType("application/json");
-        ResultResponse<Object> res = new ResultResponse<Object>();
+        ResultResponseDTO<Object> res = new ResultResponseDTO<Object>();
         res.setStatusCode(HttpStatus.UNAUTHORIZED.value());
         // handle case authException.getCause() is null
         String errorMessage = Optional.ofNullable(authException.getCause())

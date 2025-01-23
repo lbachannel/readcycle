@@ -11,17 +11,17 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.anlb.readcycle.domain.response.ResultResponse;
+import com.anlb.readcycle.domain.dto.response.ResultResponseDTO;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ResultResponse<Object>> validationError(MethodArgumentNotValidException ex) {
+    public ResponseEntity<ResultResponseDTO<Object>> validationError(MethodArgumentNotValidException ex) {
         BindingResult result = ex.getBindingResult();
         final List<FieldError> fieldErrors = result.getFieldErrors();
 
-        ResultResponse<Object> res = new ResultResponse<Object>();
+        ResultResponseDTO<Object> res = new ResultResponseDTO<Object>();
         res.setStatusCode(HttpStatus.BAD_REQUEST.value());
         res.setError(ex.getBody().getDetail());
 
@@ -37,8 +37,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = {
         InvalidException.class
     })
-    public ResponseEntity<ResultResponse<Object>> handleInvalidException(Exception ex) {
-        ResultResponse<Object> response = new ResultResponse<Object>();
+    public ResponseEntity<ResultResponseDTO<Object>> handleInvalidException(Exception ex) {
+        ResultResponseDTO<Object> response = new ResultResponseDTO<Object>();
         response.setStatusCode(HttpStatus.UNAUTHORIZED.value());
         response.setError(ex.getMessage());
         response.setMessage(ex.getMessage());
