@@ -3,15 +3,19 @@ package com.anlb.readcycle.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.anlb.readcycle.domain.Book;
 import com.anlb.readcycle.domain.dto.request.CreateBookRequestDTO;
+import com.anlb.readcycle.domain.dto.request.UpdateBookRequestDTO;
 import com.anlb.readcycle.domain.dto.response.CreateBookResponseDTO;
+import com.anlb.readcycle.domain.dto.response.UpdateBookResponseDTO;
 import com.anlb.readcycle.service.BookService;
 import com.anlb.readcycle.utils.anotation.ApiMessage;
+import com.anlb.readcycle.utils.exception.InvalidException;
 
 import jakarta.validation.Valid;
 
@@ -32,5 +36,15 @@ public class BookController {
         return ResponseEntity
                     .status(HttpStatus.CREATED)
                     .body(this.bookService.convertBookToCreateBookResponseDTO(newBook));
+    }
+
+    @PutMapping("/books")
+    @ApiMessage("Update book")
+    public ResponseEntity<UpdateBookResponseDTO> updateBook(@RequestBody UpdateBookRequestDTO reqBook) throws InvalidException {
+        Book updateBook = this.bookService.handleUpdateBook(reqBook);
+        if (updateBook == null) {
+            throw new InvalidException("Book with id: " + reqBook.getId() + " does not exists");
+        }
+        return ResponseEntity.ok(this.bookService.convertBookToUpdateBookResponseDTO(updateBook));
     }
 }
