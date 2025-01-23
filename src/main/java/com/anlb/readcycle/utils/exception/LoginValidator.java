@@ -2,16 +2,16 @@ package com.anlb.readcycle.utils.exception;
 
 import org.springframework.stereotype.Service;
 
-import com.anlb.readcycle.domain.dto.LoginDTO;
+import com.anlb.readcycle.domain.dto.request.LoginRequestDTO;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 @Service
-public class LoginValidator implements ConstraintValidator<LoginChecked, LoginDTO>{
+public class LoginValidator implements ConstraintValidator<LoginChecked, LoginRequestDTO>{
 
     @Override
-    public boolean isValid(LoginDTO account, ConstraintValidatorContext context) {
+    public boolean isValid(LoginRequestDTO account, ConstraintValidatorContext context) {
         boolean valid = true;
 
         // validation username

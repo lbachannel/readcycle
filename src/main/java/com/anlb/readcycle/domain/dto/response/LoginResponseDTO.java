@@ -1,11 +1,11 @@
-package com.anlb.readcycle.domain.response;
+package com.anlb.readcycle.domain.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-public class LoginResponse {
+public class LoginResponseDTO {
     private String accessToken;
     private UserLogin user;
 
