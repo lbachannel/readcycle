@@ -2,6 +2,8 @@ package com.anlb.readcycle.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -46,5 +48,16 @@ public class BookController {
             throw new InvalidException("Book with id: " + reqBook.getId() + " does not exists");
         }
         return ResponseEntity.ok(this.bookService.convertBookToUpdateBookResponseDTO(updateBook));
+    }
+
+    @DeleteMapping("/books/{id}")
+    @ApiMessage("Delete book")
+    public ResponseEntity<Void> deleteBook(@PathVariable("id") int id) throws InvalidException {
+        Book isDeletedBook = this.bookService.handleGetBookById(id);
+        if (isDeletedBook == null) {
+            throw new InvalidException("Book with id: " + id + " does not exists");
+        }
+        this.bookService.handleSoftDelete(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
