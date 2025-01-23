@@ -2,6 +2,7 @@ package com.anlb.readcycle.domain;
 
 import java.time.Instant;
 
+import com.anlb.readcycle.utils.SecurityUtil;
 import com.anlb.readcycle.utils.constant.BookStatusEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -12,6 +13,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -40,4 +42,11 @@ public class Book {
 
     @Enumerated(EnumType.STRING)
     private BookStatusEnum status;
+
+    @PrePersist
+    public void handleBeforeCreate() {
+        this.createdBy = SecurityUtil.getCurrentUserLogin().isPresent()
+                    ? SecurityUtil.getCurrentUserLogin().get() : "";
+        this.createdAt = Instant.now();
+    }
 }

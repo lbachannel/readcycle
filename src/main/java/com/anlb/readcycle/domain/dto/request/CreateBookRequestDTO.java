@@ -1,0 +1,18 @@
+package com.anlb.readcycle.domain.dto.request;
+
+import com.anlb.readcycle.utils.exception.BookChecked;
+
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+@BookChecked
+public class CreateBookRequestDTO {
+    private String category;
+    private String title;
+    private String author;
+    private String publisher;
+    private String thumb;
+    private String description;
+}
