@@ -7,7 +7,6 @@ import com.anlb.readcycle.domain.Book;
 import com.anlb.readcycle.domain.dto.request.CreateBookRequestDTO;
 import com.anlb.readcycle.domain.dto.response.CreateBookResponseDTO;
 import com.anlb.readcycle.repository.BookRepository;
-import com.anlb.readcycle.utils.constant.BookStatusEnum;
 
 @Service
 @Transactional
@@ -27,7 +26,7 @@ public class BookService {
         newBook.setPublisher(requestBook.getPublisher());
         newBook.setThumb(requestBook.getThumb());
         newBook.setDescription(requestBook.getDescription());
-        newBook.setStatus(BookStatusEnum.AVAILABLE);
+        newBook.setStatus(requestBook.getStatus());
         return this.bookRepository.save(newBook);
     }
 

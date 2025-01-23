@@ -1,5 +1,6 @@
 package com.anlb.readcycle.domain.dto.request;
 
+import com.anlb.readcycle.utils.constant.BookStatusEnum;
 import com.anlb.readcycle.utils.exception.BookChecked;
 
 import lombok.Getter;
@@ -15,4 +16,5 @@ public class CreateBookRequestDTO {
     private String publisher;
     private String thumb;
     private String description;
+    private BookStatusEnum status;
 }
