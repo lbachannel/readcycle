@@ -1,5 +1,8 @@
 package com.anlb.readcycle.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -125,6 +128,29 @@ public class BookService {
         response.setDescription(currentBook.getDescription());
         response.setStatus(currentBook.getStatus());
         response.setActive(currentBook.isActive());
+        return response;
+    }
+
+    // get all books
+    public List<Book> handleGetAllBooks(boolean isActive) {
+        return this.bookRepository.findAllByIsActive(isActive);
+    }
+
+    // convert books -> get books response dto 
+    public List<BookResponseDTO> convertBooksToBookResponseDTO(List<Book> books) {
+        List<BookResponseDTO> response = books.stream()
+                                            .map(item -> new BookResponseDTO(
+                                                item.getId(),
+                                                item.getCategory(),
+                                                item.getTitle(),
+                                                item.getAuthor(),
+                                                item.getPublisher(),
+                                                item.getThumb(),
+                                                item.getDescription(),
+                                                item.getStatus(),
+                                                item.isActive()
+                                            ))
+                                            .collect(Collectors.toList());
         return response;
     }
 }

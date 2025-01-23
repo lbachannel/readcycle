@@ -1,6 +1,9 @@
 package com.anlb.readcycle.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,6 +43,16 @@ public class BookController {
             throw new InvalidException("Book with id: " + id + " does not exists");
         }
         return ResponseEntity.status(HttpStatus.OK).body(this.bookService.convertBookToBookResponseDTO(currentBook));
+    }
+
+    @GetMapping("/books")
+    @ApiMessage("Get books")
+    public ResponseEntity<List<BookResponseDTO>> getBooks() throws InvalidException {
+        List<Book> books = this.bookService.handleGetAllBooks(true);
+        if (books.isEmpty()) {
+            throw new InvalidException("There is no book");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(this.bookService.convertBooksToBookResponseDTO(books));
     }
 
     @PostMapping("/books")
