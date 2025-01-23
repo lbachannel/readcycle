@@ -86,4 +86,14 @@ public class BookService {
         response.setUpdatedBy(updateBook.getUpdatedBy());
         return response;
     }
+
+    public Book handleSoftDelete(int id) {
+        Book isDeletedBook = this.handleGetBookById(id);
+        if (isDeletedBook == null) {
+            return null;
+        }
+
+        isDeletedBook.setActive(false);
+        return this.bookRepository.save(isDeletedBook);
+    }
 }

@@ -44,6 +44,8 @@ public class Book {
     @Enumerated(EnumType.STRING)
     private BookStatusEnum status;
 
+    private boolean isActive;
+
     @PrePersist
     public void handleBeforeCreate() {
         this.createdBy = SecurityUtil.getCurrentUserLogin().isPresent()
