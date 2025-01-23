@@ -89,7 +89,22 @@ public class UserService {
         }
     }
 
+    // delete user [email]
     public void handleDeleteUserByEmail(String email) {
         this.userRepository.deleteByEmail(email);
+    }
+
+    // save refresh token into user
+    public void handleUpdateRefreshTokenIntoUser(String refreshToken, String email) {
+        User user = this.handleGetUserByUsername(email);
+        if (user != null) {
+            user.setRefreshToken(refreshToken);
+            this.userRepository.save(user);
+        }
+    }
+
+    // get user [refresh token & email]
+    public User handleGetUserByRefreshTokenAndEmail(String refreshToken, String email) {
+        return this.userRepository.findByRefreshTokenAndEmail(refreshToken, email);
     }
 }
