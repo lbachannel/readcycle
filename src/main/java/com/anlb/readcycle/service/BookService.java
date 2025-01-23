@@ -20,6 +20,7 @@ public class BookService {
         this.bookRepository = bookRepository;
     }
 
+    // handle create book
     public Book handleCreateBook(CreateBookRequestDTO requestBook) {
         Book newBook = new Book();
         newBook.setCategory(requestBook.getCategory());
@@ -29,9 +30,11 @@ public class BookService {
         newBook.setThumb(requestBook.getThumb());
         newBook.setDescription(requestBook.getDescription());
         newBook.setStatus(requestBook.getStatus());
+        newBook.setActive(true);
         return this.bookRepository.save(newBook);
     }
 
+    // convert book -> create book response dto 
     public CreateBookResponseDTO convertBookToCreateBookResponseDTO(Book book) {
         CreateBookResponseDTO response = new CreateBookResponseDTO();
         response.setId(book.getId());
@@ -42,6 +45,7 @@ public class BookService {
         response.setThumb(book.getThumb());
         response.setDescription(book.getDescription());
         response.setStatus(book.getStatus());
+        response.setActive(book.isActive());
         response.setCreatedAt(book.getCreatedAt());
         response.setCreatedBy(book.getCreatedBy());
         return response;
