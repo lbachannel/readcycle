@@ -2,7 +2,6 @@ package com.anlb.readcycle.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -50,7 +49,7 @@ public class BookController {
         return ResponseEntity.ok(this.bookService.convertBookToUpdateBookResponseDTO(updateBook));
     }
 
-    @DeleteMapping("/books/{id}")
+    @PutMapping("/books/{id}")
     @ApiMessage("Delete book")
     public ResponseEntity<Void> deleteBook(@PathVariable("id") int id) throws InvalidException {
         Book isDeletedBook = this.bookService.handleGetBookById(id);
