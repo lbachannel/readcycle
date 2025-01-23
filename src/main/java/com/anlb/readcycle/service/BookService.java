@@ -59,6 +59,7 @@ public class BookService {
         return null;
     }
 
+    // handle update book
     public Book handleUpdateBook(UpdateBookRequestDTO requestBook) {
         Book updateBook = this.handleGetBookById(requestBook.getId());
         if (updateBook == null) {
@@ -74,6 +75,7 @@ public class BookService {
         return this.bookRepository.save(updateBook);
     }
 
+    // convert book -> update book response dto 
     public UpdateBookResponseDTO convertBookToUpdateBookResponseDTO(Book updateBook) {
         UpdateBookResponseDTO response = new UpdateBookResponseDTO();
         response.setId(updateBook.getId());
@@ -84,6 +86,7 @@ public class BookService {
         response.setThumb(updateBook.getThumb());
         response.setDescription(updateBook.getDescription());
         response.setStatus(updateBook.getStatus());
+        response.setActive(updateBook.isActive());
         response.setCreatedAt(updateBook.getCreatedAt());
         response.setCreatedBy(updateBook.getCreatedBy());
         response.setUpdatedAt(updateBook.getUpdatedAt());
