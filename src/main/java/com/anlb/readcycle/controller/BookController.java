@@ -2,6 +2,7 @@ package com.anlb.readcycle.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.anlb.readcycle.domain.Book;
 import com.anlb.readcycle.domain.dto.request.CreateBookRequestDTO;
 import com.anlb.readcycle.domain.dto.request.UpdateBookRequestDTO;
+import com.anlb.readcycle.domain.dto.response.BookResponseDTO;
 import com.anlb.readcycle.domain.dto.response.CreateBookResponseDTO;
 import com.anlb.readcycle.domain.dto.response.UpdateBookResponseDTO;
 import com.anlb.readcycle.service.BookService;
@@ -28,6 +30,16 @@ public class BookController {
     
     public BookController(BookService bookService) {
         this.bookService = bookService;
+    }
+
+    @GetMapping("/books/{id}")
+    @ApiMessage("Get book by id")
+    public ResponseEntity<BookResponseDTO> getBookById(@PathVariable("id") long id) throws InvalidException {
+        Book currentBook = this.bookService.handleGetBookByIdAndActive(id, true);
+        if (currentBook == null) {
+            throw new InvalidException("Book with id: " + id + " does not exists");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(this.bookService.convertBookToBookResponseDTO(currentBook));
     }
 
     @PostMapping("/books")
