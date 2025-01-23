@@ -1,11 +1,15 @@
 package com.anlb.readcycle.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.anlb.readcycle.domain.Book;
 import com.anlb.readcycle.domain.dto.request.CreateBookRequestDTO;
 import com.anlb.readcycle.domain.dto.request.UpdateBookRequestDTO;
+import com.anlb.readcycle.domain.dto.response.BookResponseDTO;
 import com.anlb.readcycle.domain.dto.response.CreateBookResponseDTO;
 import com.anlb.readcycle.domain.dto.response.UpdateBookResponseDTO;
 import com.anlb.readcycle.repository.BookRepository;
@@ -59,6 +63,14 @@ public class BookService {
         return null;
     }
 
+    // Get book by id and isActive true
+    public Book handleGetBookByIdAndActive(long id, boolean isActive) {
+        if(this.bookRepository.findByIdAndIsActive(id, isActive).isPresent()) {
+            return this.bookRepository.findByIdAndIsActive(id, isActive).get();
+        }
+        return null;
+    }
+
     // handle update book
     public Book handleUpdateBook(UpdateBookRequestDTO requestBook) {
         Book updateBook = this.handleGetBookById(requestBook.getId());
@@ -102,5 +114,43 @@ public class BookService {
 
         isDeletedBook.setActive(false);
         return this.bookRepository.save(isDeletedBook);
+    }
+
+    // convert book -> get a book response dto 
+    public BookResponseDTO convertBookToBookResponseDTO(Book currentBook) {
+        BookResponseDTO response = new BookResponseDTO();
+        response.setId(currentBook.getId());
+        response.setCategory(currentBook.getCategory());
+        response.setTitle(currentBook.getTitle());
+        response.setAuthor(currentBook.getAuthor());
+        response.setPublisher(currentBook.getPublisher());
+        response.setThumb(currentBook.getThumb());
+        response.setDescription(currentBook.getDescription());
+        response.setStatus(currentBook.getStatus());
+        response.setActive(currentBook.isActive());
+        return response;
+    }
+
+    // get all books
+    public List<Book> handleGetAllBooks(boolean isActive) {
+        return this.bookRepository.findAllByIsActive(isActive);
+    }
+
+    // convert books -> get books response dto 
+    public List<BookResponseDTO> convertBooksToBookResponseDTO(List<Book> books) {
+        List<BookResponseDTO> response = books.stream()
+                                            .map(item -> new BookResponseDTO(
+                                                item.getId(),
+                                                item.getCategory(),
+                                                item.getTitle(),
+                                                item.getAuthor(),
+                                                item.getPublisher(),
+                                                item.getThumb(),
+                                                item.getDescription(),
+                                                item.getStatus(),
+                                                item.isActive()
+                                            ))
+                                            .collect(Collectors.toList());
+        return response;
     }
 }
