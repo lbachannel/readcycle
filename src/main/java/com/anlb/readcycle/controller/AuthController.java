@@ -25,6 +25,7 @@ import com.anlb.readcycle.domain.User;
 import com.anlb.readcycle.domain.dto.request.LoginRequestDTO;
 import com.anlb.readcycle.domain.dto.request.RegisterRequestDTO;
 import com.anlb.readcycle.domain.dto.response.LoginResponseDTO;
+import com.anlb.readcycle.domain.dto.response.RegisterResponseDTO;
 import com.anlb.readcycle.domain.dto.response.LoginResponseDTO.UserGetAccount;
 import com.anlb.readcycle.domain.dto.response.LoginResponseDTO.UserLogin;
 import com.anlb.readcycle.service.EmailService;
@@ -61,7 +62,7 @@ public class AuthController {
 
     @PostMapping("/auth/register")
     @ApiMessage("Register account")
-    public ResponseEntity<User> createNewUser(@Valid @RequestBody RegisterRequestDTO registerDTO) {
+    public ResponseEntity<RegisterResponseDTO> createNewUser(@Valid @RequestBody RegisterRequestDTO registerDTO) {
         // hash password
         String hashPassword = this.passwordEncoder.encode(registerDTO.getPassword());
         registerDTO.setPassword(hashPassword);
@@ -71,7 +72,7 @@ public class AuthController {
         newUser = this.userService.handleCreateUser(newUser);
         // send email
         this.emailService.sendEmailFromTemplateSync(newUser, "ReadCycle - Verify your email", "verify-email");
-        return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
+        return ResponseEntity.status(HttpStatus.CREATED).body(this.userService.convertUserToRegisterResponseDTO(newUser));
     }
 
     @GetMapping("/auth/verify-email")
