@@ -23,9 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.anlb.readcycle.domain.User;
 import com.anlb.readcycle.domain.dto.request.LoginRequestDTO;
-import com.anlb.readcycle.domain.dto.request.RegisterRequestDTO;
 import com.anlb.readcycle.domain.dto.response.LoginResponseDTO;
-import com.anlb.readcycle.domain.dto.response.RegisterResponseDTO;
 import com.anlb.readcycle.domain.dto.response.LoginResponseDTO.UserGetAccount;
 import com.anlb.readcycle.domain.dto.response.LoginResponseDTO.UserLogin;
 import com.anlb.readcycle.service.EmailService;
@@ -42,8 +40,6 @@ public class AuthController {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final SecurityUtil securityUtil;
     private final UserService userService;
-    private final PasswordEncoder passwordEncoder;
-    private final EmailService emailService;
 
     @Value("${anlb.jwt.refresh-token-validity-in-seconds}")
     private long refreshTokenExpired;
@@ -56,23 +52,6 @@ public class AuthController {
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.securityUtil = securityUtil;
         this.userService = userService;
-        this.passwordEncoder = passwordEncoder;
-        this.emailService = emailService;
-    }
-
-    @PostMapping("/auth/register")
-    @ApiMessage("Register account")
-    public ResponseEntity<RegisterResponseDTO> createNewUser(@Valid @RequestBody RegisterRequestDTO registerDTO) {
-        // hash password
-        String hashPassword = this.passwordEncoder.encode(registerDTO.getPassword());
-        registerDTO.setPassword(hashPassword);
-        // convert DTO -> User
-        User newUser = this.userService.registerDTOtoUser(registerDTO);
-        // save user
-        newUser = this.userService.handleCreateUser(newUser);
-        // send email
-        this.emailService.sendEmailFromTemplateSync(newUser, "ReadCycle - Verify your email", "verify-email");
-        return ResponseEntity.status(HttpStatus.CREATED).body(this.userService.convertUserToRegisterResponseDTO(newUser));
     }
 
     @GetMapping("/auth/verify-email")
