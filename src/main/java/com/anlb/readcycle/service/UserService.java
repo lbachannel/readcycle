@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.anlb.readcycle.domain.User;
 import com.anlb.readcycle.domain.dto.request.RegisterRequestDTO;
+import com.anlb.readcycle.domain.dto.response.RegisterResponseDTO;
 import com.anlb.readcycle.repository.UserRepository;
 import com.anlb.readcycle.utils.SecurityUtil;
 import com.anlb.readcycle.utils.exception.RegisterValidator;
@@ -43,6 +44,16 @@ public class UserService {
         }
 
         return user;
+    }
+
+    // convert User To RegisterResponseDTO
+    public RegisterResponseDTO convertUserToRegisterResponseDTO(User user) {
+        RegisterResponseDTO response = new RegisterResponseDTO();
+        response.setId(user.getId());
+        response.setName(user.getName());
+        response.setEmail(user.getEmail());
+        response.setVerificationEmailToken(user.getVerificationEmailToken());
+        return response;
     }
 
     public User handleCreateUser(User user) {
