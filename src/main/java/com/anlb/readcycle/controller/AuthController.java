@@ -61,14 +61,14 @@ public class AuthController {
             this.userService.handleDeleteUserByEmail(email);
             return ResponseEntity
                 .status(HttpStatus.FOUND)
-                .location(URI.create("http://127.0.0.1:5500/verify-email-failed.html"))
+                .location(URI.create("http://localhost:3000/verify-email-failed"))
                 .build();
         }
         
         this.userService.handleVerifyEmail(token);
         return ResponseEntity
             .status(HttpStatus.FOUND)
-            .location(URI.create("http://127.0.0.1:5500/verify-email-success.html"))
+            .location(URI.create("http://localhost:3000/verify-email-success"))
             .build();
     }
 
