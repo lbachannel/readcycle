@@ -4,7 +4,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -69,5 +71,16 @@ public class PermissionController {
     @ApiMessage("Get permissions")
     public ResponseEntity<ResultPaginateDTO> getPermissions(@Filter Specification<Permission> spec, Pageable pageable) {
         return ResponseEntity.ok(this.permissionService.handleGetPermissions(spec, pageable));
+    }
+
+    @DeleteMapping("/permissions/{id}")
+    @ApiMessage("delete a permission")
+    public ResponseEntity<Void> deletePermission(@PathVariable("id") long id) throws InvalidException {
+        // check exist by id
+        if (this.permissionService.handleFindById(id) == null) {
+            throw new InvalidException("Permission with id: " + id + " does not exist.");
+        }
+        this.permissionService.delete(id);
+        return ResponseEntity.ok().body(null);
     }
 }
