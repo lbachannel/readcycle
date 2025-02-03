@@ -1,6 +1,7 @@
 package com.anlb.readcycle.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -8,7 +9,9 @@ import org.springframework.stereotype.Service;
 import com.anlb.readcycle.domain.Permission;
 import com.anlb.readcycle.domain.Role;
 import com.anlb.readcycle.domain.dto.request.CreateRoleRequestDTO;
+import com.anlb.readcycle.domain.dto.request.UpdateRoleRequestDTO;
 import com.anlb.readcycle.domain.dto.response.CreateRoleResponseDTO;
+import com.anlb.readcycle.domain.dto.response.UpdateRoleResponseDTO;
 import com.anlb.readcycle.repository.PermissionRepository;
 import com.anlb.readcycle.repository.RoleRepository;
 
@@ -55,5 +58,40 @@ public class RoleService {
         response.setCreatedBy(role.getCreatedBy());
         response.setPermissions(role.getPermissions());
         return response;
+    }
+
+    public UpdateRoleResponseDTO convertRoleToUpdateRoleResponseDTO(Role role) {
+        UpdateRoleResponseDTO response = new UpdateRoleResponseDTO();
+        response.setId(role.getId());
+        response.setName(role.getName());
+        response.setDescription(role.getDescription());
+        response.setActive(role.isActive());
+        response.setCreatedAt(role.getCreatedAt());
+        response.setCreatedBy(role.getCreatedBy());
+        response.setUpdatedAt(role.getUpdatedAt());
+        response.setUpdatedBy(role.getUpdatedBy());
+        response.setPermissions(role.getPermissions());
+        return response;
+    }
+
+    public Optional<Role> handleFindById(long id) {
+        return this.roleRepository.findById(id);
+    }
+
+    public Role handleUpdateRole(UpdateRoleRequestDTO roleDTO) {
+        Role updateRole = this.roleRepository.findById(roleDTO.getId()).get();
+        updateRole.setName(roleDTO.getName());
+        updateRole.setDescription(roleDTO.getDescription());
+        updateRole.setActive(roleDTO.isActive());
+        if (roleDTO.getPermissions() != null) {
+            List<Long> reqPermissions = roleDTO.getPermissions()
+                                            .stream()
+                                            .map(x -> x.getId())
+                                            .collect(Collectors.toList());
+            List<Permission> dbPermissions = this.permissionRepository.findByIdIn(reqPermissions);
+
+            updateRole.setPermissions(dbPermissions);
+        }
+        return this.roleRepository.save(updateRole);
     }
 }
