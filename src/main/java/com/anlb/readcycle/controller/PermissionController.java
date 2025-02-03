@@ -14,6 +14,8 @@ import com.anlb.readcycle.service.PermissionService;
 import com.anlb.readcycle.utils.anotation.ApiMessage;
 import com.anlb.readcycle.utils.exception.InvalidException;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/v1")
 public class PermissionController {
@@ -26,7 +28,7 @@ public class PermissionController {
 
     @PostMapping("/permissions")
     @ApiMessage("Create a permission")
-    public ResponseEntity<CreatePermissionResponseDTO> createPermission(@RequestBody CreatePermissionRequestDTO permissionDTO) throws InvalidException {
+    public ResponseEntity<CreatePermissionResponseDTO> createPermission(@Valid @RequestBody CreatePermissionRequestDTO permissionDTO) throws InvalidException {
         if (this.permissionService.isPermissionExist(permissionDTO)) {
             throw new InvalidException("Permission is already exists");
         }
