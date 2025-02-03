@@ -1,7 +1,10 @@
 package com.anlb.readcycle.controller;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,10 +15,12 @@ import com.anlb.readcycle.domain.Permission;
 import com.anlb.readcycle.domain.dto.request.CreatePermissionRequestDTO;
 import com.anlb.readcycle.domain.dto.request.UpdatePermissionRequestDTO;
 import com.anlb.readcycle.domain.dto.response.CreatePermissionResponseDTO;
+import com.anlb.readcycle.domain.dto.response.ResultPaginateDTO;
 import com.anlb.readcycle.domain.dto.response.UpdatePermissionResponseDTO;
 import com.anlb.readcycle.service.PermissionService;
 import com.anlb.readcycle.utils.anotation.ApiMessage;
 import com.anlb.readcycle.utils.exception.InvalidException;
+import com.turkraft.springfilter.boot.Filter;
 
 import jakarta.validation.Valid;
 
@@ -58,5 +63,11 @@ public class PermissionController {
         return ResponseEntity
                     .ok()
                     .body(this.permissionService.convertPermissionToUpdatePermissionResponseDTO(updatePermission));
+    }
+
+    @GetMapping("/permissions")
+    @ApiMessage("Get permissions")
+    public ResponseEntity<ResultPaginateDTO> getPermissions(@Filter Specification<Permission> spec, Pageable pageable) {
+        return ResponseEntity.ok(this.permissionService.handleGetPermissions(spec, pageable));
     }
 }

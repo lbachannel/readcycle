@@ -1,5 +1,8 @@
 package com.anlb.readcycle.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -7,6 +10,8 @@ import com.anlb.readcycle.domain.Permission;
 import com.anlb.readcycle.domain.dto.request.CreatePermissionRequestDTO;
 import com.anlb.readcycle.domain.dto.request.UpdatePermissionRequestDTO;
 import com.anlb.readcycle.domain.dto.response.CreatePermissionResponseDTO;
+import com.anlb.readcycle.domain.dto.response.ResultPaginateDTO;
+import com.anlb.readcycle.domain.dto.response.ResultPaginateDTO.Meta;
 import com.anlb.readcycle.domain.dto.response.UpdatePermissionResponseDTO;
 import com.anlb.readcycle.repository.PermissionRepository;
 
@@ -83,5 +88,21 @@ public class PermissionService {
         response.setUpdatedAt(permission.getUpdatedAt());
         response.setUpdatedBy(permission.getUpdatedBy());
         return response;
+    }
+
+    public ResultPaginateDTO handleGetPermissions(Specification<Permission> spec, Pageable pageable) {
+        Page<Permission> dbPermissions = this.permissionRepository.findAll(spec, pageable);
+        ResultPaginateDTO resultPaginateDTO = new ResultPaginateDTO();
+        Meta meta = new Meta();
+        meta.setPage(pageable.getPageNumber() + 1);
+        meta.setPageSize(pageable.getPageSize());
+
+        meta.setPages(dbPermissions.getTotalPages());
+        meta.setTotal(dbPermissions.getTotalElements());
+
+        resultPaginateDTO.setMeta(meta);
+        resultPaginateDTO.setResult(dbPermissions.getContent());
+
+        return resultPaginateDTO;
     }
 }
