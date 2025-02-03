@@ -1,6 +1,7 @@
 package com.anlb.readcycle.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.anlb.readcycle.domain.Permission;
 import com.anlb.readcycle.domain.dto.request.CreatePermissionRequestDTO;
@@ -8,6 +9,7 @@ import com.anlb.readcycle.domain.dto.response.CreatePermissionResponseDTO;
 import com.anlb.readcycle.repository.PermissionRepository;
 
 @Service
+@Transactional
 public class PermissionService {
 
     private final PermissionRepository permissionRepository;
