@@ -115,4 +115,8 @@ public class RoleService {
 
         return resultPaginateDTO;
     }
+
+    public void handleDeleteRoleById(long id) {
+        this.roleRepository.deleteById(id);
+    }
 }
