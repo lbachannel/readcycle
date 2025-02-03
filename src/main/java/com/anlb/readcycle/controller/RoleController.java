@@ -1,7 +1,10 @@
 package com.anlb.readcycle.controller;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,10 +15,12 @@ import com.anlb.readcycle.domain.Role;
 import com.anlb.readcycle.domain.dto.request.CreateRoleRequestDTO;
 import com.anlb.readcycle.domain.dto.request.UpdateRoleRequestDTO;
 import com.anlb.readcycle.domain.dto.response.CreateRoleResponseDTO;
+import com.anlb.readcycle.domain.dto.response.ResultPaginateDTO;
 import com.anlb.readcycle.domain.dto.response.UpdateRoleResponseDTO;
 import com.anlb.readcycle.service.RoleService;
 import com.anlb.readcycle.utils.anotation.ApiMessage;
 import com.anlb.readcycle.utils.exception.InvalidException;
+import com.turkraft.springfilter.boot.Filter;
 
 import jakarta.validation.Valid;
 
@@ -61,5 +66,11 @@ public class RoleController {
         return ResponseEntity
                     .ok()
                     .body(this.roleService.convertRoleToUpdateRoleResponseDTO(updateRole));
+    }
+
+    @GetMapping("/roles")
+    @ApiMessage("Get roles")
+    public ResponseEntity<ResultPaginateDTO> getPermissions(@Filter Specification<Role> spec, Pageable pageable) {
+        return ResponseEntity.ok(this.roleService.handleGetRoles(spec, pageable));
     }
 }

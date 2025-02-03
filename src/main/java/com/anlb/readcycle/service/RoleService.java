@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.anlb.readcycle.domain.Permission;
@@ -11,6 +14,8 @@ import com.anlb.readcycle.domain.Role;
 import com.anlb.readcycle.domain.dto.request.CreateRoleRequestDTO;
 import com.anlb.readcycle.domain.dto.request.UpdateRoleRequestDTO;
 import com.anlb.readcycle.domain.dto.response.CreateRoleResponseDTO;
+import com.anlb.readcycle.domain.dto.response.ResultPaginateDTO;
+import com.anlb.readcycle.domain.dto.response.ResultPaginateDTO.Meta;
 import com.anlb.readcycle.domain.dto.response.UpdateRoleResponseDTO;
 import com.anlb.readcycle.repository.PermissionRepository;
 import com.anlb.readcycle.repository.RoleRepository;
@@ -93,5 +98,21 @@ public class RoleService {
             updateRole.setPermissions(dbPermissions);
         }
         return this.roleRepository.save(updateRole);
+    }
+
+    public ResultPaginateDTO handleGetRoles(Specification<Role> spec, Pageable pageable) {
+        Page<Role> dbRoles = this.roleRepository.findAll(spec, pageable);
+        ResultPaginateDTO resultPaginateDTO = new ResultPaginateDTO();
+        Meta meta = new Meta();
+        meta.setPage(pageable.getPageNumber() + 1);
+        meta.setPageSize(pageable.getPageSize());
+
+        meta.setPages(dbRoles.getTotalPages());
+        meta.setTotal(dbRoles.getTotalElements());
+
+        resultPaginateDTO.setMeta(meta);
+        resultPaginateDTO.setResult(dbRoles.getContent());
+
+        return resultPaginateDTO;
     }
 }
