@@ -5,7 +5,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.anlb.readcycle.domain.Permission;
 import com.anlb.readcycle.domain.dto.request.CreatePermissionRequestDTO;
+import com.anlb.readcycle.domain.dto.request.UpdatePermissionRequestDTO;
 import com.anlb.readcycle.domain.dto.response.CreatePermissionResponseDTO;
+import com.anlb.readcycle.domain.dto.response.UpdatePermissionResponseDTO;
 import com.anlb.readcycle.repository.PermissionRepository;
 
 @Service
@@ -26,6 +28,14 @@ public class PermissionService {
         );
     }
 
+    public boolean isPermissionExist(UpdatePermissionRequestDTO permissionDTO) {
+        return permissionRepository.existsByModuleAndApiPathAndMethod(
+            permissionDTO.getModule(),
+            permissionDTO.getApiPath(),
+            permissionDTO.getMethod()
+        );
+    }
+
     public Permission handleCreatePermission(CreatePermissionRequestDTO permissionDTO) {
         Permission newPermission = new Permission();
         newPermission.setName(permissionDTO.getName());
@@ -33,6 +43,19 @@ public class PermissionService {
         newPermission.setMethod(permissionDTO.getMethod());
         newPermission.setModule(permissionDTO.getModule());
         return this.permissionRepository.save(newPermission);
+    }
+
+    public Permission handleFindById(long id) {
+        return this.permissionRepository.findById(id).get();
+    }
+
+    public Permission handleUpdatePermission(UpdatePermissionRequestDTO permissionDTO) {
+        Permission updatePermission = this.permissionRepository.findById(permissionDTO.getId()).get();
+        updatePermission.setName(permissionDTO.getName());
+        updatePermission.setApiPath(permissionDTO.getApiPath());
+        updatePermission.setMethod(permissionDTO.getMethod());
+        updatePermission.setModule(permissionDTO.getModule());
+        return this.permissionRepository.save(updatePermission);
     }
 
     // convert permission -> create permission response dto
@@ -45,6 +68,20 @@ public class PermissionService {
         response.setModule(permission.getModule());
         response.setCreatedAt(permission.getCreatedAt());
         response.setCreatedBy(permission.getCreatedBy());
+        return response;
+    }
+
+    public UpdatePermissionResponseDTO convertPermissionToUpdatePermissionResponseDTO(Permission permission) {
+        UpdatePermissionResponseDTO response = new UpdatePermissionResponseDTO();
+        response.setId(permission.getId());
+        response.setName(permission.getName());
+        response.setApiPath(permission.getApiPath());
+        response.setMethod(permission.getMethod());
+        response.setModule(permission.getModule());
+        response.setCreatedAt(permission.getCreatedAt());
+        response.setCreatedBy(permission.getCreatedBy());
+        response.setUpdatedAt(permission.getUpdatedAt());
+        response.setUpdatedBy(permission.getUpdatedBy());
         return response;
     }
 }
