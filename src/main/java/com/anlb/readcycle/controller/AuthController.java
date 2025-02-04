@@ -165,7 +165,7 @@ public class AuthController {
         LoginResponseDTO response = new LoginResponseDTO();
         User dbUser2 = this.userService.handleGetUserByUsername(email);
         if(dbUser2 != null) {
-            LoginResponseDTO.UserLogin userLogin = response.new UserLogin(dbUser2.getId(), dbUser2.getEmail(), dbUser2.getName(), null);
+            LoginResponseDTO.UserLogin userLogin = response.new UserLogin(dbUser2.getId(), dbUser2.getEmail(), dbUser2.getName(), dbUser2.getRole());
             response.setUser(userLogin);
         }
 
