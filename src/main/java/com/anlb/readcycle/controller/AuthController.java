@@ -141,6 +141,7 @@ public class AuthController {
             userLogin.setId(dbUser.getId());
             userLogin.setEmail(dbUser.getEmail());
             userLogin.setName(dbUser.getName());
+            userLogin.setRole(dbUser.getRole());
             userGetAccount.setUser(userLogin);
         }
         return ResponseEntity.ok().body(userGetAccount);
