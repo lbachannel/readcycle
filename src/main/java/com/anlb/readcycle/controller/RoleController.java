@@ -58,11 +58,6 @@ public class RoleController {
             throw new InvalidException("Role with id: " + roleDTO.getId() + " does not exist");
         }
 
-        // check name
-        if (this.roleService.existByName(roleDTO.getName())) {
-            throw new InvalidException("Role with name: " + roleDTO.getName() + " is already exist");
-        }
-
         Role updateRole = this.roleService.handleUpdateRole(roleDTO);
 
         return ResponseEntity
