@@ -1,8 +1,11 @@
 package com.anlb.readcycle.controller;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,9 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.anlb.readcycle.domain.User;
 import com.anlb.readcycle.domain.dto.request.RegisterRequestDTO;
 import com.anlb.readcycle.domain.dto.response.RegisterResponseDTO;
+import com.anlb.readcycle.domain.dto.response.ResultPaginateDTO;
 import com.anlb.readcycle.service.EmailService;
 import com.anlb.readcycle.service.UserService;
 import com.anlb.readcycle.utils.anotation.ApiMessage;
+import com.turkraft.springfilter.boot.Filter;
 
 import jakarta.validation.Valid;
 
@@ -29,6 +34,14 @@ public class UserController {
         this.passwordEncoder = passwordEncoder;
         this.emailService = emailService;
         this.userService = userService;
+    }
+    
+    @GetMapping("/users")
+    @ApiMessage("Get all users")
+    public ResponseEntity<ResultPaginateDTO> getAllUsers(@Filter Specification<User> spec, Pageable pageable) {
+        return ResponseEntity
+                        .status(HttpStatus.OK)
+                        .body(this.userService.handleGetAllUsers(spec, pageable));
     }
 
     @PostMapping("/user/register")
