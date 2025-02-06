@@ -23,13 +23,16 @@ public class UserService {
     private final UserRepository userRepository;
     private final SecurityUtil securityUtil;
     private final JwtDecoder jwtDecoder;
+    private final RoleService roleService;
 
     public UserService(UserRepository userRepository,
                         SecurityUtil securityUtil,
-                        JwtDecoder jwtDecoder) {
+                        JwtDecoder jwtDecoder,
+                        RoleService roleService) {
         this.userRepository = userRepository;
         this.securityUtil = securityUtil;
         this.jwtDecoder = jwtDecoder;
+        this.roleService = roleService;
     }
 
     // mapper DTO -> User
@@ -42,6 +45,7 @@ public class UserService {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             user.setDateOfBirth(LocalDate.parse(registerDTO.getDateOfBirth(), formatter));
         }
+        user.setRole(this.roleService.handleFindById(2).get());
 
         return user;
     }

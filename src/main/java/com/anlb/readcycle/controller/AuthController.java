@@ -93,10 +93,11 @@ public class AuthController {
         user.setId(dbUser.getId());
         user.setEmail(dbUser.getEmail());
         user.setName(dbUser.getName());
+        user.setRole(dbUser.getRole());
         response.setUser(user);
 
         // create access token
-        String accessToken = this.securityUtil.createAccessToken(authentication.getName(), response.getUser());
+        String accessToken = this.securityUtil.createAccessToken(authentication.getName(), response);
         // response access-token
         response.setAccessToken(accessToken);
 
@@ -140,6 +141,7 @@ public class AuthController {
             userLogin.setId(dbUser.getId());
             userLogin.setEmail(dbUser.getEmail());
             userLogin.setName(dbUser.getName());
+            userLogin.setRole(dbUser.getRole());
             userGetAccount.setUser(userLogin);
         }
         return ResponseEntity.ok().body(userGetAccount);
@@ -148,13 +150,16 @@ public class AuthController {
     // get refresh token in db
     @GetMapping("/auth/refresh")
     @ApiMessage("Get refresh token")
-    public ResponseEntity<LoginResponseDTO> getRefreshToken(@CookieValue(name = "refresh_token") String refresh_token) throws InvalidException {
+    public ResponseEntity<LoginResponseDTO> getRefreshToken(@CookieValue(name = "refresh_token", defaultValue = "abc") String refreshTK) throws InvalidException {
+        if (refreshTK.equals("abc")) {
+            throw new InvalidException("You do not have refresh token in cookies");
+        }
         // decode check token is real or fake
-        Jwt decodedToken = this.securityUtil.checkValidRefreshToken(refresh_token);
+        Jwt decodedToken = this.securityUtil.checkValidRefreshToken(refreshTK);
         String email = decodedToken.getSubject();
 
         // check user by token and email
-        User dbUser = this.userService.handleGetUserByRefreshTokenAndEmail(refresh_token, email);
+        User dbUser = this.userService.handleGetUserByRefreshTokenAndEmail(refreshTK, email);
         if (dbUser == null) {
             throw new InvalidException("Refresh token is not valid");
         }
@@ -163,13 +168,12 @@ public class AuthController {
         LoginResponseDTO response = new LoginResponseDTO();
         User dbUser2 = this.userService.handleGetUserByUsername(email);
         if(dbUser2 != null) {
-            LoginResponseDTO.UserLogin userLogin = response.new UserLogin(dbUser2.getId(), dbUser2.getEmail(), dbUser2.getName());
+            LoginResponseDTO.UserLogin userLogin = response.new UserLogin(dbUser2.getId(), dbUser2.getEmail(), dbUser2.getName(), dbUser2.getRole());
             response.setUser(userLogin);
         }
-        UserLogin userLogin = response.new UserLogin();
 
         // create access token
-        String access_token = this.securityUtil.createAccessToken(email, userLogin);
+        String access_token = this.securityUtil.createAccessToken(email, response);
         response.setAccessToken(access_token);
 
         // create refresh token
