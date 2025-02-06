@@ -3,7 +3,12 @@ package com.anlb.readcycle.service;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtException;
@@ -13,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.anlb.readcycle.domain.User;
 import com.anlb.readcycle.domain.dto.request.RegisterRequestDTO;
 import com.anlb.readcycle.domain.dto.response.RegisterResponseDTO;
+import com.anlb.readcycle.domain.dto.response.ResultPaginateDTO;
+import com.anlb.readcycle.domain.dto.response.UserResponseDTO;
 import com.anlb.readcycle.repository.UserRepository;
 import com.anlb.readcycle.utils.SecurityUtil;
 import com.anlb.readcycle.utils.exception.RegisterValidator;
@@ -121,5 +128,46 @@ public class UserService {
     // get user [refresh token & email]
     public User handleGetUserByRefreshTokenAndEmail(String refreshToken, String email) {
         return this.userRepository.findByRefreshTokenAndEmail(refreshToken, email);
+    }
+
+    // get all users
+    public ResultPaginateDTO handleGetAllUsers(Specification<User> spec, Pageable pageable) {
+        Page<User> pageUser = this.userRepository.findAll(spec, pageable);
+        ResultPaginateDTO rs = new ResultPaginateDTO();
+        ResultPaginateDTO.Meta mt = new ResultPaginateDTO.Meta();
+
+        mt.setPage(pageable.getPageNumber() + 1);
+        mt.setPageSize(pageable.getPageSize());
+
+        mt.setPages(pageUser.getTotalPages());
+        mt.setTotal(pageUser.getTotalElements());
+
+        rs.setMeta(mt);
+
+        // remove sensitive data
+        List<UserResponseDTO> listUser = pageUser.getContent()
+                                            .stream()
+                                            .map(item -> this.convertUserToUserResponseDTO(item))
+                                            .collect(Collectors.toList());
+
+        rs.setResult(listUser);
+
+        return rs;
+    }
+
+    public UserResponseDTO convertUserToUserResponseDTO(User user) {
+        UserResponseDTO response = new UserResponseDTO();
+        UserResponseDTO.RoleUser roleUser = new UserResponseDTO.RoleUser();
+
+        response.setId(user.getId());
+        response.setEmail(user.getEmail());
+        response.setName(user.getName());
+        response.setDateOfBirth(user.getDateOfBirth());
+        if (user.getRole() != null) {
+            roleUser.setId(user.getRole().getId());
+            roleUser.setName(user.getRole().getName());
+            response.setRole(roleUser);
+        }
+        return response;
     }
 }
