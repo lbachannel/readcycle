@@ -36,6 +36,16 @@ public class RoleController {
         this.roleService = roleService;
     }
 
+    @GetMapping("/roles/{id}")
+    @ApiMessage("Get role by id")
+    public ResponseEntity<Role> getById(@PathVariable("id") long id) throws InvalidException {
+        Role role = this.roleService.handleGetRoleById(id);
+        if (role == null) {
+            throw new InvalidException("Role with id: " + id + " does not exist");
+        }
+        return ResponseEntity.ok().body(role);
+    }
+
     @PostMapping("/roles")
     @ApiMessage("Create a role")
     public ResponseEntity<CreateRoleResponseDTO> createRole(@Valid @RequestBody CreateRoleRequestDTO roleDTO) throws InvalidException {
