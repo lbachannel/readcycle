@@ -150,16 +150,16 @@ public class AuthController {
     // get refresh token in db
     @GetMapping("/auth/refresh")
     @ApiMessage("Get refresh token")
-    public ResponseEntity<LoginResponseDTO> getRefreshToken(@CookieValue(name = "refresh_token", defaultValue = "abc") String refresh_token) throws InvalidException {
-        if (refresh_token.equals("abc")) {
+    public ResponseEntity<LoginResponseDTO> getRefreshToken(@CookieValue(name = "refresh_token", defaultValue = "abc") String refreshTK) throws InvalidException {
+        if (refreshTK.equals("abc")) {
             throw new InvalidException("You do not have refresh token in cookies");
         }
         // decode check token is real or fake
-        Jwt decodedToken = this.securityUtil.checkValidRefreshToken(refresh_token);
+        Jwt decodedToken = this.securityUtil.checkValidRefreshToken(refreshTK);
         String email = decodedToken.getSubject();
 
         // check user by token and email
-        User dbUser = this.userService.handleGetUserByRefreshTokenAndEmail(refresh_token, email);
+        User dbUser = this.userService.handleGetUserByRefreshTokenAndEmail(refreshTK, email);
         if (dbUser == null) {
             throw new InvalidException("Refresh token is not valid");
         }
