@@ -16,7 +16,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.anlb.readcycle.domain.User;
+import com.anlb.readcycle.domain.dto.request.CreateUserRequestDTO;
 import com.anlb.readcycle.domain.dto.request.RegisterRequestDTO;
+import com.anlb.readcycle.domain.dto.response.CreateUserResponseDTO;
 import com.anlb.readcycle.domain.dto.response.RegisterResponseDTO;
 import com.anlb.readcycle.domain.dto.response.ResultPaginateDTO;
 import com.anlb.readcycle.domain.dto.response.UserResponseDTO;
@@ -57,6 +59,19 @@ public class UserService {
         return user;
     }
 
+    public User convertCreateUserRequestDTOToUser(CreateUserRequestDTO userDTO) {
+        User user = new User();
+        user.setName(userDTO.getFirstName() + " " + userDTO.getLastName());
+        user.setEmail(userDTO.getEmail());
+        user.setPassword(userDTO.getPassword());
+        if (RegisterValidator.isValidDateFormat(userDTO.getDateOfBirth())) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            user.setDateOfBirth(LocalDate.parse(userDTO.getDateOfBirth(), formatter));
+        }
+        user.setRole(this.roleService.handleFindByName(userDTO.getRole()));
+        return user;
+    }
+
     // convert User To RegisterResponseDTO
     public RegisterResponseDTO convertUserToRegisterResponseDTO(User user) {
         RegisterResponseDTO response = new RegisterResponseDTO();
@@ -67,10 +82,25 @@ public class UserService {
         return response;
     }
 
-    public User handleCreateUser(User user) {
+    // create a user response
+    public CreateUserResponseDTO convertUserToCreateResponseDTO(User user) {
+        CreateUserResponseDTO response = new CreateUserResponseDTO();
+        response.setId(user.getId());
+        response.setName(user.getName());
+        response.setEmail(user.getEmail());
+        response.setDateOfBirth(user.getDateOfBirth());
+        response.setRole(user.getRole());
+        return response;
+    }
+
+    public User handleRegisterMember(User user) {
         String verifyEmailToken = this.securityUtil.createVerifyEmailToken(user.getEmail());
         user.setEmailVerified(false);
         user.setVerificationEmailToken(verifyEmailToken);
+        return this.userRepository.save(user);
+    }
+    public User handleCreateUser(User user) {
+        user.setEmailVerified(true);
         return this.userRepository.save(user);
     }
 

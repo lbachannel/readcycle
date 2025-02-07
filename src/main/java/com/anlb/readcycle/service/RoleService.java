@@ -83,6 +83,10 @@ public class RoleService {
         return this.roleRepository.findById(id);
     }
 
+    public Role handleFindByName(String role) {
+        return this.roleRepository.findByName(role);
+    }
+
     public Role handleUpdateRole(UpdateRoleRequestDTO roleDTO) {
         Role updateRole = this.roleRepository.findById(roleDTO.getId()).get();
         updateRole.setName(roleDTO.getName());
