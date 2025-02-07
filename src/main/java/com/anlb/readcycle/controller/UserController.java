@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.anlb.readcycle.domain.User;
+import com.anlb.readcycle.domain.dto.request.CreateUserRequestDTO;
 import com.anlb.readcycle.domain.dto.request.RegisterRequestDTO;
+import com.anlb.readcycle.domain.dto.response.CreateUserResponseDTO;
 import com.anlb.readcycle.domain.dto.response.RegisterResponseDTO;
 import com.anlb.readcycle.domain.dto.response.ResultPaginateDTO;
 import com.anlb.readcycle.service.EmailService;
@@ -46,16 +48,31 @@ public class UserController {
 
     @PostMapping("/user/register")
     @ApiMessage("Register account")
-    public ResponseEntity<RegisterResponseDTO> createNewUser(@Valid @RequestBody RegisterRequestDTO registerDTO) {
+    public ResponseEntity<RegisterResponseDTO> registerMember(@Valid @RequestBody RegisterRequestDTO registerDTO) {
         // hash password
         String hashPassword = this.passwordEncoder.encode(registerDTO.getPassword());
         registerDTO.setPassword(hashPassword);
         // convert DTO -> User
         User newUser = this.userService.registerDTOtoUser(registerDTO);
         // save user
-        newUser = this.userService.handleCreateUser(newUser);
+        newUser = this.userService.handleRegisterMember(newUser);
         // send email
         this.emailService.sendEmailFromTemplateSync(newUser, "ReadCycle - Verify your email", "verify-email");
         return ResponseEntity.status(HttpStatus.CREATED).body(this.userService.convertUserToRegisterResponseDTO(newUser));
+    }
+
+    @PostMapping("/users")
+    @ApiMessage("Create a user")
+    public ResponseEntity<CreateUserResponseDTO> createNewUser(@RequestBody CreateUserRequestDTO userDTO) {
+        // hash password
+        String hashPassword = this.passwordEncoder.encode(userDTO.getPassword());
+        userDTO.setPassword(hashPassword);
+        // convert DTO -> User
+        User newUser = this.userService.convertCreateUserRequestDTOToUser(userDTO);
+        // save user
+        newUser = this.userService.handleCreateUser(newUser);
+        return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body(this.userService.convertUserToCreateResponseDTO(newUser));
     }
 }
