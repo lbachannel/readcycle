@@ -63,7 +63,7 @@ public class UserController {
 
     @PostMapping("/users")
     @ApiMessage("Create a user")
-    public ResponseEntity<CreateUserResponseDTO> createNewUser(@RequestBody CreateUserRequestDTO userDTO) {
+    public ResponseEntity<CreateUserResponseDTO> createNewUser(@Valid @RequestBody CreateUserRequestDTO userDTO) {
         // hash password
         String hashPassword = this.passwordEncoder.encode(userDTO.getPassword());
         userDTO.setPassword(hashPassword);

@@ -1,8 +1,11 @@
 package com.anlb.readcycle.domain.dto.request;
 
+import com.anlb.readcycle.utils.exception.UserChecked;
+
 import lombok.Data;
 
 @Data
+@UserChecked
 public class CreateUserRequestDTO {
     private String firstName;
     
