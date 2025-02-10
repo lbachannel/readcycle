@@ -1,6 +1,7 @@
 package com.anlb.readcycle.utils.exception;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
@@ -23,10 +24,12 @@ public class GlobalExceptionHandler {
 
         ResultResponseDTO<Object> res = new ResultResponseDTO<Object>();
         res.setStatusCode(HttpStatus.BAD_REQUEST.value());
-        res.setError(ex.getBody().getDetail());
+
+        String errorDetails = ex.getBody() != null ? ex.getBody().getDetail() : "Validation failed";
+        res.setError(errorDetails);
 
         List<String> errors = fieldErrors.stream()
-                                .map(f -> f.getDefaultMessage())
+                                .map(f -> Objects.requireNonNullElse(f.getDefaultMessage(), "Unknown error"))
                                 .collect(Collectors.toList());
         res.setMessage(errors);
 
