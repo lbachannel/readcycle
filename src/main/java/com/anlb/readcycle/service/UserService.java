@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
@@ -39,7 +40,17 @@ public class UserService {
     private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
 
-    // convert DTO -> User
+    /**
+     * Converts a {@link RegisterRequestDTO} object to a {@link User} entity.
+     * 
+     * This method extracts user details from the DTO and creates a new {@link User} entity.
+     * It also hashes the password before storing it.
+     * If the provided date of birth is in a valid format, it is parsed into a {@link LocalDate}.
+     * The user's role is set to the default role with ID 2.
+     *
+     * @param registerDTO The {@link RegisterRequestDTO} containing user registration details.
+     * @return A {@link User} entity populated with data from the DTO.
+     */
     public User convertRegisterDTOToUser(RegisterRequestDTO registerDTO) {
         User user = new User();
         user.setName(registerDTO.getFirstName() + " " + registerDTO.getLastName());
@@ -57,6 +68,17 @@ public class UserService {
         return user;
     }
 
+    /**
+     * Converts a {@link CreateUserRequestDTO} object to a {@link User} entity.
+     *
+     * This method extracts user details from the DTO and creates a new {@link User} entity.
+     * It also hashes the password before storing it.
+     * If the provided date of birth is in a valid format, it is parsed into a {@link LocalDate}.
+     * The user's role is determined based on the role name provided in the DTO.
+     *
+     * @param userDTO The {@link CreateUserRequestDTO} containing user registration details.
+     * @return A {@link User} entity populated with data from the DTO.
+     */
     public User convertCreateUserRequestDTOToUser(CreateUserRequestDTO userDTO) {
         User user = new User();
         user.setName(userDTO.getFirstName() + " " + userDTO.getLastName());
@@ -73,7 +95,15 @@ public class UserService {
         return user;
     }
 
-    // convert User To RegisterResponseDTO
+    /**
+     * Converts a {@link User} entity to a {@link RegisterResponseDTO}.
+     *
+     * This method extracts relevant user information and maps it to a DTO
+     * for registration response purposes.
+     *
+     * @param user The {@link User} entity to be converted.
+     * @return A {@link RegisterResponseDTO} containing user details.
+     */
     public RegisterResponseDTO convertUserToRegisterResponseDTO(User user) {
         RegisterResponseDTO response = new RegisterResponseDTO();
         response.setId(user.getId());
@@ -83,7 +113,15 @@ public class UserService {
         return response;
     }
 
-    // create a user response
+    /**
+     * Converts a {@link User} entity to a {@link CreateUserResponseDTO}.
+     *
+     * This method extracts relevant user information and maps it to a DTO
+     * for user creation response purposes.
+     *
+     * @param user The {@link User} entity to be converted.
+     * @return A {@link CreateUserResponseDTO} containing user details.
+     */
     public CreateUserResponseDTO convertUserToCreateResponseDTO(User user) {
         CreateUserResponseDTO response = new CreateUserResponseDTO();
         response.setId(user.getId());
@@ -94,25 +132,63 @@ public class UserService {
         return response;
     }
 
+    /**
+     * Handles the registration process for a new member.
+     *
+     * This method generates an email verification token, sets the email verification
+     * status to false, assigns the token to the user, and then saves the user to the database.
+     *
+     * @param user The {@link User} entity to be registered.
+     * @return The saved {@link User} entity with the verification token.
+     */
     public User handleRegisterMember(User user) {
         String verifyEmailToken = this.securityUtil.createVerifyEmailToken(user.getEmail());
         user.setEmailVerified(false);
         user.setVerificationEmailToken(verifyEmailToken);
         return this.userRepository.save(user);
     }
+
+    /**
+     * Creates and saves a new user in the system.
+     * 
+     * This method sets the user's email verification status to true and persists the user entity to the database.
+     *
+     * @param user The {@link User} entity to be created.
+     * @return The saved {@link User} entity.
+     */
     public User handleCreateUser(User user) {
         user.setEmailVerified(true);
         return this.userRepository.save(user);
     }
 
+    /**
+     * Checks if a user exists in the system by their email.
+     *
+     * @param email The email address to check.
+     * @return {@code true} if a user with the given email exists, {@code false} otherwise.
+     */
     public boolean handleCheckExistsByEmail(String email) {
         return this.userRepository.existsByEmail(email);
     }
 
+    /**
+     * Retrieves a user by their username (email).
+     *
+     * @param username The username (email) of the user.
+     * @return The {@code User} object corresponding to the given username.
+     */
     public User handleGetUserByUsername(String username) {
         return this.userRepository.findByEmail(username);
     }
 
+    /**
+     * Verifies a user's email based on the provided verification token.
+     * If the token is valid, the user's email is marked as verified and the token is removed.
+     *
+     * @param token The verification email token used to verify the user's email.
+     * @return The updated {@link User} object with email verification set to {@code true}.
+     * @throws NoSuchElementException if the token is not found in the repository.
+     */
     public User handleVerifyEmail(String token) {
         User user = this.userRepository.findByVerificationEmailToken(token).get();
         user.setEmailVerified(true);
@@ -120,6 +196,14 @@ public class UserService {
         return this.userRepository.save(user);
     }
 
+    /**
+     * Validates a JWT token by decoding it and checking its expiration time.
+     * If the token is expired or invalid, the method returns {@code false}.
+     *
+     * @param token The JWT token to be validated.
+     * @return {@code true} if the token is valid and not expired, otherwise {@code false}.
+     * @throws JwtException if the token is malformed or cannot be decoded.
+     */
     public boolean validateToken(String token) {
         try {
             Jwt jwt = jwtDecoder.decode(token);
@@ -133,6 +217,13 @@ public class UserService {
         }
     }
 
+    /**
+     * Extracts the email claim from a given JWT token.
+     * If the token is invalid or an error occurs during decoding, the method returns {@code null}.
+     *
+     * @param token The JWT token from which the email will be extracted.
+     * @return The email contained in the token, or {@code null} if extraction fails.
+     */
     public String extractEmailFromToken(String token) {
         try {
             Jwt jwt = jwtDecoder.decode(token);
@@ -142,12 +233,21 @@ public class UserService {
         }
     }
 
-    // delete user [email]
+    /**
+     * Deletes a user from the repository based on their email.
+     *
+     * @param email The email of the user to be deleted.
+     */
     public void handleDeleteUserByEmail(String email) {
         this.userRepository.deleteByEmail(email);
     }
 
-    // save refresh token into user
+    /**
+     * Updates the refresh token for a user based on their email.
+     *
+     * @param refreshToken The new refresh token to be stored.
+     * @param email        The email of the user whose refresh token is being updated.
+     */
     public void handleUpdateRefreshTokenIntoUser(String refreshToken, String email) {
         User user = this.handleGetUserByUsername(email);
         if (user != null) {
@@ -156,12 +256,24 @@ public class UserService {
         }
     }
 
-    // get user [refresh token & email]
+    /**
+     * Retrieves a user by their refresh token and email.
+     *
+     * @param refreshToken The refresh token associated with the user.
+     * @param email        The email of the user.
+     * @return The user matching the given refresh token and email, or null if not found.
+     */
     public User handleGetUserByRefreshTokenAndEmail(String refreshToken, String email) {
         return this.userRepository.findByRefreshTokenAndEmail(refreshToken, email);
     }
 
-    // get all users
+    /**
+     * Retrieves a paginated list of users based on the provided specification.
+     *
+     * @param spec     The specification to filter users.
+     * @param pageable The pagination and sorting information.
+     * @return A {@link ResultPaginateDTO} containing the paginated user list and metadata.
+     */
     public ResultPaginateDTO handleGetAllUsers(Specification<User> spec, Pageable pageable) {
         Page<User> pageUser = this.userRepository.findAll(spec, pageable);
         ResultPaginateDTO rs = new ResultPaginateDTO();
@@ -186,6 +298,12 @@ public class UserService {
         return rs;
     }
 
+    /**
+     * Converts a {@link User} entity to a {@link UserResponseDTO}.
+     *
+     * @param user The {@link User} entity to convert.
+     * @return A {@link UserResponseDTO} containing user details.
+     */
     public UserResponseDTO convertUserToUserResponseDTO(User user) {
         UserResponseDTO response = new UserResponseDTO();
         UserResponseDTO.RoleUser roleUser = new UserResponseDTO.RoleUser();
