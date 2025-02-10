@@ -26,23 +26,16 @@ import com.anlb.readcycle.repository.UserRepository;
 import com.anlb.readcycle.utils.SecurityUtil;
 import com.anlb.readcycle.utils.exception.RegisterValidator;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
     private final SecurityUtil securityUtil;
     private final JwtDecoder jwtDecoder;
     private final RoleService roleService;
-
-    public UserService(UserRepository userRepository,
-                        SecurityUtil securityUtil,
-                        JwtDecoder jwtDecoder,
-                        RoleService roleService) {
-        this.userRepository = userRepository;
-        this.securityUtil = securityUtil;
-        this.jwtDecoder = jwtDecoder;
-        this.roleService = roleService;
-    }
 
     // mapper DTO -> User
     public User registerDTOtoUser(RegisterRequestDTO registerDTO) {

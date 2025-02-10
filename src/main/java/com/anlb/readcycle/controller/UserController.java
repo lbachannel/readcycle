@@ -23,20 +23,16 @@ import com.anlb.readcycle.utils.anotation.ApiMessage;
 import com.turkraft.springfilter.boot.Filter;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/v1")
+@RequiredArgsConstructor
 public class UserController {
 
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
     private final UserService userService;
-
-    public UserController(PasswordEncoder passwordEncoder, EmailService emailService, UserService userService) {
-        this.passwordEncoder = passwordEncoder;
-        this.emailService = emailService;
-        this.userService = userService;
-    }
     
     @GetMapping("/users")
     @ApiMessage("Get all users")
