@@ -13,6 +13,7 @@ import com.anlb.readcycle.domain.dto.response.BookResponseDTO;
 import com.anlb.readcycle.domain.dto.response.CreateBookResponseDTO;
 import com.anlb.readcycle.domain.dto.response.UpdateBookResponseDTO;
 import com.anlb.readcycle.repository.BookRepository;
+import com.anlb.readcycle.utils.exception.InvalidException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -63,11 +64,12 @@ public class BookService {
     }
 
     // Get book by id and isActive true
-    public Book handleGetBookByIdAndActive(long id, boolean isActive) {
-        if(this.bookRepository.findByIdAndIsActive(id, isActive).isPresent()) {
-            return this.bookRepository.findByIdAndIsActive(id, isActive).get();
+    public Book handleGetBookByIdAndActive(long id, boolean isActive) throws InvalidException {
+        Book currentBook = this.bookRepository.findByIdAndIsActive(id, isActive).orElse(null);
+        if (currentBook == null) {
+            throw new InvalidException("Book with id: " + id + " does not exists");
         }
-        return null;
+        return this.bookRepository.findByIdAndIsActive(id, isActive).get();
     }
 
     // handle update book

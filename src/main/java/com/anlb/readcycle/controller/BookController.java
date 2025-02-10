@@ -36,10 +36,9 @@ public class BookController {
     @ApiMessage("Get book by id")
     public ResponseEntity<BookResponseDTO> getBookById(@PathVariable("id") long id) throws InvalidException {
         Book currentBook = this.bookService.handleGetBookByIdAndActive(id, true);
-        if (currentBook == null) {
-            throw new InvalidException("Book with id: " + id + " does not exists");
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(this.bookService.convertBookToBookResponseDTO(currentBook));
+        return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(this.bookService.convertBookToBookResponseDTO(currentBook));
     }
 
     @GetMapping("/books")
