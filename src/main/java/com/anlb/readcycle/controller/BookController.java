@@ -63,10 +63,8 @@ public class BookController {
     @ApiMessage("Update book")
     public ResponseEntity<UpdateBookResponseDTO> updateBook(@RequestBody UpdateBookRequestDTO reqBook) throws InvalidException {
         Book updateBook = this.bookService.handleUpdateBook(reqBook);
-        if (updateBook == null) {
-            throw new InvalidException("Book with id: " + reqBook.getId() + " does not exists");
-        }
-        return ResponseEntity.ok(this.bookService.convertBookToUpdateBookResponseDTO(updateBook));
+        return ResponseEntity
+                    .ok(this.bookService.convertBookToUpdateBookResponseDTO(updateBook));
     }
 
     @PutMapping("/books/{id}")

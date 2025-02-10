@@ -72,11 +72,17 @@ public class BookService {
         return this.bookRepository.findByIdAndIsActive(id, isActive).get();
     }
 
-    // handle update book
-    public Book handleUpdateBook(UpdateBookRequestDTO requestBook) {
+    /**
+     * Updates an existing book with new details provided in the request.
+     *
+     * @param requestBook The DTO containing updated book information.
+     * @return The updated {@link Book} entity after saving to the database.
+     * @throws InvalidException if the book with the given ID does not exist.
+     */
+    public Book handleUpdateBook(UpdateBookRequestDTO requestBook) throws InvalidException {
         Book updateBook = this.handleGetBookById(requestBook.getId());
         if (updateBook == null) {
-            return null;
+            throw new InvalidException("Book with id: " + requestBook.getId() + " does not exists");
         }
         updateBook.setCategory(requestBook.getCategory());
         updateBook.setTitle(requestBook.getTitle());
