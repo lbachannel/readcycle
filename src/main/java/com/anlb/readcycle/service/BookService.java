@@ -121,7 +121,7 @@ public class BookService {
      * @return The updated {@link Book} entity after deactivating it.
      * @throws InvalidException if the book with the given ID does not exist.
      */
-    public Book handleSoftDelete(int id) throws InvalidException {
+    public Book handleSoftDelete(long id) throws InvalidException {
         Book isDeletedBook = this.handleGetBookById(id);
         isDeletedBook.setActive(false);
         return this.bookRepository.save(isDeletedBook);
@@ -163,10 +163,5 @@ public class BookService {
                                             ))
                                             .collect(Collectors.toList());
         return response;
-    }
-
-    public void handleSoftDelete(long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'handleSoftDelete'");
     }
 }
