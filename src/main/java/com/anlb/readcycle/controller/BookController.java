@@ -43,12 +43,11 @@ public class BookController {
 
     @GetMapping("/books")
     @ApiMessage("Get books")
-    public ResponseEntity<List<BookResponseDTO>> getBooks() throws InvalidException {
+    public ResponseEntity<List<BookResponseDTO>> getBooks() {
         List<Book> books = this.bookService.handleGetAllBooks(true);
-        if (books.isEmpty()) {
-            throw new InvalidException("There is no book");
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(this.bookService.convertBooksToBookResponseDTO(books));
+        return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(this.bookService.convertBooksToBookResponseDTO(books));
     }
 
     @PostMapping("/books")
