@@ -64,7 +64,14 @@ public class BookService {
         return this.bookRepository.findById(id).get();
     }
 
-    // Get book by id and isActive true
+    /**
+     * Retrieves a book by its ID and active status.
+     *
+     * @param id       The ID of the book to retrieve.
+     * @param isActive A boolean flag indicating whether the book should be active (true) or inactive (false).
+     * @return The {@link Book} entity that matches the given ID and active status.
+     * @throws InvalidException if no book with the given ID and active status is found.
+     */
     public Book handleGetBookByIdAndActive(long id, boolean isActive) throws InvalidException {
         Book currentBook = this.bookRepository.findByIdAndIsActive(id, isActive).orElse(null);
         if (currentBook == null) {
