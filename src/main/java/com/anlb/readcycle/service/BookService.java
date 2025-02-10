@@ -24,7 +24,12 @@ public class BookService {
 
     private final BookRepository bookRepository;
 
-    // handle create book
+    /**
+     * Creates a new book record in the database.
+     *
+     * @param requestBook The DTO containing details of the new book.
+     * @return The newly created {@link Book} entity after saving to the database.
+     */
     public Book handleCreateBook(CreateBookRequestDTO requestBook) {
         Book newBook = new Book();
         newBook.setCategory(requestBook.getCategory());
