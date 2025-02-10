@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtException;
@@ -36,12 +37,16 @@ public class UserService {
     private final SecurityUtil securityUtil;
     private final JwtDecoder jwtDecoder;
     private final RoleService roleService;
+    private final PasswordEncoder passwordEncoder;
 
-    // mapper DTO -> User
-    public User registerDTOtoUser(RegisterRequestDTO registerDTO) {
+    // convert DTO -> User
+    public User convertRegisterDTOToUser(RegisterRequestDTO registerDTO) {
         User user = new User();
         user.setName(registerDTO.getFirstName() + " " + registerDTO.getLastName());
         user.setEmail(registerDTO.getEmail());
+        // hash password
+        String hashPassword = this.passwordEncoder.encode(registerDTO.getPassword());
+        registerDTO.setPassword(hashPassword);
         user.setPassword(registerDTO.getPassword());
         if (RegisterValidator.isValidDateFormat(registerDTO.getDateOfBirth())) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -56,6 +61,9 @@ public class UserService {
         User user = new User();
         user.setName(userDTO.getFirstName() + " " + userDTO.getLastName());
         user.setEmail(userDTO.getEmail());
+        // hash password
+        String hashPassword = this.passwordEncoder.encode(userDTO.getPassword());
+        userDTO.setPassword(hashPassword);
         user.setPassword(userDTO.getPassword());
         if (RegisterValidator.isValidDateFormat(userDTO.getDateOfBirth())) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
