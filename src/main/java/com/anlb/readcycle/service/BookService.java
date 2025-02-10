@@ -56,11 +56,12 @@ public class BookService {
     }
 
     // Get book by id
-    public Book handleGetBookById(long id) {
-        if (this.bookRepository.findById(id).isPresent()) {
-            return this.bookRepository.findById(id).get();
+    public Book handleGetBookById(long id) throws InvalidException {
+        Book isDeletedBook = this.bookRepository.findById(id).orElse(null);
+        if (isDeletedBook == null) {
+            throw new InvalidException("Book with id: " + id + " does not exists");
         }
-        return null;
+        return this.bookRepository.findById(id).get();
     }
 
     // Get book by id and isActive true
@@ -113,12 +114,15 @@ public class BookService {
         return response;
     }
 
-    public Book handleSoftDelete(int id) {
+    /**
+     * Performs a soft delete on a book by setting its active status to false.
+     *
+     * @param id The ID of the book to be soft deleted.
+     * @return The updated {@link Book} entity after deactivating it.
+     * @throws InvalidException if the book with the given ID does not exist.
+     */
+    public Book handleSoftDelete(int id) throws InvalidException {
         Book isDeletedBook = this.handleGetBookById(id);
-        if (isDeletedBook == null) {
-            return null;
-        }
-
         isDeletedBook.setActive(false);
         return this.bookRepository.save(isDeletedBook);
     }
@@ -159,5 +163,10 @@ public class BookService {
                                             ))
                                             .collect(Collectors.toList());
         return response;
+    }
+
+    public void handleSoftDelete(long id) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'handleSoftDelete'");
     }
 }

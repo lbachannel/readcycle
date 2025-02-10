@@ -71,10 +71,9 @@ public class BookController {
     @ApiMessage("Delete book")
     public ResponseEntity<Void> deleteBook(@PathVariable("id") int id) throws InvalidException {
         Book isDeletedBook = this.bookService.handleGetBookById(id);
-        if (isDeletedBook == null) {
-            throw new InvalidException("Book with id: " + id + " does not exists");
-        }
-        this.bookService.handleSoftDelete(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        this.bookService.handleSoftDelete(isDeletedBook.getId());
+        return ResponseEntity
+                    .status(HttpStatus.NO_CONTENT)
+                    .build();
     }
 }
