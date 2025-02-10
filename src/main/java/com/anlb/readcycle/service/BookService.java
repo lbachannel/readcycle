@@ -43,7 +43,12 @@ public class BookService {
         return this.bookRepository.save(newBook);
     }
 
-    // convert book -> create book response dto 
+    /**
+     * Converts a {@link Book} entity to a {@link CreateBookResponseDTO}.
+     *
+     * @param book The {@link Book} entity to be converted.
+     * @return A {@link CreateBookResponseDTO} containing the book's details.
+     */
     public CreateBookResponseDTO convertBookToCreateBookResponseDTO(Book book) {
         CreateBookResponseDTO response = new CreateBookResponseDTO();
         response.setId(book.getId());
@@ -60,7 +65,13 @@ public class BookService {
         return response;
     }
 
-    // Get book by id
+    /**
+     * Retrieves a {@link Book} entity by its ID.
+     *
+     * @param id The unique identifier of the book.
+     * @return The {@link Book} entity if found.
+     * @throws InvalidException If no book with the given ID exists.
+     */
     public Book handleGetBookById(long id) throws InvalidException {
         Book isDeletedBook = this.bookRepository.findById(id).orElse(null);
         if (isDeletedBook == null) {
@@ -107,7 +118,12 @@ public class BookService {
         return this.bookRepository.save(updateBook);
     }
 
-    // convert book -> update book response dto 
+    /**
+     * Converts a {@link Book} entity to an {@link UpdateBookResponseDTO}.
+     *
+     * @param updateBook The {@link Book} entity to be converted.
+     * @return An {@link UpdateBookResponseDTO} containing the book's updated details.
+     */
     public UpdateBookResponseDTO convertBookToUpdateBookResponseDTO(Book updateBook) {
         UpdateBookResponseDTO response = new UpdateBookResponseDTO();
         response.setId(updateBook.getId());
@@ -139,7 +155,12 @@ public class BookService {
         return this.bookRepository.save(isDeletedBook);
     }
 
-    // convert book -> get a book response dto 
+    /**
+     * Converts a {@link Book} entity to a {@link BookResponseDTO}.
+     *
+     * @param currentBook The {@link Book} entity to be converted.
+     * @return A {@link BookResponseDTO} containing the book's details.
+     */
     public BookResponseDTO convertBookToBookResponseDTO(Book currentBook) {
         BookResponseDTO response = new BookResponseDTO();
         response.setId(currentBook.getId());
@@ -164,7 +185,12 @@ public class BookService {
         return this.bookRepository.findAllByIsActive(isActive);
     }
 
-    // convert books -> get books response dto 
+    /**
+     * Converts a list of {@link Book} entities to a list of {@link BookResponseDTO}.
+     *
+     * @param books The list of {@link Book} entities to be converted.
+     * @return A list of {@link BookResponseDTO} containing the details of each book.
+     */
     public List<BookResponseDTO> convertBooksToBookResponseDTO(List<Book> books) {
         List<BookResponseDTO> response = books.stream()
                                             .map(item -> new BookResponseDTO(
