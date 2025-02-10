@@ -142,7 +142,12 @@ public class BookService {
         return response;
     }
 
-    // get all books
+    /**
+     * Retrieves a list of all books based on their active status.
+     *
+     * @param isActive A boolean flag indicating whether to fetch active (true) or inactive (false) books.
+     * @return A list of {@link Book} entities that match the specified active status.
+     */
     public List<Book> handleGetAllBooks(boolean isActive) {
         return this.bookRepository.findAllByIsActive(isActive);
     }
