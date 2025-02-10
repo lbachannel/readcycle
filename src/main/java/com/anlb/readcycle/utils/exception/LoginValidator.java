@@ -21,13 +21,14 @@ public class LoginValidator implements ConstraintValidator<LoginChecked, LoginRe
                     .addConstraintViolation()
                     .disableDefaultConstraintViolation();
             valid = false;
-        } else if (account.getUsername().length() < 10) {
+        } else if (10 > account.getUsername().length()) {
             context.buildConstraintViolationWithTemplate("Username must be greater than or equal 10")
                     .addPropertyNode("username")
                     .addConstraintViolation()
                     .disableDefaultConstraintViolation();
             valid = false;
-        } else if (!(account.getUsername().matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"))) {
+        } 
+        else if (!("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$".matches(account.getUsername()))) {
             context.buildConstraintViolationWithTemplate("Invalid email format")
                     .addPropertyNode("username")
                     .addConstraintViolation()
@@ -42,7 +43,7 @@ public class LoginValidator implements ConstraintValidator<LoginChecked, LoginRe
                     .addConstraintViolation()
                     .disableDefaultConstraintViolation();
             valid = false;
-        } else if (account.getPassword().length() <= 2) {
+        } else if (2 >= account.getPassword().length()) {
             context.buildConstraintViolationWithTemplate("Password must be greater than or equal to 3")
                     .addPropertyNode("password")
                     .addConstraintViolation()
