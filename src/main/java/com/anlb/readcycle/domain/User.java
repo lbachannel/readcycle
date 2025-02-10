@@ -18,17 +18,28 @@ import lombok.Data;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private long id;
-    private String name;
-    private String email;
-    private String password;
-    private LocalDate dateOfBirth;
-    @Column(columnDefinition = "MEDIUMTEXT")
-    private String refreshToken;
 
+    @Column(name = "name", length = 50, nullable = false)
+    private String name;
+
+    @Column(name = "email", length = 300, nullable = false, unique = true)
+    private String email;
+
+    @Column(name = "password", length = 250, nullable = false)
+    private String password;
+
+    @Column(name = "date_of_birth")
+    private LocalDate dateOfBirth;
+
+    @Column(name = "refresh_token", columnDefinition = "MEDIUMTEXT")
+    private String refreshToken;
+    
+    @Column(name = "email_verified")
     private boolean emailVerified;
 
-    @Column(columnDefinition = "MEDIUMTEXT")
+    @Column(name = "verification_email_token", columnDefinition = "MEDIUMTEXT")
     private String verificationEmailToken;
 
     @ManyToOne
