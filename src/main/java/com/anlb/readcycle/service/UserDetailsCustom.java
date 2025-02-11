@@ -10,6 +10,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
+import com.anlb.readcycle.utils.exception.InvalidException;
+
 @Component("userDetailsService")
 public class UserDetailsCustom implements UserDetailsService {
     private final UserService userService;
@@ -19,17 +21,17 @@ public class UserDetailsCustom implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        com.anlb.readcycle.domain.User user = this.userService.handleGetUserByUsername(username);
-        if (user == null) {
-            throw new UsernameNotFoundException("Username/password invalid");
+    public UserDetails loadUserByUsername(String username) {
+        try {
+            com.anlb.readcycle.domain.User user = this.userService.handleGetUserByUsername(username);
+            return new User(
+                user.getEmail(),
+                user.getPassword(),
+                Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
+            );
+        } catch (InvalidException e) {
+            throw new UsernameNotFoundException(e.getMessage());
         }
-
-        return new User(
-            user.getEmail(),
-            user.getPassword(),
-            Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
-        );
     }
 
 }
