@@ -73,11 +73,11 @@ public class BookService {
      * @throws InvalidException If no book with the given ID exists.
      */
     public Book handleGetBookById(long id) throws InvalidException {
-        Book isDeletedBook = this.bookRepository.findById(id).orElse(null);
-        if (isDeletedBook == null) {
+        Book book = this.bookRepository.findById(id).orElse(null);
+        if (book == null) {
             throw new InvalidException("Book with id: " + id + " does not exists");
         }
-        return this.bookRepository.findById(id).get();
+        return book;
     }
 
     /**
@@ -105,9 +105,6 @@ public class BookService {
      */
     public Book handleUpdateBook(UpdateBookRequestDTO requestBook) throws InvalidException {
         Book updateBook = this.handleGetBookById(requestBook.getId());
-        if (updateBook == null) {
-            throw new InvalidException("Book with id: " + requestBook.getId() + " does not exists");
-        }
         updateBook.setCategory(requestBook.getCategory());
         updateBook.setTitle(requestBook.getTitle());
         updateBook.setAuthor(requestBook.getAuthor());
