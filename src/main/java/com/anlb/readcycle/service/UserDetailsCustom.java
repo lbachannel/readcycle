@@ -12,13 +12,12 @@ import org.springframework.stereotype.Component;
 
 import com.anlb.readcycle.utils.exception.InvalidException;
 
+import lombok.RequiredArgsConstructor;
+
 @Component("userDetailsService")
+@RequiredArgsConstructor
 public class UserDetailsCustom implements UserDetailsService {
     private final UserService userService;
-
-    public UserDetailsCustom(UserService userService) {
-        this.userService = userService;
-    }
 
     @Override
     public UserDetails loadUserByUsername(String username) {
