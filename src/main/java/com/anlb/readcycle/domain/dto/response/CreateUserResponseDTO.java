@@ -1,5 +1,6 @@
 package com.anlb.readcycle.domain.dto.response;
 
+import java.time.Instant;
 import java.time.LocalDate;
 
 import com.anlb.readcycle.domain.Role;
@@ -12,6 +13,7 @@ public class CreateUserResponseDTO {
     private String name;
     private String email;
     private LocalDate dateOfBirth;
+    private Instant createdAt;
 
     private Role role;
 }
