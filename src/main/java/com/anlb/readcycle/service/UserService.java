@@ -134,6 +134,7 @@ public class UserService {
         response.setName(user.getName());
         response.setEmail(user.getEmail());
         response.setDateOfBirth(user.getDateOfBirth());
+        response.setCreatedAt(user.getCreatedAt());
         response.setRole(user.getRole());
         return response;
     }
