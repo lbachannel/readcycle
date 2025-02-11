@@ -11,7 +11,7 @@ public class CreatePermissionRequestDTO {
     private String name;
     @NotBlank(message = "Api path is required")
     private String apiPath;
-    @NotBlank(message = "Method path is required")
+    @NotBlank(message = "Method is required")
     private String method;
     @NotBlank(message = "Module is required")
     private String module;
