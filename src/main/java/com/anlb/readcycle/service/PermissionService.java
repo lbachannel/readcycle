@@ -17,15 +17,14 @@ import com.anlb.readcycle.domain.dto.response.ResultPaginateDTO.Meta;
 import com.anlb.readcycle.domain.dto.response.UpdatePermissionResponseDTO;
 import com.anlb.readcycle.repository.PermissionRepository;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class PermissionService {
 
     private final PermissionRepository permissionRepository;
-
-    public PermissionService(PermissionRepository permissionRepository) {
-        this.permissionRepository = permissionRepository;
-    }
 
     public boolean isPermissionExist(CreatePermissionRequestDTO permissionDTO) {
         return permissionRepository.existsByModuleAndApiPathAndMethod(
