@@ -40,36 +40,25 @@ public class RoleController {
     @ApiMessage("Get role by id")
     public ResponseEntity<Role> getById(@PathVariable("id") long id) throws InvalidException {
         Role role = this.roleService.handleGetRoleById(id);
-        if (role == null) {
-            throw new InvalidException("Role with id: " + id + " does not exist");
-        }
         return ResponseEntity.ok().body(role);
     }
 
     @PostMapping("/roles")
     @ApiMessage("Create a role")
     public ResponseEntity<CreateRoleResponseDTO> createRole(@Valid @RequestBody CreateRoleRequestDTO roleDTO) throws InvalidException {
-        if (this.roleService.existByName(roleDTO.getName())) {
-            throw new InvalidException("Role with name: " + roleDTO.getName() + " is already exist");
-        }
-
+        this.roleService.existByName(roleDTO.getName());
         Role role = this.roleService.handleCreateRole(roleDTO);
-
         return ResponseEntity
-                        .status(HttpStatus.CREATED)
-                        .body(this.roleService.convertRoleToCreateRoleResponseDTO(role));
+                    .status(HttpStatus.CREATED)
+                    .body(this.roleService.convertRoleToCreateRoleResponseDTO(role));
     }
 
     @PutMapping("/roles")
     @ApiMessage("Update a role")
     public ResponseEntity<UpdateRoleResponseDTO> updateRole(@Valid @RequestBody UpdateRoleRequestDTO roleDTO) throws InvalidException {
-        // check id
-        if (this.roleService.handleFindById(roleDTO.getId()).isEmpty()) {
-            throw new InvalidException("Role with id: " + roleDTO.getId() + " does not exist");
-        }
-
+        // check if role does not exits. then throw exception
+        this.roleService.checkRoleExitsById(roleDTO.getId());
         Role updateRole = this.roleService.handleUpdateRole(roleDTO);
-
         return ResponseEntity
                     .ok()
                     .body(this.roleService.convertRoleToUpdateRoleResponseDTO(updateRole));
@@ -84,10 +73,8 @@ public class RoleController {
     @DeleteMapping("/roles/{id}")
     @ApiMessage("Delete a role")
     public ResponseEntity<Void> deleteRole(@PathVariable("id") long id) throws InvalidException {
-        // check id
-        if (this.roleService.handleFindById(id).isEmpty()) {
-            throw new InvalidException("Role with id: " + id + " does not exist");
-        }
+        // check if role does not exits. then throw exception
+        this.roleService.checkRoleExitsById(id);
         this.roleService.handleDeleteRoleById(id);
         return ResponseEntity.ok().body(null);
     }
