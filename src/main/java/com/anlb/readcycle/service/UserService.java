@@ -456,7 +456,7 @@ public class UserService {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             updateUser.setDateOfBirth(LocalDate.parse(reqUser.getDateOfBirth(), formatter));
         }
-        updateUser.setRole(this.roleService.handleFindByName(reqUser.getName()));
+        updateUser.setRole(this.roleService.handleFindByName(reqUser.getRole()));
         return updateUser;
     }
 
