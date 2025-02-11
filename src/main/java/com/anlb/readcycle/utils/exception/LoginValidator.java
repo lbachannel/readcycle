@@ -1,5 +1,6 @@
 package com.anlb.readcycle.utils.exception;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import com.anlb.readcycle.domain.dto.request.LoginRequestDTO;
@@ -15,7 +16,7 @@ public class LoginValidator implements ConstraintValidator<LoginChecked, LoginRe
         boolean valid = true;
 
         // validation username
-        if (account.getUsername().isEmpty()) {
+        if (StringUtils.isBlank(account.getUsername())) {
             context.buildConstraintViolationWithTemplate("Please enter username")
                     .addPropertyNode("username")
                     .addConstraintViolation()
@@ -28,7 +29,7 @@ public class LoginValidator implements ConstraintValidator<LoginChecked, LoginRe
                     .disableDefaultConstraintViolation();
             valid = false;
         } 
-        else if (!("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$".matches(account.getUsername()))) {
+        else if (!(account.getUsername().matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"))) {
             context.buildConstraintViolationWithTemplate("Invalid email format")
                     .addPropertyNode("username")
                     .addConstraintViolation()
@@ -37,7 +38,7 @@ public class LoginValidator implements ConstraintValidator<LoginChecked, LoginRe
         }
         
         // validation password
-        if (account.getPassword().isEmpty()) {
+        if (StringUtils.isBlank(account.getPassword())) {
             context.buildConstraintViolationWithTemplate("Please enter password")
                     .addPropertyNode("password")
                     .addConstraintViolation()
