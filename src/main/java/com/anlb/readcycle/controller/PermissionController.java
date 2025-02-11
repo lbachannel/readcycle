@@ -39,11 +39,9 @@ public class PermissionController {
     @PostMapping("/permissions")
     @ApiMessage("Create a permission")
     public ResponseEntity<CreatePermissionResponseDTO> createPermission(@Valid @RequestBody CreatePermissionRequestDTO permissionDTO) throws InvalidException {
-        if (this.permissionService.isPermissionExist(permissionDTO)) {
-            throw new InvalidException("Permission is already exists");
-        }
+        // check if permission exists
+        this.permissionService.permissionExists(permissionDTO);
         Permission newPermission = this.permissionService.handleCreatePermission(permissionDTO);
-
         return ResponseEntity
                     .status(HttpStatus.CREATED)
                     .body(this.permissionService.convertPermissionToCreatePermissionResponseDTO(newPermission));

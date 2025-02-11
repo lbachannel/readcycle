@@ -16,6 +16,7 @@ import com.anlb.readcycle.domain.dto.response.ResultPaginateDTO;
 import com.anlb.readcycle.domain.dto.response.ResultPaginateDTO.Meta;
 import com.anlb.readcycle.domain.dto.response.UpdatePermissionResponseDTO;
 import com.anlb.readcycle.repository.PermissionRepository;
+import com.anlb.readcycle.utils.exception.InvalidException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -26,12 +27,23 @@ public class PermissionService {
 
     private final PermissionRepository permissionRepository;
 
-    public boolean isPermissionExist(CreatePermissionRequestDTO permissionDTO) {
-        return permissionRepository.existsByModuleAndApiPathAndMethod(
+    /**
+     * Checks whether a permission with the given module, API path, and method already exists.
+     * If the permission exists, an {@link InvalidException} is thrown.
+     *
+     * @param permissionDTO The request data containing module, API path, and method.
+     * @throws InvalidException if the permission already exists.
+     */
+    public void permissionExists(CreatePermissionRequestDTO permissionDTO) throws InvalidException {
+        boolean checkPermissionExist = permissionRepository.existsByModuleAndApiPathAndMethod(
             permissionDTO.getModule(),
             permissionDTO.getApiPath(),
             permissionDTO.getMethod()
         );
+
+        if (checkPermissionExist) {
+            throw new InvalidException("Permission already exists");
+        }
     }
 
     public boolean isPermissionExist(UpdatePermissionRequestDTO permissionDTO) {
