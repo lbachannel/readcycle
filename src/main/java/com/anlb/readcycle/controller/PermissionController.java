@@ -25,16 +25,14 @@ import com.anlb.readcycle.utils.exception.InvalidException;
 import com.turkraft.springfilter.boot.Filter;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/v1")
+@RequiredArgsConstructor
 public class PermissionController {
 
     private final PermissionService permissionService;
-
-    public PermissionController(PermissionService permissionService) {
-        this.permissionService = permissionService;
-    }
 
     @PostMapping("/permissions")
     @ApiMessage("Create a permission")
