@@ -76,7 +76,13 @@ public class UserService {
         return user;
     }
 
-    
+    /**
+     * Converts a {@link CreateUserRequestDTO} object to a {@link User} entity.
+     *
+     * @param userDTO the DTO containing user details
+     * @return a {@link User} entity with the provided details
+     * @throws InvalidException if any validation fails
+     */
     public User convertCreateUserRequestDTOToUser(CreateUserRequestDTO userDTO) throws InvalidException {
         User user = new User();
         user.setName(userDTO.getFirstName() + " " + userDTO.getLastName());
