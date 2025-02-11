@@ -72,7 +72,7 @@ public class UserController {
 
     @PutMapping("/users")
     @ApiMessage("Update user")
-    public ResponseEntity<UpdateUserResponseDTO> updateUser(@RequestBody UpdateUserRequestDTO reqUser) throws InvalidException {
+    public ResponseEntity<UpdateUserResponseDTO> updateUser(@Valid @RequestBody UpdateUserRequestDTO reqUser) throws InvalidException {
         User updateUser = this.userService.handleUpdateUser(reqUser);
         return ResponseEntity
                     .ok(this.userService.convertUserToUpdateUserResponseDTO(updateUser));
