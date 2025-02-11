@@ -1,5 +1,6 @@
 package com.anlb.readcycle.domain.dto.response;
 
+import java.time.Instant;
 import java.time.LocalDate;
 
 import lombok.AllArgsConstructor;
@@ -16,6 +17,7 @@ public class UserResponseDTO {
     private String name;
     private String email;
     private LocalDate dateOfBirth;
+    private Instant createdAt;
     
     private RoleUser role;
 

@@ -366,6 +366,7 @@ public class UserService {
         response.setEmail(user.getEmail());
         response.setName(user.getName());
         response.setDateOfBirth(user.getDateOfBirth());
+        response.setCreatedAt(user.getCreatedAt());
         if (user.getRole() != null) {
             roleUser.setId(user.getRole().getId());
             roleUser.setName(user.getRole().getName());
