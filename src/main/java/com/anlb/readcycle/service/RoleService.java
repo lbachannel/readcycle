@@ -46,16 +46,14 @@ public class RoleService {
     }
 
     /**
-     * Checks if a role with the given ID exists.
-     * If the role does not exist, an {@link InvalidException} is thrown.
+     * Checks if a role exists by its ID.
      *
      * @param id The ID of the role to check.
-     * @throws InvalidException if no role with the given ID is found.
+     * @throws InvalidException if the role does not exist.
      */
     public void checkRoleExitsById(long id) throws InvalidException {
-        Optional<Role> role = this.roleRepository.findById(id);
-        if (role.isEmpty()) {
-            throw new InvalidException("Role with id: " + id + " does not exist");
+        if (!this.roleRepository.existsById(id)) {
+            throw new InvalidException("Role with id: " + id + " does not exist.");
         }
     }
 
