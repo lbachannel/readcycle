@@ -1,5 +1,6 @@
 package com.anlb.readcycle.utils.exception;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import com.anlb.readcycle.domain.dto.request.CreateBookRequestDTO;
@@ -15,14 +16,14 @@ public class BookValidator implements ConstraintValidator<BookChecked, CreateBoo
         boolean valid = true;
 
         // validation category
-        if (book.getCategory().isEmpty()) {
+        if (StringUtils.isBlank(book.getCategory())) {
             context.buildConstraintViolationWithTemplate("Category is required")
                     .addPropertyNode("category")
                     .addConstraintViolation()
                     .disableDefaultConstraintViolation();
             valid = false;
-        } else if (book.getCategory().length() <= 2) {
-            context.buildConstraintViolationWithTemplate("First name must be greater than 2")
+        } else if (2 >= book.getCategory().length()) {
+            context.buildConstraintViolationWithTemplate("First name must be greater than or equal 2")
                     .addPropertyNode("category")
                     .addConstraintViolation()
                     .disableDefaultConstraintViolation();
@@ -30,13 +31,13 @@ public class BookValidator implements ConstraintValidator<BookChecked, CreateBoo
         }
 
         // validation title
-        if (book.getTitle().isEmpty()) {
+        if (StringUtils.isBlank(book.getTitle())) {
             context.buildConstraintViolationWithTemplate("Title is required")
                     .addPropertyNode("title")
                     .addConstraintViolation()
                     .disableDefaultConstraintViolation();
             valid = false;
-        } else if (book.getTitle().length() <= 2) {
+        } else if (2 >= book.getTitle().length()) {
             context.buildConstraintViolationWithTemplate("Title must be greater than 2")
                     .addPropertyNode("title")
                     .addConstraintViolation()
@@ -45,13 +46,13 @@ public class BookValidator implements ConstraintValidator<BookChecked, CreateBoo
         }
 
         // validation author
-        if (book.getAuthor().isEmpty()) {
+        if (StringUtils.isBlank(book.getAuthor())) {
             context.buildConstraintViolationWithTemplate("Author is required")
                     .addPropertyNode("author")
                     .addConstraintViolation()
                     .disableDefaultConstraintViolation();
             valid = false;
-        } else if (book.getAuthor().length() <= 2) {
+        } else if (2 >= book.getAuthor().length()) {
             context.buildConstraintViolationWithTemplate("Author must be greater than 2")
                     .addPropertyNode("author")
                     .addConstraintViolation()
@@ -60,13 +61,13 @@ public class BookValidator implements ConstraintValidator<BookChecked, CreateBoo
         }
 
         // validation publisher
-        if (book.getPublisher().isEmpty()) {
+        if (StringUtils.isBlank(book.getPublisher())) {
             context.buildConstraintViolationWithTemplate("Publisher is required")
                     .addPropertyNode("publisher")
                     .addConstraintViolation()
                     .disableDefaultConstraintViolation();
             valid = false;
-        } else if (book.getPublisher().length() <= 2) {
+        } else if (2 >= book.getPublisher().length()) {
             context.buildConstraintViolationWithTemplate("Publisher must be greater than 2")
                     .addPropertyNode("publisher")
                     .addConstraintViolation()
