@@ -18,7 +18,7 @@ public class LoginResponseDTO {
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
-    public class UserLogin {
+    public static class UserLogin {
         private long id;
         private String email;
         private String name;
