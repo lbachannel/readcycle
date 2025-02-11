@@ -22,12 +22,14 @@ import org.springframework.transaction.annotation.Transactional;
 import com.anlb.readcycle.domain.User;
 import com.anlb.readcycle.domain.dto.request.CreateUserRequestDTO;
 import com.anlb.readcycle.domain.dto.request.RegisterRequestDTO;
+import com.anlb.readcycle.domain.dto.request.UpdateUserRequestDTO;
 import com.anlb.readcycle.domain.dto.response.CreateUserResponseDTO;
 import com.anlb.readcycle.domain.dto.response.LoginResponseDTO;
 import com.anlb.readcycle.domain.dto.response.LoginResponseDTO.UserGetAccount;
 import com.anlb.readcycle.domain.dto.response.LoginResponseDTO.UserLogin;
 import com.anlb.readcycle.domain.dto.response.RegisterResponseDTO;
 import com.anlb.readcycle.domain.dto.response.ResultPaginateDTO;
+import com.anlb.readcycle.domain.dto.response.UpdateUserResponseDTO;
 import com.anlb.readcycle.domain.dto.response.UserResponseDTO;
 import com.anlb.readcycle.repository.UserRepository;
 import com.anlb.readcycle.utils.SecurityUtil;
@@ -77,15 +79,11 @@ public class UserService {
     /**
      * Converts a {@link CreateUserRequestDTO} object to a {@link User} entity.
      *
-     * This method extracts user details from the DTO and creates a new {@link User} entity.
-     * It also hashes the password before storing it.
-     * If the provided date of birth is in a valid format, it is parsed into a {@link LocalDate}.
-     * The user's role is determined based on the role name provided in the DTO.
-     *
-     * @param userDTO The {@link CreateUserRequestDTO} containing user registration details.
-     * @return A {@link User} entity populated with data from the DTO.
+     * @param userDTO the DTO containing user details
+     * @return a {@link User} entity with the provided details
+     * @throws InvalidException if any validation fails
      */
-    public User convertCreateUserRequestDTOToUser(CreateUserRequestDTO userDTO) {
+    public User convertCreateUserRequestDTOToUser(CreateUserRequestDTO userDTO) throws InvalidException {
         User user = new User();
         user.setName(userDTO.getFirstName() + " " + userDTO.getLastName());
         user.setEmail(userDTO.getEmail());
@@ -436,5 +434,36 @@ public class UserService {
         UserGetAccount userGetAccount = new UserGetAccount();
         userGetAccount.setUser(userLogin);
         return userGetAccount;
+    }
+
+    public User handleGetUserById(long id) throws InvalidException {
+        User user = this.userRepository.findById(id).orElse(null);
+        if (user == null) {
+            throw new InvalidException("User with id: " + id + " does not exists");
+        }
+        return user;
+    }
+
+    public User handleUpdateUser(UpdateUserRequestDTO reqUser) throws InvalidException {
+        User updateUser = this.handleGetUserById(reqUser.getId());
+        updateUser.setName(reqUser.getName());
+        updateUser.setEmail(reqUser.getEmail());
+        if (RegisterValidator.isValidDateFormat(reqUser.getDateOfBirth())) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            updateUser.setDateOfBirth(LocalDate.parse(reqUser.getDateOfBirth(), formatter));
+        }
+        updateUser.setRole(this.roleService.handleFindByName(reqUser.getRole()));
+        return updateUser;
+    }
+
+    public UpdateUserResponseDTO convertUserToUpdateUserResponseDTO(User updateUser) {
+        UpdateUserResponseDTO response = new UpdateUserResponseDTO();
+        response.setId(updateUser.getId());
+        response.setName(updateUser.getName());
+        response.setEmail(updateUser.getEmail());
+        response.setDateOfBirth(updateUser.getDateOfBirth());
+        response.setCreatedAt(updateUser.getCreatedAt());
+        response.setRole(updateUser.getRole());
+        return response;
     }
 }
