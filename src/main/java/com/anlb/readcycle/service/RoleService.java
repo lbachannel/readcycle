@@ -130,13 +130,13 @@ public class RoleService {
     }
 
     /**
-     * Retrieves a {@link Role} entity by its name.
+     * Finds a {@link Role} entity by its name.
      *
-     * @param role The name of the role to retrieve.
-     * @return The {@link Role} entity if found, or {@code null} if not.
-          * @throws InvalidException 
-          */
-         public Role handleFindByName(String name) throws InvalidException {
+     * @param name the name of the role to find
+     * @return the {@link Role} entity if found
+     * @throws InvalidException if no role with the given name exists
+     */
+    public Role handleFindByName(String name) throws InvalidException {
         Role role = this.roleRepository.findByName(name);
         if (role == null) {
             throw new InvalidException("Role with name: " + name + " does exists");
