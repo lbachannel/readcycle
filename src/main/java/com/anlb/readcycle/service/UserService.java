@@ -22,12 +22,14 @@ import org.springframework.transaction.annotation.Transactional;
 import com.anlb.readcycle.domain.User;
 import com.anlb.readcycle.domain.dto.request.CreateUserRequestDTO;
 import com.anlb.readcycle.domain.dto.request.RegisterRequestDTO;
+import com.anlb.readcycle.domain.dto.request.UpdateUserRequestDTO;
 import com.anlb.readcycle.domain.dto.response.CreateUserResponseDTO;
 import com.anlb.readcycle.domain.dto.response.LoginResponseDTO;
 import com.anlb.readcycle.domain.dto.response.LoginResponseDTO.UserGetAccount;
 import com.anlb.readcycle.domain.dto.response.LoginResponseDTO.UserLogin;
 import com.anlb.readcycle.domain.dto.response.RegisterResponseDTO;
 import com.anlb.readcycle.domain.dto.response.ResultPaginateDTO;
+import com.anlb.readcycle.domain.dto.response.UpdateUserResponseDTO;
 import com.anlb.readcycle.domain.dto.response.UserResponseDTO;
 import com.anlb.readcycle.repository.UserRepository;
 import com.anlb.readcycle.utils.SecurityUtil;
@@ -436,5 +438,36 @@ public class UserService {
         UserGetAccount userGetAccount = new UserGetAccount();
         userGetAccount.setUser(userLogin);
         return userGetAccount;
+    }
+
+    public User handleGetUserById(long id) throws InvalidException {
+        User user = this.userRepository.findById(id).orElse(null);
+        if (user == null) {
+            throw new InvalidException("User with id: " + id + " does not exists");
+        }
+        return user;
+    }
+
+    public User handleUpdateUser(UpdateUserRequestDTO reqUser) throws InvalidException {
+        User updateUser = this.handleGetUserById(reqUser.getId());
+        updateUser.setName(reqUser.getName());
+        updateUser.setEmail(reqUser.getEmail());
+        if (RegisterValidator.isValidDateFormat(reqUser.getDateOfBirth())) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            updateUser.setDateOfBirth(LocalDate.parse(reqUser.getDateOfBirth(), formatter));
+        }
+        updateUser.setRole(this.roleService.handleFindByName(reqUser.getName()));
+        return updateUser;
+    }
+
+    public UpdateUserResponseDTO convertUserToUpdateUserResponseDTO(User updateUser) {
+        UpdateUserResponseDTO response = new UpdateUserResponseDTO();
+        response.setId(updateUser.getId());
+        response.setName(updateUser.getName());
+        response.setEmail(updateUser.getEmail());
+        response.setDateOfBirth(updateUser.getDateOfBirth());
+        response.setCreatedAt(updateUser.getCreatedAt());
+        response.setRole(updateUser.getRole());
+        return response;
     }
 }

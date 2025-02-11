@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,12 +14,15 @@ import org.springframework.web.bind.annotation.RestController;
 import com.anlb.readcycle.domain.User;
 import com.anlb.readcycle.domain.dto.request.CreateUserRequestDTO;
 import com.anlb.readcycle.domain.dto.request.RegisterRequestDTO;
+import com.anlb.readcycle.domain.dto.request.UpdateUserRequestDTO;
 import com.anlb.readcycle.domain.dto.response.CreateUserResponseDTO;
 import com.anlb.readcycle.domain.dto.response.RegisterResponseDTO;
 import com.anlb.readcycle.domain.dto.response.ResultPaginateDTO;
+import com.anlb.readcycle.domain.dto.response.UpdateUserResponseDTO;
 import com.anlb.readcycle.service.EmailService;
 import com.anlb.readcycle.service.UserService;
 import com.anlb.readcycle.utils.anotation.ApiMessage;
+import com.anlb.readcycle.utils.exception.InvalidException;
 import com.turkraft.springfilter.boot.Filter;
 
 import jakarta.validation.Valid;
@@ -64,5 +68,13 @@ public class UserController {
         return ResponseEntity
                     .status(HttpStatus.CREATED)
                     .body(this.userService.convertUserToCreateResponseDTO(newUser));
+    }
+
+    @PutMapping("/users")
+    @ApiMessage("Update user")
+    public ResponseEntity<UpdateUserResponseDTO> updateUser(@RequestBody UpdateUserRequestDTO reqUser) throws InvalidException {
+        User updateUser = this.userService.handleUpdateUser(reqUser);
+        return ResponseEntity
+                    .ok(this.userService.convertUserToUpdateUserResponseDTO(updateUser));
     }
 }
