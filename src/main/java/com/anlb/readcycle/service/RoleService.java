@@ -20,17 +20,14 @@ import com.anlb.readcycle.domain.dto.response.UpdateRoleResponseDTO;
 import com.anlb.readcycle.repository.PermissionRepository;
 import com.anlb.readcycle.repository.RoleRepository;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class RoleService {
 
     private final RoleRepository roleRepository;
     private final PermissionRepository permissionRepository;
-
-    public RoleService(RoleRepository roleRepository,
-                        PermissionRepository permissionRepository) {
-        this.roleRepository = roleRepository;
-        this.permissionRepository = permissionRepository;
-    }
 
     public boolean existByName(String name) {
         return this.roleRepository.existsByName(name);
