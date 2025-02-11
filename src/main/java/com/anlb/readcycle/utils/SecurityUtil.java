@@ -22,6 +22,7 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.stereotype.Service;
 
 import com.anlb.readcycle.domain.dto.response.LoginResponseDTO;
+import com.anlb.readcycle.utils.exception.InvalidException;
 import com.nimbusds.jose.util.Base64;
 
 @Service
@@ -129,16 +130,18 @@ public class SecurityUtil {
     }
 
     // decoder check token is real or fake
-    public Jwt checkValidRefreshToken(String token) {
+    public Jwt checkValidRefreshToken(String token) throws InvalidException {
         NimbusJwtDecoder jwtDecoder = NimbusJwtDecoder
                                             .withSecretKey(getSecretKey())
                                             .macAlgorithm(SecurityUtil.JWT_ALGORITHM)
                                             .build();
         try {
+            if ("abc".equals(token)) {
+                throw new InvalidException("You do not have refresh token in cookies");
+            }
             return jwtDecoder.decode(token);
         } catch (Exception e) {
-            System.out.println("Refresh token error: " + e.getMessage());
-            throw e;
+            throw new InvalidException("Refresh token error: " + e.getMessage());
         }
     }
 }

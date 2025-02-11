@@ -7,9 +7,11 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
@@ -21,11 +23,15 @@ import com.anlb.readcycle.domain.User;
 import com.anlb.readcycle.domain.dto.request.CreateUserRequestDTO;
 import com.anlb.readcycle.domain.dto.request.RegisterRequestDTO;
 import com.anlb.readcycle.domain.dto.response.CreateUserResponseDTO;
+import com.anlb.readcycle.domain.dto.response.LoginResponseDTO;
+import com.anlb.readcycle.domain.dto.response.LoginResponseDTO.UserGetAccount;
+import com.anlb.readcycle.domain.dto.response.LoginResponseDTO.UserLogin;
 import com.anlb.readcycle.domain.dto.response.RegisterResponseDTO;
 import com.anlb.readcycle.domain.dto.response.ResultPaginateDTO;
 import com.anlb.readcycle.domain.dto.response.UserResponseDTO;
 import com.anlb.readcycle.repository.UserRepository;
 import com.anlb.readcycle.utils.SecurityUtil;
+import com.anlb.readcycle.utils.exception.InvalidException;
 import com.anlb.readcycle.utils.exception.RegisterValidator;
 
 import lombok.RequiredArgsConstructor;
@@ -176,9 +182,19 @@ public class UserService {
      *
      * @param username The username (email) of the user.
      * @return The {@code User} object corresponding to the given username.
+     *
      */
-    public User handleGetUserByUsername(String username) {
-        return this.userRepository.findByEmail(username);
+    public User handleGetUserByUsername(String username) throws InvalidException {
+        User user = this.userRepository.findByEmail(username);
+        if (user == null) {
+            throw new InvalidException("Bad credentials");
+        }
+
+        if (!user.isEmailVerified()) {
+            throw new InvalidException("Your account has not been verified");
+        }
+        
+        return user;
     }
 
     /**
@@ -243,12 +259,21 @@ public class UserService {
     }
 
     /**
-     * Updates the refresh token for a user based on their email.
+     * Updates the refresh token of the currently logged-in user.
      *
-     * @param refreshToken The new refresh token to be stored.
-     * @param email        The email of the user whose refresh token is being updated.
+     * This method retrieves the email of the currently logged-in user using {@link SecurityUtil#getCurrentUserLogin()}.
+     * If the email is not present or is blank, an {@link InvalidException} is thrown. Otherwise, the corresponding
+     * {@link User} is fetched from the database, and their refresh token is updated and saved.
+     *
+     * @param refreshToken the new refresh token to be set for the user
+     * @throws InvalidException if the current user's email is not available (indicating an invalid access token)
      */
-    public void handleUpdateRefreshTokenIntoUser(String refreshToken, String email) {
+    public void handleUpdateRefreshTokenIntoUser(String refreshToken) throws InvalidException {
+        String email = SecurityUtil.getCurrentUserLogin().isPresent()
+        ? SecurityUtil.getCurrentUserLogin().get() : "";
+        if (StringUtils.isBlank(email)) {
+            throw new InvalidException("Access Token invalid");
+        }
         User user = this.handleGetUserByUsername(email);
         if (user != null) {
             user.setRefreshToken(refreshToken);
@@ -257,14 +282,42 @@ public class UserService {
     }
 
     /**
-     * Retrieves a user by their refresh token and email.
+     * Validates a refresh token and email against the stored user data.
      *
-     * @param refreshToken The refresh token associated with the user.
-     * @param email        The email of the user.
-     * @return The user matching the given refresh token and email, or null if not found.
+     * @param refreshToken the refresh token to verify
+     * @param decodedToken the decoded JWT containing the user's subject (email or username)
+     * @throws InvalidException if no user is found with the provided refresh token and email
      */
-    public User handleGetUserByRefreshTokenAndEmail(String refreshToken, String email) {
-        return this.userRepository.findByRefreshTokenAndEmail(refreshToken, email);
+    public void handleGetUserByRefreshTokenAndEmail(String refreshToken, Jwt decodedToken) throws InvalidException {  
+        User dbUser = this.userRepository.findByRefreshTokenAndEmail(refreshToken, decodedToken.getSubject());
+        if (dbUser == null) {
+            throw new InvalidException("Refresh token is not valid");
+        }
+    }
+
+    /**
+     * Generates a {@link LoginResponseDTO} from a decoded JWT token.
+     *
+     * @param decodedToken the decoded JWT containing the user's subject (email or username)
+     * @return a {@link LoginResponseDTO} containing user details and an access token
+     * @throws InvalidException if the user associated with the token does not exist
+     */
+    public LoginResponseDTO generateLoginResponseFromToken (Jwt decodedToken) throws InvalidException {
+        User dbUser = this.handleGetUserByUsername(decodedToken.getSubject());
+        UserLogin user = new UserLogin(
+            dbUser.getId(),
+            dbUser.getEmail(),
+            dbUser.getName(),
+            dbUser.getRole()
+        );
+
+        LoginResponseDTO response = new LoginResponseDTO();
+        response.setUser(user);
+
+        // set access token
+        String accessToken = this.securityUtil.createAccessToken(decodedToken.getSubject(), response);
+        response.setAccessToken(accessToken);
+        return response;
     }
 
     /**
@@ -318,5 +371,68 @@ public class UserService {
             response.setRole(roleUser);
         }
         return response;
+    }
+
+    /**
+     * Converts a User object into a UserLogin object.
+     * 
+     * @param dbUser The User object containing user details.
+     * @return A UserLogin object with essential user information.
+     */
+    public UserLogin convertUserToUserLogin(User dbUser) {
+        UserLogin user = new UserLogin();
+        user.setId(dbUser.getId());
+        user.setEmail(dbUser.getEmail());
+        user.setName(dbUser.getName());
+        user.setRole(dbUser.getRole());
+        return user;
+    }
+
+    /**
+     * Retrieves the currently authenticated user's account information.
+     *
+     * @return A {@link UserGetAccount} containing the authenticated user's details.
+     * @throws InvalidException If the user is not found or their account is invalid.
+     */
+    public UserGetAccount getCurrentUserAccount() throws InvalidException {
+        String email = SecurityUtil.getCurrentUserLogin().isPresent()
+                        ? SecurityUtil.getCurrentUserLogin().get() : "";
+        User dbUser = this.handleGetUserByUsername(email);
+        UserLogin userLogin = this.convertUserToUserLogin(dbUser);
+        return this.convertUserLoginToUserGetAccount(userLogin);
+    }
+
+    /**
+     * Converts a {@link User} entity into a {@link LoginResponseDTO}, including user details and an access token.
+     *
+     * @param dbUser        The authenticated user entity.
+     * @param authentication The authentication object containing user credentials.
+     * @return A {@link LoginResponseDTO} containing user details and an access token.
+     */
+    public LoginResponseDTO convertUserToLoginResponseDTO(User dbUser, Authentication authentication) {
+        UserLogin user = new UserLogin();
+        user.setId(dbUser.getId());
+        user.setEmail(dbUser.getEmail());
+        user.setName(dbUser.getName());
+        user.setRole(dbUser.getRole());
+        LoginResponseDTO response = new LoginResponseDTO();
+        response.setUser(user);
+
+        // set access token
+        String accessToken = this.securityUtil.createAccessToken(authentication.getName(), response);
+        response.setAccessToken(accessToken);
+        return response;
+    }
+
+    /**
+     * Converts a UserLogin object into a UserGetAccount object.
+     * 
+     * @param userLogin The UserLogin object containing user details.
+     * @return A UserGetAccount object that encapsulates the user information.
+     */
+    public UserGetAccount convertUserLoginToUserGetAccount(UserLogin userLogin) {
+        UserGetAccount userGetAccount = new UserGetAccount();
+        userGetAccount.setUser(userLogin);
+        return userGetAccount;
     }
 }
