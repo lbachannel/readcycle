@@ -61,7 +61,7 @@ public class RegisterValidator implements ConstraintValidator<RegisterChecked, R
                     .addConstraintViolation()
                     .disableDefaultConstraintViolation();
             valid = false;
-        } else if (!("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$".matches(user.getEmail()))) {
+        } else if (!(user.getEmail().matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"))) {
             context.buildConstraintViolationWithTemplate("Invalid email format")
                     .addPropertyNode("email")
                     .addConstraintViolation()
