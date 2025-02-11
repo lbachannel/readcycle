@@ -76,18 +76,8 @@ public class UserService {
         return user;
     }
 
-    /**
-     * Converts a {@link CreateUserRequestDTO} object to a {@link User} entity.
-     *
-     * This method extracts user details from the DTO and creates a new {@link User} entity.
-     * It also hashes the password before storing it.
-     * If the provided date of birth is in a valid format, it is parsed into a {@link LocalDate}.
-     * The user's role is determined based on the role name provided in the DTO.
-     *
-     * @param userDTO The {@link CreateUserRequestDTO} containing user registration details.
-     * @return A {@link User} entity populated with data from the DTO.
-     */
-    public User convertCreateUserRequestDTOToUser(CreateUserRequestDTO userDTO) {
+    
+    public User convertCreateUserRequestDTOToUser(CreateUserRequestDTO userDTO) throws InvalidException {
         User user = new User();
         user.setName(userDTO.getFirstName() + " " + userDTO.getLastName());
         user.setEmail(userDTO.getEmail());

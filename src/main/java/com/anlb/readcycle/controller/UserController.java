@@ -60,7 +60,7 @@ public class UserController {
 
     @PostMapping("/users")
     @ApiMessage("Create a user")
-    public ResponseEntity<CreateUserResponseDTO> createNewUser(@Valid @RequestBody CreateUserRequestDTO userDTO) {
+    public ResponseEntity<CreateUserResponseDTO> createNewUser(@Valid @RequestBody CreateUserRequestDTO userDTO) throws InvalidException {
         // convert DTO -> User
         User newUser = this.userService.convertCreateUserRequestDTOToUser(userDTO);
         // save user
