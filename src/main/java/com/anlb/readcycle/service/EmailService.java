@@ -14,17 +14,14 @@ import com.anlb.readcycle.domain.User;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class EmailService {
 
     private final JavaMailSender javaMailSender;
     private final SpringTemplateEngine templateEngine;
-
-    public EmailService(JavaMailSender javaMailSender, SpringTemplateEngine templateEngine) {
-        this.javaMailSender = javaMailSender;
-        this.templateEngine = templateEngine;
-    }
 
     public void sendEmailSync(String to, String subject, String content, boolean isMultipart, boolean isHtml) {
         MimeMessage mimeMessage = this.javaMailSender.createMimeMessage();

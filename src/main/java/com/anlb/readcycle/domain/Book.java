@@ -24,26 +24,46 @@ import lombok.Data;
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private long id;
+
+    @Column(name = "category")
     private String category;
+
+    @Column(name = "title")
     private String title;
+
+    @Column(name = "author")
     private String author;
+
+    @Column(name = "publisher")
     private String publisher;
+
+    @Column(name = "thumb")
     private String thumb;
 
-    @Column(columnDefinition = "MEDIUMTEXT")
+    @Column(name = "description", columnDefinition = "MEDIUMTEXT")
     private String description;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss a", timezone = "GMT+7")
+    @Column(name = "created_at")
     private Instant createdAt;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss a", timezone = "GMT+7")
+    @Column(name = "updated_at")
     private Instant updatedAt;
+
+    @Column(name = "created_by")
     private String createdBy;
+
+    @Column(name = "updated_by")
     private String updatedBy;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "status")
     private BookStatusEnum status;
 
+    @Column(name = "is_active")
     private boolean isActive;
 
     @PrePersist

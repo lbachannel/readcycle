@@ -13,18 +13,23 @@ import com.anlb.readcycle.domain.dto.response.BookResponseDTO;
 import com.anlb.readcycle.domain.dto.response.CreateBookResponseDTO;
 import com.anlb.readcycle.domain.dto.response.UpdateBookResponseDTO;
 import com.anlb.readcycle.repository.BookRepository;
+import com.anlb.readcycle.utils.exception.InvalidException;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class BookService {
 
     private final BookRepository bookRepository;
 
-    public BookService(BookRepository bookRepository) {
-        this.bookRepository = bookRepository;
-    }
-
-    // handle create book
+    /**
+     * Creates a new book record in the database.
+     *
+     * @param requestBook The DTO containing details of the new book.
+     * @return The newly created {@link Book} entity after saving to the database.
+     */
     public Book handleCreateBook(CreateBookRequestDTO requestBook) {
         Book newBook = new Book();
         newBook.setCategory(requestBook.getCategory());
@@ -38,7 +43,12 @@ public class BookService {
         return this.bookRepository.save(newBook);
     }
 
-    // convert book -> create book response dto 
+    /**
+     * Converts a {@link Book} entity to a {@link CreateBookResponseDTO}.
+     *
+     * @param book The {@link Book} entity to be converted.
+     * @return A {@link CreateBookResponseDTO} containing the book's details.
+     */
     public CreateBookResponseDTO convertBookToCreateBookResponseDTO(Book book) {
         CreateBookResponseDTO response = new CreateBookResponseDTO();
         response.setId(book.getId());
@@ -55,27 +65,48 @@ public class BookService {
         return response;
     }
 
-    // Get book by id
-    public Book handleGetBookById(long id) {
-        if (this.bookRepository.findById(id).isPresent()) {
-            return this.bookRepository.findById(id).get();
+    /**
+     * Retrieves a {@link Book} entity by its ID.
+     *
+     * @param id The unique identifier of the book.
+     * @return The {@link Book} entity if found.
+     * @throws InvalidException If no book with the given ID exists.
+     */
+    public Book handleGetBookById(long id) throws InvalidException {
+        Book isDeletedBook = this.bookRepository.findById(id).orElse(null);
+        if (isDeletedBook == null) {
+            throw new InvalidException("Book with id: " + id + " does not exists");
         }
-        return null;
+        return this.bookRepository.findById(id).get();
     }
 
-    // Get book by id and isActive true
-    public Book handleGetBookByIdAndActive(long id, boolean isActive) {
-        if(this.bookRepository.findByIdAndIsActive(id, isActive).isPresent()) {
-            return this.bookRepository.findByIdAndIsActive(id, isActive).get();
+    /**
+     * Retrieves a book by its ID and active status.
+     *
+     * @param id       The ID of the book to retrieve.
+     * @param isActive A boolean flag indicating whether the book should be active (true) or inactive (false).
+     * @return The {@link Book} entity that matches the given ID and active status.
+     * @throws InvalidException if no book with the given ID and active status is found.
+     */
+    public Book handleGetBookByIdAndActive(long id, boolean isActive) throws InvalidException {
+        Book currentBook = this.bookRepository.findByIdAndIsActive(id, isActive).orElse(null);
+        if (currentBook == null) {
+            throw new InvalidException("Book with id: " + id + " does not exists");
         }
-        return null;
+        return this.bookRepository.findByIdAndIsActive(id, isActive).get();
     }
 
-    // handle update book
-    public Book handleUpdateBook(UpdateBookRequestDTO requestBook) {
+    /**
+     * Updates an existing book with new details provided in the request.
+     *
+     * @param requestBook The DTO containing updated book information.
+     * @return The updated {@link Book} entity after saving to the database.
+     * @throws InvalidException if the book with the given ID does not exist.
+     */
+    public Book handleUpdateBook(UpdateBookRequestDTO requestBook) throws InvalidException {
         Book updateBook = this.handleGetBookById(requestBook.getId());
         if (updateBook == null) {
-            return null;
+            throw new InvalidException("Book with id: " + requestBook.getId() + " does not exists");
         }
         updateBook.setCategory(requestBook.getCategory());
         updateBook.setTitle(requestBook.getTitle());
@@ -87,7 +118,12 @@ public class BookService {
         return this.bookRepository.save(updateBook);
     }
 
-    // convert book -> update book response dto 
+    /**
+     * Converts a {@link Book} entity to an {@link UpdateBookResponseDTO}.
+     *
+     * @param updateBook The {@link Book} entity to be converted.
+     * @return An {@link UpdateBookResponseDTO} containing the book's updated details.
+     */
     public UpdateBookResponseDTO convertBookToUpdateBookResponseDTO(Book updateBook) {
         UpdateBookResponseDTO response = new UpdateBookResponseDTO();
         response.setId(updateBook.getId());
@@ -106,17 +142,25 @@ public class BookService {
         return response;
     }
 
-    public Book handleSoftDelete(int id) {
+    /**
+     * Performs a soft delete on a book by setting its active status to false.
+     *
+     * @param id The ID of the book to be soft deleted.
+     * @return The updated {@link Book} entity after deactivating it.
+     * @throws InvalidException if the book with the given ID does not exist.
+     */
+    public Book handleSoftDelete(long id) throws InvalidException {
         Book isDeletedBook = this.handleGetBookById(id);
-        if (isDeletedBook == null) {
-            return null;
-        }
-
         isDeletedBook.setActive(false);
         return this.bookRepository.save(isDeletedBook);
     }
 
-    // convert book -> get a book response dto 
+    /**
+     * Converts a {@link Book} entity to a {@link BookResponseDTO}.
+     *
+     * @param currentBook The {@link Book} entity to be converted.
+     * @return A {@link BookResponseDTO} containing the book's details.
+     */
     public BookResponseDTO convertBookToBookResponseDTO(Book currentBook) {
         BookResponseDTO response = new BookResponseDTO();
         response.setId(currentBook.getId());
@@ -131,12 +175,22 @@ public class BookService {
         return response;
     }
 
-    // get all books
+    /**
+     * Retrieves a list of all books based on their active status.
+     *
+     * @param isActive A boolean flag indicating whether to fetch active (true) or inactive (false) books.
+     * @return A list of {@link Book} entities that match the specified active status.
+     */
     public List<Book> handleGetAllBooks(boolean isActive) {
         return this.bookRepository.findAllByIsActive(isActive);
     }
 
-    // convert books -> get books response dto 
+    /**
+     * Converts a list of {@link Book} entities to a list of {@link BookResponseDTO}.
+     *
+     * @param books The list of {@link Book} entities to be converted.
+     * @return A list of {@link BookResponseDTO} containing the details of each book.
+     */
     public List<BookResponseDTO> convertBooksToBookResponseDTO(List<Book> books) {
         List<BookResponseDTO> response = books.stream()
                                             .map(item -> new BookResponseDTO(

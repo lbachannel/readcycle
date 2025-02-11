@@ -3,7 +3,6 @@ package com.anlb.readcycle.controller;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,35 +23,31 @@ import com.anlb.readcycle.utils.anotation.ApiMessage;
 import com.anlb.readcycle.utils.exception.InvalidException;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/v1")
+@RequiredArgsConstructor
 public class BookController {
     
     private final BookService bookService;
-    
-    public BookController(BookService bookService) {
-        this.bookService = bookService;
-    }
 
     @GetMapping("/books/{id}")
     @ApiMessage("Get book by id")
     public ResponseEntity<BookResponseDTO> getBookById(@PathVariable("id") long id) throws InvalidException {
         Book currentBook = this.bookService.handleGetBookByIdAndActive(id, true);
-        if (currentBook == null) {
-            throw new InvalidException("Book with id: " + id + " does not exists");
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(this.bookService.convertBookToBookResponseDTO(currentBook));
+        return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(this.bookService.convertBookToBookResponseDTO(currentBook));
     }
 
     @GetMapping("/books")
     @ApiMessage("Get books")
-    public ResponseEntity<List<BookResponseDTO>> getBooks() throws InvalidException {
+    public ResponseEntity<List<BookResponseDTO>> getBooks() {
         List<Book> books = this.bookService.handleGetAllBooks(true);
-        if (books.isEmpty()) {
-            throw new InvalidException("There is no book");
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(this.bookService.convertBooksToBookResponseDTO(books));
+        return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(this.bookService.convertBooksToBookResponseDTO(books));
     }
 
     @PostMapping("/books")
@@ -68,20 +63,17 @@ public class BookController {
     @ApiMessage("Update book")
     public ResponseEntity<UpdateBookResponseDTO> updateBook(@RequestBody UpdateBookRequestDTO reqBook) throws InvalidException {
         Book updateBook = this.bookService.handleUpdateBook(reqBook);
-        if (updateBook == null) {
-            throw new InvalidException("Book with id: " + reqBook.getId() + " does not exists");
-        }
-        return ResponseEntity.ok(this.bookService.convertBookToUpdateBookResponseDTO(updateBook));
+        return ResponseEntity
+                    .ok(this.bookService.convertBookToUpdateBookResponseDTO(updateBook));
     }
 
     @PutMapping("/books/{id}")
     @ApiMessage("Delete book")
     public ResponseEntity<Void> deleteBook(@PathVariable("id") int id) throws InvalidException {
         Book isDeletedBook = this.bookService.handleGetBookById(id);
-        if (isDeletedBook == null) {
-            throw new InvalidException("Book with id: " + id + " does not exists");
-        }
-        this.bookService.handleSoftDelete(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        this.bookService.handleSoftDelete(isDeletedBook.getId());
+        return ResponseEntity
+                    .status(HttpStatus.NO_CONTENT)
+                    .build();
     }
 }

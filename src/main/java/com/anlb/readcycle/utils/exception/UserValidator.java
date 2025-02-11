@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import com.anlb.readcycle.domain.dto.request.CreateUserRequestDTO;
@@ -11,28 +12,26 @@ import com.anlb.readcycle.service.UserService;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class UserValidator implements ConstraintValidator<UserChecked, CreateUserRequestDTO> {
 
     private final UserService userService;
-
-    public UserValidator(UserService userService) {
-        this.userService = userService;
-    }
 
     @Override
     public boolean isValid(CreateUserRequestDTO user, ConstraintValidatorContext context) {
         boolean valid = true;
 
         // validation first name
-        if (user.getFirstName().isEmpty()) {
+        if (StringUtils.isBlank(user.getFirstName())) {
             context.buildConstraintViolationWithTemplate("First name is required")
                     .addPropertyNode("firstName")
                     .addConstraintViolation()
                     .disableDefaultConstraintViolation();
             valid = false;
-        } else if (user.getFirstName().length() <= 1) {
+        } else if (1 >= user.getFirstName().length()) {
             context.buildConstraintViolationWithTemplate("First name must be greater than 1")
                     .addPropertyNode("firstName")
                     .addConstraintViolation()
@@ -41,13 +40,13 @@ public class UserValidator implements ConstraintValidator<UserChecked, CreateUse
         }
 
         // validation last name
-        if (user.getLastName().isEmpty()) {
+        if (StringUtils.isBlank(user.getLastName())) {
             context.buildConstraintViolationWithTemplate("Last name is required")
                     .addPropertyNode("lastName")
                     .addConstraintViolation()
                     .disableDefaultConstraintViolation();
             valid = false;
-        } else if (user.getLastName().length() <= 1) {
+        } else if (1 >= user.getLastName().length()) {
             context.buildConstraintViolationWithTemplate("Last name must be greater than 1")
                     .addPropertyNode("lastName")
                     .addConstraintViolation()
@@ -56,7 +55,7 @@ public class UserValidator implements ConstraintValidator<UserChecked, CreateUse
         }
 
         // validation email
-        if (user.getEmail().isEmpty()) {
+        if (StringUtils.isBlank(user.getEmail())) {
             context.buildConstraintViolationWithTemplate("Email is required")
                     .addPropertyNode("email")
                     .addConstraintViolation()
@@ -77,7 +76,7 @@ public class UserValidator implements ConstraintValidator<UserChecked, CreateUse
         }
 
         // validation date of birth
-        if (user.getDateOfBirth().isEmpty()) {
+        if (StringUtils.isBlank(user.getDateOfBirth())) {
             context.buildConstraintViolationWithTemplate("Date of birth is required")
                     .addPropertyNode("dateOfBirth")
                     .addConstraintViolation()
@@ -104,13 +103,13 @@ public class UserValidator implements ConstraintValidator<UserChecked, CreateUse
         }
 
         // validation password
-        if (user.getPassword().isEmpty()) {
+        if (StringUtils.isBlank(user.getPassword())) {
             context.buildConstraintViolationWithTemplate("Password is required")
                     .addPropertyNode("password")
                     .addConstraintViolation()
                     .disableDefaultConstraintViolation();
             valid = false;
-        } else if (user.getPassword().length() <= 2) {
+        } else if (2 >= user.getPassword().length()) {
             context.buildConstraintViolationWithTemplate("Password must be greater than or equal to 3")
                     .addPropertyNode("password")
                     .addConstraintViolation()
@@ -119,13 +118,13 @@ public class UserValidator implements ConstraintValidator<UserChecked, CreateUse
         }
 
          // validation confirm password
-        if (user.getConfirmPassword().isEmpty()) {
+        if (StringUtils.isBlank(user.getConfirmPassword())) {
             context.buildConstraintViolationWithTemplate("Confirm password is required")
                     .addPropertyNode("confirmPassword")
                     .addConstraintViolation()
                     .disableDefaultConstraintViolation();
             valid = false;
-        } else if (user.getConfirmPassword().length() <= 2) {
+        } else if (2 >= user.getConfirmPassword().length()) {
             context.buildConstraintViolationWithTemplate("Confirm password must be greater than or equal to 3")
                     .addPropertyNode("confirmPassword")
                     .addConstraintViolation()
@@ -145,7 +144,7 @@ public class UserValidator implements ConstraintValidator<UserChecked, CreateUse
         }
 
         // validation role
-        if (user.getRole().isEmpty()) {
+        if (StringUtils.isBlank(user.getRole())) {
             context.buildConstraintViolationWithTemplate("Role is required")
                     .addPropertyNode("role")
                     .addConstraintViolation()

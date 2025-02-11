@@ -25,25 +25,21 @@ import com.anlb.readcycle.utils.exception.InvalidException;
 import com.turkraft.springfilter.boot.Filter;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/v1")
+@RequiredArgsConstructor
 public class PermissionController {
 
     private final PermissionService permissionService;
 
-    public PermissionController(PermissionService permissionService) {
-        this.permissionService = permissionService;
-    }
-
     @PostMapping("/permissions")
     @ApiMessage("Create a permission")
     public ResponseEntity<CreatePermissionResponseDTO> createPermission(@Valid @RequestBody CreatePermissionRequestDTO permissionDTO) throws InvalidException {
-        if (this.permissionService.isPermissionExist(permissionDTO)) {
-            throw new InvalidException("Permission is already exists");
-        }
+        // check if permission exists
+        this.permissionService.permissionExists(permissionDTO.getModule(), permissionDTO.getApiPath(), permissionDTO.getMethod());
         Permission newPermission = this.permissionService.handleCreatePermission(permissionDTO);
-
         return ResponseEntity
                     .status(HttpStatus.CREATED)
                     .body(this.permissionService.convertPermissionToCreatePermissionResponseDTO(newPermission));
@@ -52,16 +48,9 @@ public class PermissionController {
     @PutMapping("/permissions")
     @ApiMessage("Update a permission")
     public ResponseEntity<UpdatePermissionResponseDTO> updatePermission(@Valid @RequestBody UpdatePermissionRequestDTO permissionDTO) throws InvalidException {
-        if (this.permissionService.handleFindById(permissionDTO.getId()) == null) {
-            throw new InvalidException("Permission with id: " + permissionDTO.getId() + " does not exist.");
-        }
-
-        if (this.permissionService.isPermissionExist(permissionDTO)) {
-            throw new InvalidException("Permission is already exist.");
-        }
-
+        // check if permission exists
+        this.permissionService.permissionExists(permissionDTO.getModule(), permissionDTO.getApiPath(), permissionDTO.getMethod());
         Permission updatePermission = this.permissionService.handleUpdatePermission(permissionDTO);
-
         return ResponseEntity
                     .ok()
                     .body(this.permissionService.convertPermissionToUpdatePermissionResponseDTO(updatePermission));
@@ -76,10 +65,6 @@ public class PermissionController {
     @DeleteMapping("/permissions/{id}")
     @ApiMessage("delete a permission")
     public ResponseEntity<Void> deletePermission(@PathVariable("id") long id) throws InvalidException {
-        // check exist by id
-        if (this.permissionService.handleFindById(id) == null) {
-            throw new InvalidException("Permission with id: " + id + " does not exist.");
-        }
         this.permissionService.delete(id);
         return ResponseEntity.ok().body(null);
     }
