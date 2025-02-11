@@ -23,7 +23,7 @@ public class LoginValidator implements ConstraintValidator<LoginChecked, LoginRe
                     .disableDefaultConstraintViolation();
             valid = false;
         } else if (10 > account.getUsername().length()) {
-            context.buildConstraintViolationWithTemplate("Username must be greater than or equal 10")
+            context.buildConstraintViolationWithTemplate("Username must be greater than 10")
                     .addPropertyNode("username")
                     .addConstraintViolation()
                     .disableDefaultConstraintViolation();
