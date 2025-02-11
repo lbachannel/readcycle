@@ -40,7 +40,7 @@ public class PermissionController {
     @ApiMessage("Create a permission")
     public ResponseEntity<CreatePermissionResponseDTO> createPermission(@Valid @RequestBody CreatePermissionRequestDTO permissionDTO) throws InvalidException {
         // check if permission exists
-        this.permissionService.permissionExists(permissionDTO);
+        this.permissionService.permissionExists(permissionDTO.getModule(), permissionDTO.getApiPath(), permissionDTO.getMethod());
         Permission newPermission = this.permissionService.handleCreatePermission(permissionDTO);
         return ResponseEntity
                     .status(HttpStatus.CREATED)
@@ -50,16 +50,9 @@ public class PermissionController {
     @PutMapping("/permissions")
     @ApiMessage("Update a permission")
     public ResponseEntity<UpdatePermissionResponseDTO> updatePermission(@Valid @RequestBody UpdatePermissionRequestDTO permissionDTO) throws InvalidException {
-        if (this.permissionService.handleFindById(permissionDTO.getId()) == null) {
-            throw new InvalidException("Permission with id: " + permissionDTO.getId() + " does not exist.");
-        }
-
-        if (this.permissionService.isPermissionExist(permissionDTO)) {
-            throw new InvalidException("Permission is already exist.");
-        }
-
+        // check if permission exists
+        this.permissionService.permissionExists(permissionDTO.getModule(), permissionDTO.getApiPath(), permissionDTO.getMethod());
         Permission updatePermission = this.permissionService.handleUpdatePermission(permissionDTO);
-
         return ResponseEntity
                     .ok()
                     .body(this.permissionService.convertPermissionToUpdatePermissionResponseDTO(updatePermission));

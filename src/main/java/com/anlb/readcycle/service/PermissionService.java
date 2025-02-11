@@ -31,27 +31,21 @@ public class PermissionService {
      * Checks whether a permission with the given module, API path, and method already exists.
      * If the permission exists, an {@link InvalidException} is thrown.
      *
-     * @param permissionDTO The request data containing module, API path, and method.
-     * @throws InvalidException if the permission already exists.
+     * @param module  The module associated with the permission.
+     * @param apiPath The API path of the permission.
+     * @param method  The HTTP method of the permission.
+     * @throws InvalidException if a permission with the same module, API path, and method already exists.
      */
-    public void permissionExists(CreatePermissionRequestDTO permissionDTO) throws InvalidException {
-        boolean checkPermissionExist = permissionRepository.existsByModuleAndApiPathAndMethod(
-            permissionDTO.getModule(),
-            permissionDTO.getApiPath(),
-            permissionDTO.getMethod()
+    public void permissionExists(String module, String apiPath, String method) throws InvalidException {
+        boolean checkPermissionExists = permissionRepository.existsByModuleAndApiPathAndMethod(
+            module,
+            apiPath,
+            method
         );
 
-        if (checkPermissionExist) {
+        if (checkPermissionExists) {
             throw new InvalidException("Permission already exists");
         }
-    }
-
-    public boolean isPermissionExist(UpdatePermissionRequestDTO permissionDTO) {
-        return permissionRepository.existsByModuleAndApiPathAndMethod(
-            permissionDTO.getModule(),
-            permissionDTO.getApiPath(),
-            permissionDTO.getMethod()
-        );
     }
 
     public Permission handleCreatePermission(CreatePermissionRequestDTO permissionDTO) {
@@ -63,7 +57,11 @@ public class PermissionService {
         return this.permissionRepository.save(newPermission);
     }
 
-    public Permission handleFindById(long id) {
+    public Permission handleFindById(long id) throws InvalidException {
+        Optional<Permission> permission = this.permissionRepository.findById(id);
+        if (permission.isEmpty()) {
+            throw new InvalidException("Permission with id: " + id + " does not exist.");
+        }
         return this.permissionRepository.findById(id).get();
     }
 
