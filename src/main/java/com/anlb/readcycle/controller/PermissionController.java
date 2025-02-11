@@ -67,10 +67,6 @@ public class PermissionController {
     @DeleteMapping("/permissions/{id}")
     @ApiMessage("delete a permission")
     public ResponseEntity<Void> deletePermission(@PathVariable("id") long id) throws InvalidException {
-        // check exist by id
-        if (this.permissionService.handleFindById(id) == null) {
-            throw new InvalidException("Permission with id: " + id + " does not exist.");
-        }
         this.permissionService.delete(id);
         return ResponseEntity.ok().body(null);
     }
