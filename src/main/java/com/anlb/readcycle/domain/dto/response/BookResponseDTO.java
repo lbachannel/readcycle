@@ -1,5 +1,7 @@
 package com.anlb.readcycle.domain.dto.response;
 
+import java.time.Instant;
+
 import com.anlb.readcycle.utils.constant.BookStatusEnum;
 
 import lombok.AllArgsConstructor;
@@ -19,6 +21,13 @@ public class BookResponseDTO {
     private String publisher;
     private String thumb;
     private String description;
+    private int quantity;
     private BookStatusEnum status;
     private boolean isActive;
+
+    private Instant createdAt;
+    private String createdBy;
+
+    private Instant updatedAt;
+    private String updatedBy;
 }
