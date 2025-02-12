@@ -430,6 +430,13 @@ public class UserService {
         return userGetAccount;
     }
 
+    /**
+     * Retrieves a user by their unique identifier.
+     *
+     * @param id the ID of the user to be retrieved
+     * @return the User object if found
+     * @throws InvalidException if no user with the given ID exists
+     */
     public User handleGetUserById(long id) throws InvalidException {
         User user = this.userRepository.findById(id).orElse(null);
         if (user == null) {
@@ -438,6 +445,13 @@ public class UserService {
         return user;
     }
 
+    /**
+     * Updates an existing user's details based on the provided request data.
+     *
+     * @param reqUser the request DTO containing updated user information
+     * @return the updated User object
+     * @throws InvalidException if the user with the given ID does not exist
+     */
     public User handleUpdateUser(UpdateUserRequestDTO reqUser) throws InvalidException {
         User updateUser = this.handleGetUserById(reqUser.getId());
         updateUser.setName(reqUser.getName());
@@ -450,6 +464,12 @@ public class UserService {
         return updateUser;
     }
 
+    /**
+     * Converts a User entity to an UpdateUserResponseDTO.
+     *
+     * @param updateUser the User object to be converted
+     * @return an UpdateUserResponseDTO containing the user's details
+     */
     public UpdateUserResponseDTO convertUserToUpdateUserResponseDTO(User updateUser) {
         UpdateUserResponseDTO response = new UpdateUserResponseDTO();
         response.setId(updateUser.getId());
@@ -459,5 +479,16 @@ public class UserService {
         response.setCreatedAt(updateUser.getCreatedAt());
         response.setRole(updateUser.getRole());
         return response;
+    }
+
+
+    public void handleDeleteUserById(long id) throws InvalidException {
+        String email = SecurityUtil.getCurrentUserLogin()
+                            .orElseThrow(() -> new InvalidException("Access Token invalid"));
+        User user = this.handleGetUserById(id);
+        if (user.getEmail().equals(email)) {
+            throw new InvalidException("You can not delete yourself");
+        }
+        this.userRepository.deleteById(id);
     }
 }
