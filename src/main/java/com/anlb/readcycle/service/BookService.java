@@ -117,6 +117,7 @@ public class BookService {
         updateBook.setPublisher(requestBook.getPublisher());
         updateBook.setThumb(requestBook.getThumb());
         updateBook.setDescription(requestBook.getDescription());
+        updateBook.setQuantity(requestBook.getQuantity());
         updateBook.setStatus(requestBook.getStatus());
         return this.bookRepository.save(updateBook);
     }
@@ -136,6 +137,7 @@ public class BookService {
         response.setPublisher(updateBook.getPublisher());
         response.setThumb(updateBook.getThumb());
         response.setDescription(updateBook.getDescription());
+        response.setQuantity(updateBook.getQuantity());
         response.setStatus(updateBook.getStatus());
         response.setActive(updateBook.isActive());
         response.setCreatedAt(updateBook.getCreatedAt());
