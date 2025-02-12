@@ -16,5 +16,6 @@ public class CreateBookRequestDTO {
     private String publisher;
     private String thumb;
     private String description;
+    private int quantity;
     private BookStatusEnum status;
 }

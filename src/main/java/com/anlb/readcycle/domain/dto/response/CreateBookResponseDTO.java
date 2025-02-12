@@ -18,6 +18,7 @@ public class CreateBookResponseDTO {
     private String publisher;
     private String thumb;
     private String description;
+    private int quantity;
     private BookStatusEnum status;
     private boolean isActive;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss a", timezone = "GMT+7")
