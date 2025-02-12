@@ -144,15 +144,18 @@ public class BookService {
     }
 
     /**
-     * Performs a soft delete on a book by setting its active status to false.
+     * Toggles the soft delete status of a book by its ID.
      *
-     * @param id The ID of the book to be soft deleted.
-     * @return The updated {@link Book} entity after deactivating it.
-     * @throws InvalidException if the book with the given ID does not exist.
+     * If the book is currently active, it will be marked as inactive (soft deleted).
+     * If the book is inactive, it will be reactivated.
+     * 
+     * @param id the ID of the book to toggle soft delete status
+     * @return the updated {@link Book} entity with the new active status
+     * @throws InvalidException if the book with the given ID does not exist
      */
     public Book handleSoftDelete(long id) throws InvalidException {
         Book isDeletedBook = this.handleGetBookById(id);
-        isDeletedBook.setActive(false);
+        isDeletedBook.setActive(!isDeletedBook.isActive());
         return this.bookRepository.save(isDeletedBook);
     }
 

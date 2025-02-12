@@ -69,12 +69,12 @@ public class BookController {
     }
 
     @PutMapping("/books/{id}")
-    @ApiMessage("Delete book")
-    public ResponseEntity<Void> deleteBook(@PathVariable("id") int id) throws InvalidException {
+    @ApiMessage("Toggle soft delete a book")
+    public ResponseEntity<Book> toggleSoftDeleteBook(@PathVariable("id") int id) throws InvalidException {
         Book isDeletedBook = this.bookService.handleGetBookById(id);
-        this.bookService.handleSoftDelete(isDeletedBook.getId());
+        isDeletedBook = this.bookService.handleSoftDelete(isDeletedBook.getId());
         return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
-                    .build();
+                    .ok()
+                    .body(isDeletedBook);
     }
 }
