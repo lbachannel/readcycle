@@ -69,11 +69,12 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         LoginResponseDTO response = this.userService.convertUserToLoginResponseDTO(dbUser, authentication);
-
         // create refresh token
         String refreshToken = this.securityUtil.createRefreshToken(loginDTO.getUsername(), response);
         // save refresh token into user
-        this.userService.handleUpdateRefreshTokenIntoUser(refreshToken);
+        String email = SecurityUtil.getCurrentUserLogin()
+                            .orElseThrow(() -> new InvalidException("Access Token invalid"));
+        this.userService.handleUpdateRefreshTokenIntoUser(refreshToken, email);
 
         /**
          * set cookies
@@ -119,8 +120,9 @@ public class AuthController {
         // create refresh token
         String new_refresh_token = this.securityUtil.createRefreshToken(decodedToken.getSubject(), response);
 
+        String email = decodedToken.getSubject();
         // update user
-        this.userService.handleUpdateRefreshTokenIntoUser(new_refresh_token);
+        this.userService.handleUpdateRefreshTokenIntoUser(new_refresh_token, email);
         // set cookies
         ResponseCookie responseCookie = ResponseCookie
                                                 .from("refresh_token", new_refresh_token)
@@ -138,8 +140,10 @@ public class AuthController {
 
     @PostMapping("/auth/logout")
     public ResponseEntity<Void> logout() throws InvalidException {
+        String email = SecurityUtil.getCurrentUserLogin()
+        .orElseThrow(() -> new InvalidException("Access Token invalid"));
         // update refresh token = null
-        this.userService.handleUpdateRefreshTokenIntoUser(null);
+        this.userService.handleUpdateRefreshTokenIntoUser(null, email);
 
         // remove refresh token cookie
         ResponseCookie deletResponseCookie = ResponseCookie

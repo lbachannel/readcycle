@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -267,12 +266,7 @@ public class UserService {
      * @param refreshToken the new refresh token to be set for the user
      * @throws InvalidException if the current user's email is not available (indicating an invalid access token)
      */
-    public void handleUpdateRefreshTokenIntoUser(String refreshToken) throws InvalidException {
-        String email = SecurityUtil.getCurrentUserLogin().isPresent()
-        ? SecurityUtil.getCurrentUserLogin().get() : "";
-        if (StringUtils.isBlank(email)) {
-            throw new InvalidException("Access Token invalid");
-        }
+    public void handleUpdateRefreshTokenIntoUser(String refreshToken, String email) throws InvalidException {
         User user = this.handleGetUserByUsername(email);
         if (user != null) {
             user.setRefreshToken(refreshToken);
