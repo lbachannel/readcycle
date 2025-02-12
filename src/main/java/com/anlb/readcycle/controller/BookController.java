@@ -1,7 +1,7 @@
 package com.anlb.readcycle.controller;
 
-import java.util.List;
-
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,10 +17,12 @@ import com.anlb.readcycle.domain.dto.request.CreateBookRequestDTO;
 import com.anlb.readcycle.domain.dto.request.UpdateBookRequestDTO;
 import com.anlb.readcycle.domain.dto.response.BookResponseDTO;
 import com.anlb.readcycle.domain.dto.response.CreateBookResponseDTO;
+import com.anlb.readcycle.domain.dto.response.ResultPaginateDTO;
 import com.anlb.readcycle.domain.dto.response.UpdateBookResponseDTO;
 import com.anlb.readcycle.service.BookService;
 import com.anlb.readcycle.utils.anotation.ApiMessage;
 import com.anlb.readcycle.utils.exception.InvalidException;
+import com.turkraft.springfilter.boot.Filter;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -42,12 +44,11 @@ public class BookController {
     }
 
     @GetMapping("/books")
-    @ApiMessage("Get books")
-    public ResponseEntity<List<BookResponseDTO>> getBooks() {
-        List<Book> books = this.bookService.handleGetAllBooks(true);
+    @ApiMessage("Get all books")
+    public ResponseEntity<ResultPaginateDTO> getAllBooks(@Filter Specification<Book> spec, Pageable pageable) {
         return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(this.bookService.convertBooksToBookResponseDTO(books));
+                    .body(this.bookService.handleGetAllBooks(spec, pageable));
     }
 
     @PostMapping("/books")

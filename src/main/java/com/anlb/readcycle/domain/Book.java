@@ -45,6 +45,9 @@ public class Book {
     @Column(name = "description", columnDefinition = "MEDIUMTEXT")
     private String description;
 
+    @Column(name = "quantity")
+    private int quantity;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss a", timezone = "GMT+7")
     @Column(name = "created_at")
     private Instant createdAt;

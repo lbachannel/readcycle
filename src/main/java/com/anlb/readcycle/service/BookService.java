@@ -3,6 +3,9 @@ package com.anlb.readcycle.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,6 +14,7 @@ import com.anlb.readcycle.domain.dto.request.CreateBookRequestDTO;
 import com.anlb.readcycle.domain.dto.request.UpdateBookRequestDTO;
 import com.anlb.readcycle.domain.dto.response.BookResponseDTO;
 import com.anlb.readcycle.domain.dto.response.CreateBookResponseDTO;
+import com.anlb.readcycle.domain.dto.response.ResultPaginateDTO;
 import com.anlb.readcycle.domain.dto.response.UpdateBookResponseDTO;
 import com.anlb.readcycle.repository.BookRepository;
 import com.anlb.readcycle.utils.exception.InvalidException;
@@ -167,27 +171,46 @@ public class BookService {
         response.setPublisher(currentBook.getPublisher());
         response.setThumb(currentBook.getThumb());
         response.setDescription(currentBook.getDescription());
+        response.setQuantity(currentBook.getQuantity());
         response.setStatus(currentBook.getStatus());
         response.setActive(currentBook.isActive());
+        response.setCreatedAt(currentBook.getCreatedAt());
+        response.setCreatedBy(currentBook.getCreatedBy());
+        response.setUpdatedAt(currentBook.getUpdatedAt());
+        response.setUpdatedBy(currentBook.getUpdatedBy());
         return response;
     }
 
     /**
-     * Retrieves a list of all books based on their active status.
+     * Retrieves all books based on the given specification and pagination details.
      *
-     * @param isActive A boolean flag indicating whether to fetch active (true) or inactive (false) books.
-     * @return A list of {@link Book} entities that match the specified active status.
+     * @param spec     The {@link Specification} used to filter books based on criteria.
+     * @param pageable The {@link Pageable} object containing pagination information.
+     * @return A {@link ResultPaginateDTO} containing the paginated list of books
+     *         and associated metadata.
      */
-    public List<Book> handleGetAllBooks(boolean isActive) {
-        return this.bookRepository.findAllByIsActive(isActive);
+    public ResultPaginateDTO handleGetAllBooks(Specification<Book> spec, Pageable pageable) {
+        Page<Book> pageBook = this.bookRepository.findAll(spec, pageable);
+        ResultPaginateDTO response = new ResultPaginateDTO();
+        ResultPaginateDTO.Meta meta = new ResultPaginateDTO.Meta();
+
+        meta.setPage(pageable.getPageNumber() + 1);
+        meta.setPageSize(pageable.getPageSize());
+
+        meta.setPages(pageBook.getTotalPages());
+        meta.setTotal(pageBook.getTotalElements());
+
+        response.setMeta(meta);
+
+        List<BookResponseDTO> listBook = pageBook.getContent()
+                                            .stream()
+                                            .map(item -> this.convertBookToBookResponseDTO(item))
+                                            .collect(Collectors.toList());
+        response.setResult(listBook);
+        return response;
     }
 
-    /**
-     * Converts a list of {@link Book} entities to a list of {@link BookResponseDTO}.
-     *
-     * @param books The list of {@link Book} entities to be converted.
-     * @return A list of {@link BookResponseDTO} containing the details of each book.
-     */
+
     public List<BookResponseDTO> convertBooksToBookResponseDTO(List<Book> books) {
         List<BookResponseDTO> response = books.stream()
                                             .map(item -> new BookResponseDTO(
@@ -198,8 +221,13 @@ public class BookService {
                                                 item.getPublisher(),
                                                 item.getThumb(),
                                                 item.getDescription(),
+                                                item.getQuantity(),
                                                 item.getStatus(),
-                                                item.isActive()
+                                                item.isActive(),
+                                                item.getCreatedAt(),
+                                                item.getCreatedBy(),
+                                                item.getUpdatedAt(),
+                                                item.getUpdatedBy()
                                             ))
                                             .collect(Collectors.toList());
         return response;
