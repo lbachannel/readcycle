@@ -24,6 +24,12 @@ public class FileService {
     @Value("${anlb.upload-file.base-uri}")
     private String baseURI;
 
+    /**
+     * Creates a directory at the specified location if it does not already exist.
+     *
+     * @param folder the URI string representing the directory path.
+     * @throws URISyntaxException if the provided folder string is not a valid URI.
+     */
     public void createDirectory(String folder) throws URISyntaxException {
         URI uri = new URI(folder);
         Path path = Paths.get(uri);
@@ -37,6 +43,14 @@ public class FileService {
         }
     }
 
+    /**
+     * Stores the uploaded file with a unique filename.
+     *
+     * @param file the uploaded {@link MultipartFile} to be stored.
+     * @return the generated unique filename.
+     * @throws URISyntaxException if the constructed URI is invalid.
+     * @throws IOException if an I/O error occurs while storing the file.
+     */
     public String store(MultipartFile file) throws URISyntaxException, IOException {
         // create unique filename
         String finalName = System.currentTimeMillis() + "-" + file.getOriginalFilename();
@@ -50,6 +64,12 @@ public class FileService {
         return finalName;
     }
 
+    /**
+     * Validates the uploaded file to ensure it is not empty and has an allowed extension.
+     *
+     * @param file the uploaded {@link MultipartFile} to be validated.
+     * @throws StorageException if the file is empty or has an invalid extension.
+     */
     public void validationFile(MultipartFile file) throws StorageException {
         if (file == null || file.isEmpty()) {
             throw new StorageException("File is empty. Please upload a file.");
