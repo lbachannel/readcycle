@@ -24,6 +24,12 @@ public class FileService {
     @Value("${anlb.upload-file.base-uri}")
     private String baseURI;
 
+    /**
+     * Creates a directory at the specified location if it does not already exist.
+     *
+     * @param folder the URI string representing the directory path.
+     * @throws URISyntaxException if the provided folder string is not a valid URI.
+     */
     public void createDirectory(String folder) throws URISyntaxException {
         URI uri = new URI(folder);
         Path path = Paths.get(uri);
@@ -37,6 +43,14 @@ public class FileService {
         }
     }
 
+    /**
+     * Stores the uploaded file with a unique filename.
+     *
+     * @param file the uploaded {@link MultipartFile} to be stored.
+     * @return the generated unique filename.
+     * @throws URISyntaxException if the constructed URI is invalid.
+     * @throws IOException if an I/O error occurs while storing the file.
+     */
     public String store(MultipartFile file) throws URISyntaxException, IOException {
         // create unique filename
         String finalName = System.currentTimeMillis() + "-" + file.getOriginalFilename();
@@ -50,6 +64,12 @@ public class FileService {
         return finalName;
     }
 
+    /**
+     * Validates the uploaded file to ensure it is not empty and has an allowed extension.
+     *
+     * @param file the uploaded {@link MultipartFile} to be validated.
+     * @throws StorageException if the file is empty or has an invalid extension.
+     */
     public void validationFile(MultipartFile file) throws StorageException {
         if (file == null || file.isEmpty()) {
             throw new StorageException("File is empty. Please upload a file.");
@@ -59,6 +79,23 @@ public class FileService {
         boolean isValid = allowedExtensions.stream().anyMatch(item -> fileName.toLowerCase().endsWith(item));
         if (!isValid) {
             throw new StorageException("Invalid file extension. only allows " + allowedExtensions.toString());
+        }
+    }
+
+    /**
+     * Deletes a file from storage.
+     *
+     * @param fileName the name of the file to be deleted.
+     * @throws URISyntaxException if the file path URI is invalid.
+    * @throws StorageException 
+    * @throws IOException if an error occurs while deleting the file.
+    */
+    public void delete(String fileName) throws URISyntaxException, StorageException, IOException {
+        URI uri = new URI(baseURI + "/" + fileName);
+        Path path = Paths.get(uri);
+
+        if (Files.exists(path)) {
+            Files.delete(path);
         }
     }
 
