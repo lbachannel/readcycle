@@ -5,7 +5,10 @@ import java.net.URISyntaxException;
 import java.time.Instant;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -39,5 +42,14 @@ public class FileController {
         String uploadFile = this.fileService.store(file);
         UploadFileResponseDTO response = new UploadFileResponseDTO(uploadFile, Instant.now());
         return ResponseEntity.ok().body(response);
+    }
+
+    @DeleteMapping("/file/delete/{file}")
+    @ApiMessage("Delete single file")
+    public ResponseEntity<Void> deleteFile(@PathVariable("file") String file) throws StorageException, URISyntaxException, IOException {
+        this.fileService.delete(file);
+        return ResponseEntity
+                        .status(HttpStatus.NO_CONTENT)
+                        .build();
     }
 }
