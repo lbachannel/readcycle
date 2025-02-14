@@ -239,4 +239,13 @@ public class BookService {
                                             .collect(Collectors.toList());
         return response;
     }
+
+    /**
+     * Deletes a book from the repository by its ID.
+     *
+     * @param id the ID of the book to be deleted
+     */
+    public void handleDeleteBookById(long id) {
+        this.bookRepository.deleteById(id);
+    }
 }
