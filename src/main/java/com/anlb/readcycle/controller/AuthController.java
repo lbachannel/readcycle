@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.anlb.readcycle.domain.User;
 import com.anlb.readcycle.dto.request.LoginRequestDTO;
 import com.anlb.readcycle.dto.response.LoginResponseDTO;
+import com.anlb.readcycle.mapper.UserMapper;
 import com.anlb.readcycle.service.UserService;
 import com.anlb.readcycle.utils.SecurityUtil;
 import com.anlb.readcycle.utils.anotation.ApiMessage;
@@ -38,6 +39,7 @@ public class AuthController {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final SecurityUtil securityUtil;
     private final UserService userService;
+    private final UserMapper userMapper;
 
     @Value("${anlb.jwt.refresh-token-validity-in-seconds}")
     private long refreshTokenExpired;
@@ -68,7 +70,7 @@ public class AuthController {
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        LoginResponseDTO response = this.userService.convertUserToLoginResponseDTO(dbUser, authentication);
+        LoginResponseDTO response = this.userMapper.convertUserToLoginResponseDTO(dbUser, authentication);
         // create refresh token
         String refreshToken = this.securityUtil.createRefreshToken(loginDTO.getUsername(), response);
         // save refresh token into user

@@ -12,6 +12,7 @@ import com.anlb.readcycle.dto.response.UpdateBookResponseDTO;
 
 @Service
 public class BookMapper {
+    
     /**
      * Converts a {@link Book} entity to a {@link CreateBookResponseDTO}.
      *

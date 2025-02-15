@@ -19,22 +19,22 @@ import com.anlb.readcycle.dto.request.UpdateRoleRequestDTO;
 import com.anlb.readcycle.dto.response.CreateRoleResponseDTO;
 import com.anlb.readcycle.dto.response.ResultPaginateDTO;
 import com.anlb.readcycle.dto.response.UpdateRoleResponseDTO;
+import com.anlb.readcycle.mapper.RoleMapper;
 import com.anlb.readcycle.service.RoleService;
 import com.anlb.readcycle.utils.anotation.ApiMessage;
 import com.anlb.readcycle.utils.exception.InvalidException;
 import com.turkraft.springfilter.boot.Filter;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/v1")
+@RequiredArgsConstructor
 public class RoleController {
     
     private final RoleService roleService;
-
-    public RoleController(RoleService roleService) {
-        this.roleService = roleService;
-    }
+    private final RoleMapper roleMapper;
 
     @GetMapping("/roles/{id}")
     @ApiMessage("Get role by id")
@@ -50,7 +50,7 @@ public class RoleController {
         Role role = this.roleService.handleCreateRole(roleDTO);
         return ResponseEntity
                     .status(HttpStatus.CREATED)
-                    .body(this.roleService.convertRoleToCreateRoleResponseDTO(role));
+                    .body(this.roleMapper.convertRoleToCreateRoleResponseDTO(role));
     }
 
     @PutMapping("/roles")
@@ -61,7 +61,7 @@ public class RoleController {
         Role updateRole = this.roleService.handleUpdateRole(roleDTO);
         return ResponseEntity
                     .ok()
-                    .body(this.roleService.convertRoleToUpdateRoleResponseDTO(updateRole));
+                    .body(this.roleMapper.convertRoleToUpdateRoleResponseDTO(updateRole));
     }
 
     @GetMapping("/roles")

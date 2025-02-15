@@ -19,6 +19,7 @@ import com.anlb.readcycle.dto.request.UpdatePermissionRequestDTO;
 import com.anlb.readcycle.dto.response.CreatePermissionResponseDTO;
 import com.anlb.readcycle.dto.response.ResultPaginateDTO;
 import com.anlb.readcycle.dto.response.UpdatePermissionResponseDTO;
+import com.anlb.readcycle.mapper.PermissionMapper;
 import com.anlb.readcycle.service.PermissionService;
 import com.anlb.readcycle.utils.anotation.ApiMessage;
 import com.anlb.readcycle.utils.exception.InvalidException;
@@ -33,6 +34,7 @@ import lombok.RequiredArgsConstructor;
 public class PermissionController {
 
     private final PermissionService permissionService;
+    private final PermissionMapper permissionMapper;
 
     @PostMapping("/permissions")
     @ApiMessage("Create a permission")
@@ -42,7 +44,7 @@ public class PermissionController {
         Permission newPermission = this.permissionService.handleCreatePermission(permissionDTO);
         return ResponseEntity
                     .status(HttpStatus.CREATED)
-                    .body(this.permissionService.convertPermissionToCreatePermissionResponseDTO(newPermission));
+                    .body(this.permissionMapper.convertPermissionToCreatePermissionResponseDTO(newPermission));
     }
 
     @PutMapping("/permissions")
@@ -53,7 +55,7 @@ public class PermissionController {
         Permission updatePermission = this.permissionService.handleUpdatePermission(permissionDTO);
         return ResponseEntity
                     .ok()
-                    .body(this.permissionService.convertPermissionToUpdatePermissionResponseDTO(updatePermission));
+                    .body(this.permissionMapper.convertPermissionToUpdatePermissionResponseDTO(updatePermission));
     }
 
     @GetMapping("/permissions")

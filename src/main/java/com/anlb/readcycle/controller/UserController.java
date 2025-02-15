@@ -21,6 +21,7 @@ import com.anlb.readcycle.dto.response.CreateUserResponseDTO;
 import com.anlb.readcycle.dto.response.RegisterResponseDTO;
 import com.anlb.readcycle.dto.response.ResultPaginateDTO;
 import com.anlb.readcycle.dto.response.UpdateUserResponseDTO;
+import com.anlb.readcycle.mapper.UserMapper;
 import com.anlb.readcycle.service.EmailService;
 import com.anlb.readcycle.service.UserService;
 import com.anlb.readcycle.utils.anotation.ApiMessage;
@@ -37,6 +38,7 @@ public class UserController {
 
     private final EmailService emailService;
     private final UserService userService;
+    private final UserMapper userMapper;
     
     @GetMapping("/users")
     @ApiMessage("Get all users")
@@ -50,26 +52,26 @@ public class UserController {
     @ApiMessage("Register account")
     public ResponseEntity<RegisterResponseDTO> registerMember(@Valid @RequestBody RegisterRequestDTO registerDTO) {
         // convert DTO -> User
-        User newUser = this.userService.convertRegisterDTOToUser(registerDTO);
+        User newUser = this.userMapper.convertRegisterDTOToUser(registerDTO);
         // save user
         newUser = this.userService.handleRegisterMember(newUser);
         // send email
         this.emailService.sendEmailFromTemplateSync(newUser, "ReadCycle - Verify your email", "verify-email");
         return ResponseEntity
                     .status(HttpStatus.CREATED)
-                    .body(this.userService.convertUserToRegisterResponseDTO(newUser));
+                    .body(this.userMapper.convertUserToRegisterResponseDTO(newUser));
     }
 
     @PostMapping("/users")
     @ApiMessage("Create a user")
     public ResponseEntity<CreateUserResponseDTO> createNewUser(@Valid @RequestBody CreateUserRequestDTO userDTO) throws InvalidException {
         // convert DTO -> User
-        User newUser = this.userService.convertCreateUserRequestDTOToUser(userDTO);
+        User newUser = this.userMapper.convertCreateUserRequestDTOToUser(userDTO);
         // save user
         newUser = this.userService.handleCreateUser(newUser);
         return ResponseEntity
                     .status(HttpStatus.CREATED)
-                    .body(this.userService.convertUserToCreateResponseDTO(newUser));
+                    .body(this.userMapper.convertUserToCreateResponseDTO(newUser));
     }
 
     @PutMapping("/users")
@@ -77,7 +79,7 @@ public class UserController {
     public ResponseEntity<UpdateUserResponseDTO> updateUser(@Valid @RequestBody UpdateUserRequestDTO reqUser) throws InvalidException {
         User updateUser = this.userService.handleUpdateUser(reqUser);
         return ResponseEntity
-                    .ok(this.userService.convertUserToUpdateUserResponseDTO(updateUser));
+                    .ok(this.userMapper.convertUserToUpdateUserResponseDTO(updateUser));
     }
 
     @DeleteMapping("/users/{id}")
