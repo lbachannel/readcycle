@@ -23,6 +23,15 @@ public class EmailService {
     private final JavaMailSender javaMailSender;
     private final SpringTemplateEngine templateEngine;
 
+    /**
+     * Sends an email synchronously using the configured JavaMailSender.
+     *
+     * @param to         The recipient's email address.
+     * @param subject    The subject of the email.
+     * @param content    The content/body of the email.
+     * @param isMultipart Indicates whether the email supports multipart content.
+     * @param isHtml     Indicates whether the email content is in HTML format.
+     */
     public void sendEmailSync(String to, String subject, String content, boolean isMultipart, boolean isHtml) {
         MimeMessage mimeMessage = this.javaMailSender.createMimeMessage();
         try {
@@ -36,6 +45,13 @@ public class EmailService {
         }
     }
 
+    /**
+     * Asynchronously sends an email to the specified user using a predefined email template.
+     *
+     * @param user         The recipient user, whose email address and verification token are used.
+     * @param subject      The subject of the email.
+     * @param templateName The name of the email template to be processed.
+     */
     @Async
     public void sendEmailFromTemplateSync(User user, String subject, String templateName) {
         Context context = new Context();

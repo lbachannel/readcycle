@@ -247,7 +247,12 @@ public class BookService {
         return response;
     }
 
-
+    /**
+     * Converts a list of {@link Book} objects into a list of {@link BookResponseDTO} objects.
+     *
+     * @param books The list of {@link Book} objects to be converted.
+     * @return A list of {@link BookResponseDTO} objects created from the input list.
+     */
     public List<BookResponseDTO> convertBooksToBookResponseDTO(List<Book> books) {
         List<BookResponseDTO> response = books.stream()
                                             .map(item -> new BookResponseDTO(

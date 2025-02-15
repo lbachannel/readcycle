@@ -19,6 +19,13 @@ import lombok.RequiredArgsConstructor;
 public class UserDetailsCustom implements UserDetailsService {
     private final UserService userService;
 
+    /**
+     * Loads a user by their username and returns a {@link UserDetails} object for authentication.
+     *
+     * @param username The username (or email) of the user to be retrieved.
+     * @return A {@link UserDetails} object containing the user's credentials and roles.
+     * @throws UsernameNotFoundException If the user is not found.
+     */
     @Override
     public UserDetails loadUserByUsername(String username) {
         try {

@@ -481,7 +481,12 @@ public class UserService {
         return response;
     }
 
-
+    /**
+     * Deletes a user by their ID, ensuring that a user cannot delete themselves.
+     *
+     * @param id The ID of the user to be deleted.
+     * @throws InvalidException If the access token is invalid or if the user attempts to delete themselves.
+     */
     public void handleDeleteUserById(long id) throws InvalidException {
         String email = SecurityUtil.getCurrentUserLogin()
                             .orElseThrow(() -> new InvalidException("Access Token invalid"));
