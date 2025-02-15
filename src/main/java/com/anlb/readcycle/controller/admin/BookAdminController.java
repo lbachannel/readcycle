@@ -14,11 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.anlb.readcycle.domain.Book;
-import com.anlb.readcycle.domain.dto.request.CreateBookRequestDTO;
-import com.anlb.readcycle.domain.dto.request.UpdateBookRequestDTO;
-import com.anlb.readcycle.domain.dto.response.CreateBookResponseDTO;
-import com.anlb.readcycle.domain.dto.response.ResultPaginateDTO;
-import com.anlb.readcycle.domain.dto.response.UpdateBookResponseDTO;
+import com.anlb.readcycle.dto.request.CreateBookRequestDTO;
+import com.anlb.readcycle.dto.request.UpdateBookRequestDTO;
+import com.anlb.readcycle.dto.response.CreateBookResponseDTO;
+import com.anlb.readcycle.dto.response.ResultPaginateDTO;
+import com.anlb.readcycle.dto.response.UpdateBookResponseDTO;
+import com.anlb.readcycle.mapper.BookMapper;
 import com.anlb.readcycle.service.BookService;
 import com.anlb.readcycle.utils.anotation.ApiMessage;
 import com.anlb.readcycle.utils.exception.InvalidException;
@@ -32,6 +33,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BookAdminController {
     private final BookService bookService;
+    private final BookMapper bookMapper;
 
     @GetMapping("/books")
     @ApiMessage("Get all books")
@@ -47,7 +49,7 @@ public class BookAdminController {
         Book newBook = this.bookService.handleCreateBook(reqBook);
         return ResponseEntity
                     .status(HttpStatus.CREATED)
-                    .body(this.bookService.convertBookToCreateBookResponseDTO(newBook));
+                    .body(this.bookMapper.convertBookToCreateBookResponseDTO(newBook));
     }
 
     @PutMapping("/books")
@@ -55,7 +57,7 @@ public class BookAdminController {
     public ResponseEntity<UpdateBookResponseDTO> updateBook(@RequestBody UpdateBookRequestDTO reqBook) throws InvalidException {
         Book updateBook = this.bookService.handleUpdateBook(reqBook);
         return ResponseEntity
-                    .ok(this.bookService.convertBookToUpdateBookResponseDTO(updateBook));
+                    .ok(this.bookMapper.convertBookToUpdateBookResponseDTO(updateBook));
     }
 
     @PutMapping("/books/{id}")

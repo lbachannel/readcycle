@@ -1,20 +1,21 @@
-package com.anlb.readcycle.domain.dto.request;
+package com.anlb.readcycle.dto.response;
 
+import java.time.Instant;
 import java.util.List;
 
 import com.anlb.readcycle.domain.Permission;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class CreateRoleRequestDTO {
-    @NotBlank(message = "Name is required")
+public class CreateRoleResponseDTO {
+    private long id;
     private String name;
-    @NotBlank(message = "Description is required")
     private String description;
     private boolean active;
+    private Instant createdAt;
+    private String createdBy;
     private List<Permission> permissions;
 }

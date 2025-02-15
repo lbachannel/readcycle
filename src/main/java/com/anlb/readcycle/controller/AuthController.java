@@ -21,8 +21,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.anlb.readcycle.domain.User;
-import com.anlb.readcycle.domain.dto.request.LoginRequestDTO;
-import com.anlb.readcycle.domain.dto.response.LoginResponseDTO;
+import com.anlb.readcycle.dto.request.LoginRequestDTO;
+import com.anlb.readcycle.dto.response.LoginResponseDTO;
 import com.anlb.readcycle.service.UserService;
 import com.anlb.readcycle.utils.SecurityUtil;
 import com.anlb.readcycle.utils.anotation.ApiMessage;

@@ -1,4 +1,4 @@
-package com.anlb.readcycle.domain.dto.request;
+package com.anlb.readcycle.dto.request;
 
 import com.anlb.readcycle.utils.constant.BookStatusEnum;
 import com.anlb.readcycle.utils.exception.BookChecked;
@@ -9,8 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @BookChecked
-public class UpdateBookRequestDTO {
-    private long id;
+public class CreateBookRequestDTO {
     private String category;
     private String title;
     private String author;

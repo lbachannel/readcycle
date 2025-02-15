@@ -1,4 +1,4 @@
-package com.anlb.readcycle.domain.dto.response.file;
+package com.anlb.readcycle.dto.response.file;
 
 import java.time.Instant;
 

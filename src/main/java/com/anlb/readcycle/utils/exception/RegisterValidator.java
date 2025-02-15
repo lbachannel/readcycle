@@ -7,7 +7,7 @@ import java.time.format.DateTimeParseException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
-import com.anlb.readcycle.domain.dto.request.RegisterRequestDTO;
+import com.anlb.readcycle.dto.request.RegisterRequestDTO;
 import com.anlb.readcycle.service.UserService;
 
 import jakarta.validation.ConstraintValidator;

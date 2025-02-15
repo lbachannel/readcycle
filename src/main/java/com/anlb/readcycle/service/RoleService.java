@@ -12,12 +12,12 @@ import org.springframework.stereotype.Service;
 
 import com.anlb.readcycle.domain.Permission;
 import com.anlb.readcycle.domain.Role;
-import com.anlb.readcycle.domain.dto.request.CreateRoleRequestDTO;
-import com.anlb.readcycle.domain.dto.request.UpdateRoleRequestDTO;
-import com.anlb.readcycle.domain.dto.response.CreateRoleResponseDTO;
-import com.anlb.readcycle.domain.dto.response.ResultPaginateDTO;
-import com.anlb.readcycle.domain.dto.response.ResultPaginateDTO.Meta;
-import com.anlb.readcycle.domain.dto.response.UpdateRoleResponseDTO;
+import com.anlb.readcycle.dto.request.CreateRoleRequestDTO;
+import com.anlb.readcycle.dto.request.UpdateRoleRequestDTO;
+import com.anlb.readcycle.dto.response.CreateRoleResponseDTO;
+import com.anlb.readcycle.dto.response.ResultPaginateDTO;
+import com.anlb.readcycle.dto.response.UpdateRoleResponseDTO;
+import com.anlb.readcycle.dto.response.ResultPaginateDTO.Meta;
 import com.anlb.readcycle.repository.PermissionRepository;
 import com.anlb.readcycle.repository.RoleRepository;
 import com.anlb.readcycle.utils.exception.InvalidException;

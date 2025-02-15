@@ -9,12 +9,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.anlb.readcycle.domain.Permission;
-import com.anlb.readcycle.domain.dto.request.CreatePermissionRequestDTO;
-import com.anlb.readcycle.domain.dto.request.UpdatePermissionRequestDTO;
-import com.anlb.readcycle.domain.dto.response.CreatePermissionResponseDTO;
-import com.anlb.readcycle.domain.dto.response.ResultPaginateDTO;
-import com.anlb.readcycle.domain.dto.response.ResultPaginateDTO.Meta;
-import com.anlb.readcycle.domain.dto.response.UpdatePermissionResponseDTO;
+import com.anlb.readcycle.dto.request.CreatePermissionRequestDTO;
+import com.anlb.readcycle.dto.request.UpdatePermissionRequestDTO;
+import com.anlb.readcycle.dto.response.CreatePermissionResponseDTO;
+import com.anlb.readcycle.dto.response.ResultPaginateDTO;
+import com.anlb.readcycle.dto.response.UpdatePermissionResponseDTO;
+import com.anlb.readcycle.dto.response.ResultPaginateDTO.Meta;
 import com.anlb.readcycle.repository.PermissionRepository;
 import com.anlb.readcycle.utils.exception.InvalidException;
 

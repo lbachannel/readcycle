@@ -1,4 +1,4 @@
-package com.anlb.readcycle.domain.dto.response;
+package com.anlb.readcycle.dto.response;
 
 import lombok.Getter;
 import lombok.Setter;

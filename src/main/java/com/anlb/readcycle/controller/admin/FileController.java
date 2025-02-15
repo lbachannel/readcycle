@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.anlb.readcycle.domain.dto.response.file.UploadFileResponseDTO;
+import com.anlb.readcycle.dto.response.file.UploadFileResponseDTO;
 import com.anlb.readcycle.service.FileService;
 import com.anlb.readcycle.utils.anotation.ApiMessage;
 import com.anlb.readcycle.utils.exception.StorageException;

@@ -1,4 +1,4 @@
-package com.anlb.readcycle.domain.dto.response;
+package com.anlb.readcycle.dto.response;
 
 import com.anlb.readcycle.domain.Role;
 import com.fasterxml.jackson.annotation.JsonProperty;

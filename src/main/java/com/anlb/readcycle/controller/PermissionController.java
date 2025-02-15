@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.anlb.readcycle.domain.Permission;
-import com.anlb.readcycle.domain.dto.request.CreatePermissionRequestDTO;
-import com.anlb.readcycle.domain.dto.request.UpdatePermissionRequestDTO;
-import com.anlb.readcycle.domain.dto.response.CreatePermissionResponseDTO;
-import com.anlb.readcycle.domain.dto.response.ResultPaginateDTO;
-import com.anlb.readcycle.domain.dto.response.UpdatePermissionResponseDTO;
+import com.anlb.readcycle.dto.request.CreatePermissionRequestDTO;
+import com.anlb.readcycle.dto.request.UpdatePermissionRequestDTO;
+import com.anlb.readcycle.dto.response.CreatePermissionResponseDTO;
+import com.anlb.readcycle.dto.response.ResultPaginateDTO;
+import com.anlb.readcycle.dto.response.UpdatePermissionResponseDTO;
 import com.anlb.readcycle.service.PermissionService;
 import com.anlb.readcycle.utils.anotation.ApiMessage;
 import com.anlb.readcycle.utils.exception.InvalidException;

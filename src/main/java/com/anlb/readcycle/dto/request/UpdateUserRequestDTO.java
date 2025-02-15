@@ -1,4 +1,4 @@
-package com.anlb.readcycle.domain.dto.request;
+package com.anlb.readcycle.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;

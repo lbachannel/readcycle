@@ -9,7 +9,7 @@ import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthen
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
-import com.anlb.readcycle.domain.dto.response.ResultResponseDTO;
+import com.anlb.readcycle.dto.response.ResultResponseDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.servlet.ServletException;

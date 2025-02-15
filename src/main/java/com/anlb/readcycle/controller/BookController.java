@@ -10,8 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.anlb.readcycle.domain.Book;
-import com.anlb.readcycle.domain.dto.response.BookResponseDTO;
-import com.anlb.readcycle.domain.dto.response.ResultPaginateDTO;
+import com.anlb.readcycle.dto.response.BookResponseDTO;
+import com.anlb.readcycle.dto.response.ResultPaginateDTO;
+import com.anlb.readcycle.mapper.BookMapper;
 import com.anlb.readcycle.service.BookService;
 import com.anlb.readcycle.utils.anotation.ApiMessage;
 import com.anlb.readcycle.utils.exception.InvalidException;
@@ -25,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 public class BookController {
     
     private final BookService bookService;
+    private final BookMapper bookMapper;
 
     @GetMapping("/books/{id}")
     @ApiMessage("Get book by id")
@@ -32,7 +34,7 @@ public class BookController {
         Book currentBook = this.bookService.handleGetBookByIdAndActive(id, true);
         return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(this.bookService.convertBookToBookResponseDTO(currentBook));
+                    .body(this.bookMapper.convertBookToBookResponseDTO(currentBook));
     }
 
     @GetMapping("/books")

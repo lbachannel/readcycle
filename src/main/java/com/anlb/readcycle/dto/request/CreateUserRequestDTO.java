@@ -1,4 +1,4 @@
-package com.anlb.readcycle.domain.dto.request;
+package com.anlb.readcycle.dto.request;
 
 import com.anlb.readcycle.utils.exception.UserChecked;
 

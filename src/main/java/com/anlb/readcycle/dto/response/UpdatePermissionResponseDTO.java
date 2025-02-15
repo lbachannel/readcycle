@@ -1,4 +1,4 @@
-package com.anlb.readcycle.domain.dto.response;
+package com.anlb.readcycle.dto.response;
 
 import java.time.Instant;
 
@@ -9,7 +9,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CreatePermissionResponseDTO {
+public class UpdatePermissionResponseDTO {
     private long id;
     private String name;
     private String apiPath;
@@ -18,4 +18,7 @@ public class CreatePermissionResponseDTO {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss a", timezone = "GMT+7")
     private Instant createdAt;
     private String createdBy;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss a", timezone = "GMT+7")
+    private Instant updatedAt;
+    private String updatedBy;
 }

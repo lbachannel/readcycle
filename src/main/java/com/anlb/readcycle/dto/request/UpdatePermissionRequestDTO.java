@@ -1,4 +1,4 @@
-package com.anlb.readcycle.domain.dto.request;
+package com.anlb.readcycle.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -6,7 +6,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CreatePermissionRequestDTO {
+public class UpdatePermissionRequestDTO {
+    private long id;
     @NotBlank(message = "Name is required")
     private String name;
     @NotBlank(message = "Api path is required")

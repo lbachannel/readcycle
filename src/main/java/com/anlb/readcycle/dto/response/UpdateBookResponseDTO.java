@@ -1,4 +1,4 @@
-package com.anlb.readcycle.domain.dto.response;
+package com.anlb.readcycle.dto.response;
 
 import java.time.Instant;
 
@@ -10,7 +10,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CreateBookResponseDTO {
+public class UpdateBookResponseDTO {
     private long id;
     private String category;
     private String title;
@@ -24,4 +24,7 @@ public class CreateBookResponseDTO {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss a", timezone = "GMT+7")
     private Instant createdAt;
     private String createdBy;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss a", timezone = "GMT+7")
+    private Instant updatedAt;
+    private String updatedBy;
 }

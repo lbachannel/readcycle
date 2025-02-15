@@ -10,12 +10,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.anlb.readcycle.domain.Book;
-import com.anlb.readcycle.domain.dto.request.CreateBookRequestDTO;
-import com.anlb.readcycle.domain.dto.request.UpdateBookRequestDTO;
-import com.anlb.readcycle.domain.dto.response.BookResponseDTO;
-import com.anlb.readcycle.domain.dto.response.CreateBookResponseDTO;
-import com.anlb.readcycle.domain.dto.response.ResultPaginateDTO;
-import com.anlb.readcycle.domain.dto.response.UpdateBookResponseDTO;
+import com.anlb.readcycle.dto.request.CreateBookRequestDTO;
+import com.anlb.readcycle.dto.request.UpdateBookRequestDTO;
+import com.anlb.readcycle.dto.response.BookResponseDTO;
+import com.anlb.readcycle.dto.response.ResultPaginateDTO;
+import com.anlb.readcycle.mapper.BookMapper;
 import com.anlb.readcycle.repository.BookRepository;
 import com.anlb.readcycle.repository.specification.BookSpecifications;
 import com.anlb.readcycle.utils.exception.InvalidException;
@@ -28,6 +27,7 @@ import lombok.RequiredArgsConstructor;
 public class BookService {
 
     private final BookRepository bookRepository;
+    private final BookMapper bookMapper;
 
     /**
      * Creates a new book record in the database.
@@ -47,29 +47,6 @@ public class BookService {
         newBook.setStatus(requestBook.getStatus());
         newBook.setActive(true);
         return this.bookRepository.save(newBook);
-    }
-
-    /**
-     * Converts a {@link Book} entity to a {@link CreateBookResponseDTO}.
-     *
-     * @param book The {@link Book} entity to be converted.
-     * @return A {@link CreateBookResponseDTO} containing the book's details.
-     */
-    public CreateBookResponseDTO convertBookToCreateBookResponseDTO(Book book) {
-        CreateBookResponseDTO response = new CreateBookResponseDTO();
-        response.setId(book.getId());
-        response.setCategory(book.getCategory());
-        response.setTitle(book.getTitle());
-        response.setAuthor(book.getAuthor());
-        response.setPublisher(book.getPublisher());
-        response.setThumb(book.getThumb());
-        response.setDescription(book.getDescription());
-        response.setQuantity(book.getQuantity());
-        response.setStatus(book.getStatus());
-        response.setActive(book.isActive());
-        response.setCreatedAt(book.getCreatedAt());
-        response.setCreatedBy(book.getCreatedBy());
-        return response;
     }
 
     /**
@@ -124,31 +101,6 @@ public class BookService {
     }
 
     /**
-     * Converts a {@link Book} entity to an {@link UpdateBookResponseDTO}.
-     *
-     * @param updateBook The {@link Book} entity to be converted.
-     * @return An {@link UpdateBookResponseDTO} containing the book's updated details.
-     */
-    public UpdateBookResponseDTO convertBookToUpdateBookResponseDTO(Book updateBook) {
-        UpdateBookResponseDTO response = new UpdateBookResponseDTO();
-        response.setId(updateBook.getId());
-        response.setCategory(updateBook.getCategory());
-        response.setTitle(updateBook.getTitle());
-        response.setAuthor(updateBook.getAuthor());
-        response.setPublisher(updateBook.getPublisher());
-        response.setThumb(updateBook.getThumb());
-        response.setDescription(updateBook.getDescription());
-        response.setQuantity(updateBook.getQuantity());
-        response.setStatus(updateBook.getStatus());
-        response.setActive(updateBook.isActive());
-        response.setCreatedAt(updateBook.getCreatedAt());
-        response.setCreatedBy(updateBook.getCreatedBy());
-        response.setUpdatedAt(updateBook.getUpdatedAt());
-        response.setUpdatedBy(updateBook.getUpdatedBy());
-        return response;
-    }
-
-    /**
      * Toggles the soft delete status of a book by its ID.
      *
      * If the book is currently active, it will be marked as inactive (soft deleted).
@@ -162,31 +114,6 @@ public class BookService {
         Book isDeletedBook = this.handleGetBookById(id);
         isDeletedBook.setActive(!isDeletedBook.isActive());
         return this.bookRepository.save(isDeletedBook);
-    }
-
-    /**
-     * Converts a {@link Book} entity to a {@link BookResponseDTO}.
-     *
-     * @param currentBook The {@link Book} entity to be converted.
-     * @return A {@link BookResponseDTO} containing the book's details.
-     */
-    public BookResponseDTO convertBookToBookResponseDTO(Book currentBook) {
-        BookResponseDTO response = new BookResponseDTO();
-        response.setId(currentBook.getId());
-        response.setCategory(currentBook.getCategory());
-        response.setTitle(currentBook.getTitle());
-        response.setAuthor(currentBook.getAuthor());
-        response.setPublisher(currentBook.getPublisher());
-        response.setThumb(currentBook.getThumb());
-        response.setDescription(currentBook.getDescription());
-        response.setQuantity(currentBook.getQuantity());
-        response.setStatus(currentBook.getStatus());
-        response.setActive(currentBook.isActive());
-        response.setCreatedAt(currentBook.getCreatedAt());
-        response.setCreatedBy(currentBook.getCreatedBy());
-        response.setUpdatedAt(currentBook.getUpdatedAt());
-        response.setUpdatedBy(currentBook.getUpdatedBy());
-        return response;
     }
 
     /**
@@ -212,7 +139,7 @@ public class BookService {
 
         List<BookResponseDTO> listBook = pageBook.getContent()
                                             .stream()
-                                            .map(item -> this.convertBookToBookResponseDTO(item))
+                                            .map(item -> this.bookMapper.convertBookToBookResponseDTO(item))
                                             .collect(Collectors.toList());
         response.setResult(listBook);
         return response;
@@ -241,37 +168,9 @@ public class BookService {
 
         List<BookResponseDTO> listBook = pageBook.getContent()
                                             .stream()
-                                            .map(item -> this.convertBookToBookResponseDTO(item))
+                                            .map(item -> this.bookMapper.convertBookToBookResponseDTO(item))
                                             .collect(Collectors.toList());
         response.setResult(listBook);
-        return response;
-    }
-
-    /**
-     * Converts a list of {@link Book} objects into a list of {@link BookResponseDTO} objects.
-     *
-     * @param books The list of {@link Book} objects to be converted.
-     * @return A list of {@link BookResponseDTO} objects created from the input list.
-     */
-    public List<BookResponseDTO> convertBooksToBookResponseDTO(List<Book> books) {
-        List<BookResponseDTO> response = books.stream()
-                                            .map(item -> new BookResponseDTO(
-                                                item.getId(),
-                                                item.getCategory(),
-                                                item.getTitle(),
-                                                item.getAuthor(),
-                                                item.getPublisher(),
-                                                item.getThumb(),
-                                                item.getDescription(),
-                                                item.getQuantity(),
-                                                item.getStatus(),
-                                                item.isActive(),
-                                                item.getCreatedAt(),
-                                                item.getCreatedBy(),
-                                                item.getUpdatedAt(),
-                                                item.getUpdatedBy()
-                                            ))
-                                            .collect(Collectors.toList());
         return response;
     }
 

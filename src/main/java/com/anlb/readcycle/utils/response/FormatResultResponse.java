@@ -9,7 +9,7 @@ import org.springframework.http.server.ServletServerHttpResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
-import com.anlb.readcycle.domain.dto.response.ResultResponseDTO;
+import com.anlb.readcycle.dto.response.ResultResponseDTO;
 import com.anlb.readcycle.utils.anotation.ApiMessage;
 
 import jakarta.servlet.http.HttpServletResponse;
