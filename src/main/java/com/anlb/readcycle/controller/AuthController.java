@@ -44,7 +44,14 @@ public class AuthController {
     @Value("${anlb.jwt.refresh-token-validity-in-seconds}")
     private long refreshTokenExpired;
 
+    /**
+     * {@code GET  /auth/verify-email} : Verifies a user's email using the provided token.
+     *
+     * @param token The email verification token.
+     * @return A {@link ResponseEntity} with a redirect to either the success or failure page.
+     */
     @GetMapping("/auth/verify-email")
+    @ApiMessage("Verify email")
     public ResponseEntity<Void> verifyEmail(@RequestParam("token") String token) {
         if (!this.userService.validateToken(token)) {
             String email = this.userService.extractEmailFromToken(token);
@@ -62,6 +69,14 @@ public class AuthController {
             .build();
     }
 
+    /**
+     * {@code POST  /auth/login} : login.
+     *
+     * @param loginDTO The login request containing username and password.
+     * @return A {@link ResponseEntity} containing a {@link LoginResponseDTO} 
+     *         with user details and a refresh token cookie.
+     * @throws InvalidException If authentication fails or the access token is invalid.
+     */
     @PostMapping("/auth/login")
     @ApiMessage("Login")
     public ResponseEntity<LoginResponseDTO> login(@Valid @RequestBody LoginRequestDTO loginDTO) throws InvalidException {
@@ -99,14 +114,27 @@ public class AuthController {
 
     }
 
-    // get account (f5 - refresh page)
+    /**
+     * {@code GET  /auth/account} : get the current user.
+     *
+     * @return the current user.
+     * @throws InvalidException If the user is not authenticated or the account cannot be retrieved.
+     */
     @GetMapping("/auth/account")
     @ApiMessage("Get current user login")
     public ResponseEntity<LoginResponseDTO.UserGetAccount> getAccount() throws InvalidException {
         return ResponseEntity.ok().body(this.userService.getCurrentUserAccount());
     }
 
-    // get refresh token in db
+    /**
+     * {@code GET  /auth/refresh} : Refreshes the authentication token.
+     *
+     * @param refreshTK The refresh token extracted from the "refresh_token" cookie.
+     *              Defaults to "abc" if the cookie is missing.
+     * @return A {@link ResponseEntity} containing the new authentication tokens
+     *              in a {@link LoginResponseDTO} along with a new refresh token cookie.
+     * @throws InvalidException If the refresh token is invalid or the user cannot be authenticated.
+     */
     @GetMapping("/auth/refresh")
     @ApiMessage("Get refresh token")
     public ResponseEntity<LoginResponseDTO> getRefreshToken(@CookieValue(name = "refresh_token", defaultValue = "abc") String refreshTK) throws InvalidException {
@@ -140,6 +168,13 @@ public class AuthController {
                         .body(response);
     }
 
+    /**
+     * {@code POST  /auth/logout} : Logout.
+     *
+     * @return A {@link ResponseEntity} with an empty body and a response header
+     *                to delete the refresh token cookie.
+     * @throws InvalidException If the user is not authenticated or the access token is invalid.
+     */
     @PostMapping("/auth/logout")
     public ResponseEntity<Void> logout() throws InvalidException {
         String email = SecurityUtil.getCurrentUserLogin()
