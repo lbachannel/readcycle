@@ -9,11 +9,4 @@ public class BookSpecifications {
         return (root, query, criteriaBuilder) -> 
             criteriaBuilder.equal(root.get("isActive"), true);
     }
-
-
-    public static Specification<Book> hasTitle(String title) {
-        return (root, query, criteriaBuilder) -> {
-            return criteriaBuilder.like(root.get("title"), "%" + title + "%");
-        };
-    }
 }
