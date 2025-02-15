@@ -1,4 +1,4 @@
-package com.anlb.readcycle.controller;
+package com.anlb.readcycle.controller.admin;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
