@@ -17,6 +17,7 @@ import com.anlb.readcycle.domain.dto.response.CreateBookResponseDTO;
 import com.anlb.readcycle.domain.dto.response.ResultPaginateDTO;
 import com.anlb.readcycle.domain.dto.response.UpdateBookResponseDTO;
 import com.anlb.readcycle.repository.BookRepository;
+import com.anlb.readcycle.repository.specification.BookSpecifications;
 import com.anlb.readcycle.utils.exception.InvalidException;
 
 import lombok.RequiredArgsConstructor;
@@ -197,6 +198,28 @@ public class BookService {
      *         and associated metadata.
      */
     public ResultPaginateDTO handleGetAllBooks(Specification<Book> spec, Pageable pageable) {
+        Page<Book> pageBook = this.bookRepository.findAll(spec, pageable);
+        ResultPaginateDTO response = new ResultPaginateDTO();
+        ResultPaginateDTO.Meta meta = new ResultPaginateDTO.Meta();
+
+        meta.setPage(pageable.getPageNumber() + 1);
+        meta.setPageSize(pageable.getPageSize());
+
+        meta.setPages(pageBook.getTotalPages());
+        meta.setTotal(pageBook.getTotalElements());
+
+        response.setMeta(meta);
+
+        List<BookResponseDTO> listBook = pageBook.getContent()
+                                            .stream()
+                                            .map(item -> this.convertBookToBookResponseDTO(item))
+                                            .collect(Collectors.toList());
+        response.setResult(listBook);
+        return response;
+    }
+
+    public ResultPaginateDTO handleGetAllBooksClient(Specification<Book> spec, Pageable pageable) {
+        spec = spec.and(BookSpecifications.isActive());
         Page<Book> pageBook = this.bookRepository.findAll(spec, pageable);
         ResultPaginateDTO response = new ResultPaginateDTO();
         ResultPaginateDTO.Meta meta = new ResultPaginateDTO.Meta();
