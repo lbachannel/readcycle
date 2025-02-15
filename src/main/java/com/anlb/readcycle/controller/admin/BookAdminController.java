@@ -1,5 +1,7 @@
 package com.anlb.readcycle.controller.admin;
 
+import java.net.URISyntaxException;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
@@ -32,9 +34,17 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/v1/admin")
 @RequiredArgsConstructor
 public class BookAdminController {
+
     private final BookService bookService;
     private final BookMapper bookMapper;
 
+    /**
+     * {@code GET  /books} : get all books.
+     *
+     * @param spec     The specification used for filtering the books.
+     * @param pageable The pagination information.
+     * @return A {@link ResponseEntity} containing a {@link ResultPaginateDTO} with the list of books.
+     */
     @GetMapping("/books")
     @ApiMessage("Get all books")
     public ResponseEntity<ResultPaginateDTO> getAllBooks(@Filter Specification<Book> spec, Pageable pageable) {
@@ -43,6 +53,13 @@ public class BookAdminController {
                     .body(this.bookService.handleGetAllBooks(spec, pageable));
     }
 
+
+    /**
+     * {@code POST  /books}  : Creates a new book.
+     * 
+     * @param reqBook The request body containing the book details
+     * @return A {@link ResponseEntity} containing a {@link CreateBookResponseDTO} with the created book details.
+     */
     @PostMapping("/books")
     @ApiMessage("Create a book")
     public ResponseEntity<CreateBookResponseDTO> createNewBook(@Valid @RequestBody CreateBookRequestDTO reqBook) {
@@ -52,6 +69,13 @@ public class BookAdminController {
                     .body(this.bookMapper.convertBookToCreateBookResponseDTO(newBook));
     }
 
+    /**
+     * {@code PUT  /books}  : Updates an existing Book.
+     * 
+     * @param reqBook The request body containing the updated book details.
+     * @return A {@link ResponseEntity} containing an {@link UpdateBookResponseDTO} with the updated book details.
+     * @throws InvalidException If the update request is invalid.
+     */
     @PutMapping("/books")
     @ApiMessage("Update book")
     public ResponseEntity<UpdateBookResponseDTO> updateBook(@RequestBody UpdateBookRequestDTO reqBook) throws InvalidException {
@@ -60,6 +84,13 @@ public class BookAdminController {
                     .ok(this.bookMapper.convertBookToUpdateBookResponseDTO(updateBook));
     }
 
+    /**
+     * {@code PUT  /books/{id}}  : Toggles the soft delete status of a book by its ID.
+     * 
+     * @param id The ID of the book to be toggled.
+     * @return A {@link ResponseEntity} containing the updated {@link Book} with its new soft delete status.
+     * @throws InvalidException If the book with the given ID is not found or the operation is invalid.
+     */
     @PutMapping("/books/{id}")
     @ApiMessage("Toggle soft delete a book")
     public ResponseEntity<Book> toggleSoftDeleteBook(@PathVariable("id") int id) throws InvalidException {
@@ -70,6 +101,12 @@ public class BookAdminController {
                     .body(isDeletedBook);
     }
 
+    /**
+     * {@code DELETE /books/{id}} : Deletes a book by its ID.
+     *
+     * @return A {@link ResponseEntity} containing the deleted {@link Book}.
+     * @throws InvalidException If the book with the given ID is not found or the operation is invalid.
+     */
     @DeleteMapping("/books/{id}")
     @ApiMessage("Delete a book")
     public ResponseEntity<Book> deleteBook(@PathVariable("id") long id) throws InvalidException {
