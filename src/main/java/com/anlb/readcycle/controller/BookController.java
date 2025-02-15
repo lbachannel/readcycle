@@ -28,6 +28,13 @@ public class BookController {
     private final BookService bookService;
     private final BookMapper bookMapper;
 
+    /**
+     * {@code GET  /books/{id}} : Retrieves a book by its ID.
+     *
+     * @param id The ID of the book to retrieve.
+     * @return A {@link ResponseEntity} containing the book details in a {@link BookResponseDTO}.
+     * @throws InvalidException If the book is not found or is not active.
+     */
     @GetMapping("/books/{id}")
     @ApiMessage("Get book by id")
     public ResponseEntity<BookResponseDTO> getBookById(@PathVariable("id") long id) throws InvalidException {
@@ -37,6 +44,14 @@ public class BookController {
                     .body(this.bookMapper.convertBookToBookResponseDTO(currentBook));
     }
 
+    /**
+     * {@code GET  /books} : Retrieves a paginated list of books
+     *                       based on the provided filter and pagination parameters.
+     *
+     * @param spec The filter specification to apply when retrieving books.
+     * @param pageable The pagination information, including page number and size.
+     * @return A {@link ResponseEntity} containing a paginated list of books in a {@link ResultPaginateDTO}.
+     */
     @GetMapping("/books")
     @ApiMessage("Get all books")
     public ResponseEntity<ResultPaginateDTO> getAllBooks(@Filter Specification<Book> spec, Pageable pageable) {
