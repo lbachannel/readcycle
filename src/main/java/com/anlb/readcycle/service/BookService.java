@@ -218,6 +218,13 @@ public class BookService {
         return response;
     }
 
+    /**
+     * Retrieves a paginated list of active books based on the given specification and pagination details.
+     *
+     * @param spec     The specification used to filter books.
+     * @param pageable The pagination information including page number and size.
+     * @return A {@link ResultPaginateDTO} containing the paginated list of books and metadata.
+     */
     public ResultPaginateDTO handleGetAllBooksClient(Specification<Book> spec, Pageable pageable) {
         spec = spec.and(BookSpecifications.isActive());
         Page<Book> pageBook = this.bookRepository.findAll(spec, pageable);
