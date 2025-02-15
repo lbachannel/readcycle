@@ -9,12 +9,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.anlb.readcycle.domain.Permission;
-import com.anlb.readcycle.domain.dto.request.CreatePermissionRequestDTO;
-import com.anlb.readcycle.domain.dto.request.UpdatePermissionRequestDTO;
-import com.anlb.readcycle.domain.dto.response.CreatePermissionResponseDTO;
-import com.anlb.readcycle.domain.dto.response.ResultPaginateDTO;
-import com.anlb.readcycle.domain.dto.response.ResultPaginateDTO.Meta;
-import com.anlb.readcycle.domain.dto.response.UpdatePermissionResponseDTO;
+import com.anlb.readcycle.dto.request.CreatePermissionRequestDTO;
+import com.anlb.readcycle.dto.request.UpdatePermissionRequestDTO;
+import com.anlb.readcycle.dto.response.ResultPaginateDTO;
+import com.anlb.readcycle.dto.response.ResultPaginateDTO.Meta;
 import com.anlb.readcycle.repository.PermissionRepository;
 import com.anlb.readcycle.utils.exception.InvalidException;
 
@@ -94,44 +92,6 @@ public class PermissionService {
         updatePermission.setMethod(permissionDTO.getMethod());
         updatePermission.setModule(permissionDTO.getModule());
         return this.permissionRepository.save(updatePermission);
-    }
-
-    /**
-     * Converts a {@link Permission} entity into a {@link CreatePermissionResponseDTO}.
-     *
-     * @param permission The {@link Permission} entity to be converted.
-     * @return A {@link CreatePermissionResponseDTO} containing the permission details.
-     */
-    public CreatePermissionResponseDTO convertPermissionToCreatePermissionResponseDTO(Permission permission) {
-        CreatePermissionResponseDTO response = new CreatePermissionResponseDTO();
-        response.setId(permission.getId());
-        response.setName(permission.getName());
-        response.setApiPath(permission.getApiPath());
-        response.setMethod(permission.getMethod());
-        response.setModule(permission.getModule());
-        response.setCreatedAt(permission.getCreatedAt());
-        response.setCreatedBy(permission.getCreatedBy());
-        return response;
-    }
-
-    /**
-     * Converts a {@link Permission} entity into an {@link UpdatePermissionResponseDTO}.
-     *
-     * @param permission The {@link Permission} entity to be converted.
-     * @return An {@link UpdatePermissionResponseDTO} containing the permission details, including update information.
-     */
-    public UpdatePermissionResponseDTO convertPermissionToUpdatePermissionResponseDTO(Permission permission) {
-        UpdatePermissionResponseDTO response = new UpdatePermissionResponseDTO();
-        response.setId(permission.getId());
-        response.setName(permission.getName());
-        response.setApiPath(permission.getApiPath());
-        response.setMethod(permission.getMethod());
-        response.setModule(permission.getModule());
-        response.setCreatedAt(permission.getCreatedAt());
-        response.setCreatedBy(permission.getCreatedBy());
-        response.setUpdatedAt(permission.getUpdatedAt());
-        response.setUpdatedBy(permission.getUpdatedBy());
-        return response;
     }
 
     /**

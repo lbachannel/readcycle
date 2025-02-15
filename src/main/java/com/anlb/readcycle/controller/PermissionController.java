@@ -14,11 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.anlb.readcycle.domain.Permission;
-import com.anlb.readcycle.domain.dto.request.CreatePermissionRequestDTO;
-import com.anlb.readcycle.domain.dto.request.UpdatePermissionRequestDTO;
-import com.anlb.readcycle.domain.dto.response.CreatePermissionResponseDTO;
-import com.anlb.readcycle.domain.dto.response.ResultPaginateDTO;
-import com.anlb.readcycle.domain.dto.response.UpdatePermissionResponseDTO;
+import com.anlb.readcycle.dto.request.CreatePermissionRequestDTO;
+import com.anlb.readcycle.dto.request.UpdatePermissionRequestDTO;
+import com.anlb.readcycle.dto.response.CreatePermissionResponseDTO;
+import com.anlb.readcycle.dto.response.ResultPaginateDTO;
+import com.anlb.readcycle.dto.response.UpdatePermissionResponseDTO;
+import com.anlb.readcycle.mapper.PermissionMapper;
 import com.anlb.readcycle.service.PermissionService;
 import com.anlb.readcycle.utils.anotation.ApiMessage;
 import com.anlb.readcycle.utils.exception.InvalidException;
@@ -33,7 +34,15 @@ import lombok.RequiredArgsConstructor;
 public class PermissionController {
 
     private final PermissionService permissionService;
+    private final PermissionMapper permissionMapper;
 
+    /**
+     * {@code POST  /permissions} : Creates a new permission.
+     *
+     * @param permissionDTO The request data containing module, API path, and method for the permission.
+     * @return A {@link ResponseEntity} containing the created permission details in a {@link CreatePermissionResponseDTO}.
+     * @throws InvalidException If the permission already exists or validation fails.
+     */
     @PostMapping("/permissions")
     @ApiMessage("Create a permission")
     public ResponseEntity<CreatePermissionResponseDTO> createPermission(@Valid @RequestBody CreatePermissionRequestDTO permissionDTO) throws InvalidException {
@@ -42,9 +51,16 @@ public class PermissionController {
         Permission newPermission = this.permissionService.handleCreatePermission(permissionDTO);
         return ResponseEntity
                     .status(HttpStatus.CREATED)
-                    .body(this.permissionService.convertPermissionToCreatePermissionResponseDTO(newPermission));
+                    .body(this.permissionMapper.convertPermissionToCreatePermissionResponseDTO(newPermission));
     }
 
+    /**
+     * {@code PUT  /permissions} : Updates an existing permission.
+     *
+     * @param permissionDTO The request data containing module, API path, and method for the permission update.
+     * @return A {@link ResponseEntity} containing the updated permission details in a {@link UpdatePermissionResponseDTO}.
+     * @throws InvalidException If the permission does not exist or validation fails.
+     */
     @PutMapping("/permissions")
     @ApiMessage("Update a permission")
     public ResponseEntity<UpdatePermissionResponseDTO> updatePermission(@Valid @RequestBody UpdatePermissionRequestDTO permissionDTO) throws InvalidException {
@@ -53,15 +69,30 @@ public class PermissionController {
         Permission updatePermission = this.permissionService.handleUpdatePermission(permissionDTO);
         return ResponseEntity
                     .ok()
-                    .body(this.permissionService.convertPermissionToUpdatePermissionResponseDTO(updatePermission));
+                    .body(this.permissionMapper.convertPermissionToUpdatePermissionResponseDTO(updatePermission));
     }
 
+    /**
+     * {@code GET  /permissions} : Retrieves a paginated list of permissions
+     *                             based on the provided filter criteria.
+     *
+     * @param spec The filter specification for querying permissions.
+     * @param pageable The pagination information.
+     * @return A {@link ResponseEntity} containing a paginated list of permissions in a {@link ResultPaginateDTO}.
+     */
     @GetMapping("/permissions")
     @ApiMessage("Get permissions")
     public ResponseEntity<ResultPaginateDTO> getPermissions(@Filter Specification<Permission> spec, Pageable pageable) {
         return ResponseEntity.ok(this.permissionService.handleGetPermissions(spec, pageable));
     }
 
+    /**
+     * {@code DELETE  /permissions/{id}} : Deletes a permission by its ID.
+     *
+     * @param id The ID of the permission to be deleted.
+     * @return A {@link ResponseEntity} with an empty body indicating a successful deletion.
+     * @throws InvalidException If the permission does not exist or deletion fails.
+     */
     @DeleteMapping("/permissions/{id}")
     @ApiMessage("delete a permission")
     public ResponseEntity<Void> deletePermission(@PathVariable("id") long id) throws InvalidException {

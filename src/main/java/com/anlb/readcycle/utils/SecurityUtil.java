@@ -21,7 +21,7 @@ import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.stereotype.Service;
 
-import com.anlb.readcycle.domain.dto.response.LoginResponseDTO;
+import com.anlb.readcycle.dto.response.LoginResponseDTO;
 import com.anlb.readcycle.utils.exception.InvalidException;
 import com.nimbusds.jose.util.Base64;
 

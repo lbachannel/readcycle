@@ -14,13 +14,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.anlb.readcycle.domain.User;
-import com.anlb.readcycle.domain.dto.request.CreateUserRequestDTO;
-import com.anlb.readcycle.domain.dto.request.RegisterRequestDTO;
-import com.anlb.readcycle.domain.dto.request.UpdateUserRequestDTO;
-import com.anlb.readcycle.domain.dto.response.CreateUserResponseDTO;
-import com.anlb.readcycle.domain.dto.response.RegisterResponseDTO;
-import com.anlb.readcycle.domain.dto.response.ResultPaginateDTO;
-import com.anlb.readcycle.domain.dto.response.UpdateUserResponseDTO;
+import com.anlb.readcycle.dto.request.CreateUserRequestDTO;
+import com.anlb.readcycle.dto.request.RegisterRequestDTO;
+import com.anlb.readcycle.dto.request.UpdateUserRequestDTO;
+import com.anlb.readcycle.dto.response.CreateUserResponseDTO;
+import com.anlb.readcycle.dto.response.RegisterResponseDTO;
+import com.anlb.readcycle.dto.response.ResultPaginateDTO;
+import com.anlb.readcycle.dto.response.UpdateUserResponseDTO;
+import com.anlb.readcycle.mapper.UserMapper;
 import com.anlb.readcycle.service.EmailService;
 import com.anlb.readcycle.service.UserService;
 import com.anlb.readcycle.utils.anotation.ApiMessage;
@@ -37,7 +38,16 @@ public class UserController {
 
     private final EmailService emailService;
     private final UserService userService;
-    
+    private final UserMapper userMapper;
+
+    /**
+     * {@code GET  /users} : Retrieves a paginated list of all users
+     *                       based on the provided filters.
+     *
+     * @param spec     The filter criteria for querying users.
+     * @param pageable The pagination information.
+     * @return A {@link ResponseEntity} containing a paginated list of users.
+     */
     @GetMapping("/users")
     @ApiMessage("Get all users")
     public ResponseEntity<ResultPaginateDTO> getAllUsers(@Filter Specification<User> spec, Pageable pageable) {
@@ -46,40 +56,67 @@ public class UserController {
                     .body(this.userService.handleGetAllUsers(spec, pageable));
     }
 
+    /**
+     * {@code POST  /user/register} : Registers a new user account.
+     *
+     * @param registerDTO The registration request data.
+     * @return A {@link ResponseEntity} containing the registered user's details.
+     */
     @PostMapping("/user/register")
     @ApiMessage("Register account")
     public ResponseEntity<RegisterResponseDTO> registerMember(@Valid @RequestBody RegisterRequestDTO registerDTO) {
         // convert DTO -> User
-        User newUser = this.userService.convertRegisterDTOToUser(registerDTO);
+        User newUser = this.userMapper.convertRegisterDTOToUser(registerDTO);
         // save user
         newUser = this.userService.handleRegisterMember(newUser);
         // send email
         this.emailService.sendEmailFromTemplateSync(newUser, "ReadCycle - Verify your email", "verify-email");
         return ResponseEntity
                     .status(HttpStatus.CREATED)
-                    .body(this.userService.convertUserToRegisterResponseDTO(newUser));
+                    .body(this.userMapper.convertUserToRegisterResponseDTO(newUser));
     }
 
+    /**
+     * {@code POST  /users} : Creates a new user.
+     *
+     * @param userDTO The request data containing user details.
+     * @return A {@link ResponseEntity} containing the created user's details.
+     * @throws InvalidException If the user creation fails due to invalid data.
+     */
     @PostMapping("/users")
     @ApiMessage("Create a user")
     public ResponseEntity<CreateUserResponseDTO> createNewUser(@Valid @RequestBody CreateUserRequestDTO userDTO) throws InvalidException {
         // convert DTO -> User
-        User newUser = this.userService.convertCreateUserRequestDTOToUser(userDTO);
+        User newUser = this.userMapper.convertCreateUserRequestDTOToUser(userDTO);
         // save user
         newUser = this.userService.handleCreateUser(newUser);
         return ResponseEntity
                     .status(HttpStatus.CREATED)
-                    .body(this.userService.convertUserToCreateResponseDTO(newUser));
+                    .body(this.userMapper.convertUserToCreateResponseDTO(newUser));
     }
 
+    /**
+     * {@code PUT  /users} : Updates an existing user.
+     *
+     * @param reqUser The request data containing updated user details.
+     * @return A {@link ResponseEntity} containing the updated user's details.
+     * @throws InvalidException If the update fails due to invalid data or the user does not exist.
+     */
     @PutMapping("/users")
     @ApiMessage("Update user")
     public ResponseEntity<UpdateUserResponseDTO> updateUser(@Valid @RequestBody UpdateUserRequestDTO reqUser) throws InvalidException {
         User updateUser = this.userService.handleUpdateUser(reqUser);
         return ResponseEntity
-                    .ok(this.userService.convertUserToUpdateUserResponseDTO(updateUser));
+                    .ok(this.userMapper.convertUserToUpdateUserResponseDTO(updateUser));
     }
 
+    /**
+     * {@code DELETE  /users/{id}} : Deletes a user by their ID.
+     *
+     * @param id The ID of the user to be deleted.
+     * @return A {@link ResponseEntity} containing the deleted user's details.
+     * @throws InvalidException If the user does not exist or cannot be deleted.
+     */
     @DeleteMapping("/users/{id}")
     @ApiMessage("Delete a user")
     public ResponseEntity<User> deleteUser(@PathVariable("id") long id) throws InvalidException {

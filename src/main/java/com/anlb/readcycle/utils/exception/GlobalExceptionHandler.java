@@ -12,7 +12,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.anlb.readcycle.domain.dto.response.ResultResponseDTO;
+import com.anlb.readcycle.dto.response.ResultResponseDTO;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {

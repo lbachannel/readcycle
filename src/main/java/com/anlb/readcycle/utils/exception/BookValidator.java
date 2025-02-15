@@ -3,7 +3,7 @@ package com.anlb.readcycle.utils.exception;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
-import com.anlb.readcycle.domain.dto.request.CreateBookRequestDTO;
+import com.anlb.readcycle.dto.request.CreateBookRequestDTO;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
