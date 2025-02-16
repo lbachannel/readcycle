@@ -3,6 +3,7 @@ package com.anlb.readcycle.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import com.anlb.readcycle.domain.Book;
@@ -68,5 +69,60 @@ public class BookLogService {
         }
     }
 
+    /**
+     * Logs the changes made to a book's details by comparing the old and new book objects.
+     * 
+     * @param oldBook the original {@code Book} object before updates
+     * @param newBook the updated {@code Book} object
+     * @throws InvalidException if the current user cannot be retrieved from the security context
+     */
+    public void logUpdateBook(Book oldBook, Book newBook) {
+        try {
+            List<ActivityDescription> descriptions = new ArrayList<>();
+            descriptions.add(ActivityDescription.from("bookId", String.valueOf(newBook.getId()), "Book id"));
+            
+            if (!StringUtils.equals(oldBook.getCategory(), newBook.getCategory())) {
+                descriptions.add(ActivityDescription.from("category", oldBook.getCategory() + " → " + newBook.getCategory(), "Category"));
+            }
 
+            if (!StringUtils.equals(oldBook.getTitle(), newBook.getTitle())) {
+                descriptions.add(ActivityDescription.from("title", oldBook.getTitle() + " → " + newBook.getTitle(), "Title"));
+            }
+
+            if (!StringUtils.equals(oldBook.getAuthor(), newBook.getAuthor())) {
+                descriptions.add(ActivityDescription.from("author", oldBook.getAuthor() + " → " + newBook.getAuthor(), "Author"));
+            }
+
+            if (!StringUtils.equals(oldBook.getPublisher(), newBook.getPublisher())) {
+                descriptions.add(ActivityDescription.from("publisher", oldBook.getPublisher() + " → " + newBook.getPublisher(), "Publisher"));
+            }
+
+            if (!StringUtils.equals(oldBook.getThumb(), newBook.getThumb())) {
+                descriptions.add(ActivityDescription.from("thumb", oldBook.getThumb() + " → " + newBook.getThumb(), "Thumb"));
+            }
+
+            if (oldBook.getQuantity() != newBook.getQuantity()) {
+                descriptions.add(ActivityDescription.from("quantity", oldBook.getQuantity() + " → " + newBook.getQuantity(), "Quantity"));
+            }
+
+            if (oldBook.isActive() != newBook.isActive()) {
+                descriptions.add(ActivityDescription.from("isActive", (oldBook.isActive() ? "True" : "False")  + " → " + (newBook.isActive() ? "True" : "False"), "Active"));
+            }
+
+            if (!StringUtils.equals(String.valueOf(oldBook.getStatus()), String.valueOf(newBook.getStatus()))) {
+                descriptions.add(ActivityDescription.from("status", String.valueOf(oldBook.getStatus()) + " → " + String.valueOf(newBook.getStatus()), "Status"));
+            }
+
+            if (descriptions.size() > 1) {
+                String email = SecurityUtil.getCurrentUserLogin()
+                            .orElseThrow(() -> new InvalidException("Access Token invalid"));
+                User user = this.userService.handleGetUserByUsername(email);
+                ActivityLog activityLog = ActivityLog.formatLogMessage(ActivityGroup.BOOK, ActivityType.UPDATE_BOOK, descriptions);
+                activityLogService.log(user, activityLog);
+            }
+
+        } catch (Exception e) {
+            log.error("logging activity error: ", e);
+        }
+    }
 }

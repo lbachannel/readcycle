@@ -86,14 +86,19 @@ public class BookService {
     }
 
     /**
-     * Updates an existing book with new details provided in the request.
-     *
-     * @param requestBook The DTO containing updated book information.
-     * @return The updated {@link Book} entity after saving to the database.
-     * @throws InvalidException if the book with the given ID does not exist.
+     * Updates an existing book's details based on the provided request data.
+     * 
+     * <p>This method retrieves the book by its ID, creates a clone of the original book 
+     * for logging purposes, updates its attributes with new values from the request, 
+     * logs the changes, and then saves the updated book to the repository.</p>
+     * 
+     * @param requestBook the {@code UpdateBookRequestDTO} containing the new book details
+     * @return the updated {@code Book} object after saving to the repository
+     * @throws InvalidException if the book with the given ID does not exist
      */
     public Book handleUpdateBook(UpdateBookRequestDTO requestBook) throws InvalidException {
         Book updateBook = this.handleGetBookById(requestBook.getId());
+        Book oldBook = updateBook.clone();
         updateBook.setCategory(requestBook.getCategory());
         updateBook.setTitle(requestBook.getTitle());
         updateBook.setAuthor(requestBook.getAuthor());
@@ -102,6 +107,7 @@ public class BookService {
         updateBook.setDescription(requestBook.getDescription());
         updateBook.setQuantity(requestBook.getQuantity());
         updateBook.setStatus(requestBook.getStatus());
+        this.bookLogService.logUpdateBook(oldBook, updateBook);
         return this.bookRepository.save(updateBook);
     }
 
