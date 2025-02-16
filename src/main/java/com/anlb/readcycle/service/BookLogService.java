@@ -25,6 +25,12 @@ public class BookLogService {
     private final ActivityLogService activityLogService;
     private final UserService userService;
 
+    /**
+     * Logs the creation of a new book, capturing its details as an activity log.
+     *
+     * @param book The {@link Book} object containing details of the created book.
+     * @throws InvalidException If the current user's authentication token is invalid.
+     */
     public void logCreateBook(Book book) throws InvalidException {
         String email = SecurityUtil.getCurrentUserLogin()
                             .orElseThrow(() -> new InvalidException("Access Token invalid"));
@@ -61,4 +67,6 @@ public class BookLogService {
             log.error("logging activity error: ", e);
         }
     }
+
+
 }
