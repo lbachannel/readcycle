@@ -28,14 +28,17 @@ public class BookService {
 
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
+    private final BookLogService bookLogService;
 
     /**
-     * Creates a new book record in the database.
+     * Creates a new book and logs the creation event.
      *
-     * @param requestBook The DTO containing details of the new book.
-     * @return The newly created {@link Book} entity after saving to the database.
+     * @param requestBook the DTO containing the book details.
+     * @return the newly created and saved {@link Book} entity.
+     * @throws InvalidException if the request is invalid.
+     * @implNote This method logs the book creation event using {@code bookLogService}.
      */
-    public Book handleCreateBook(CreateBookRequestDTO requestBook) {
+    public Book handleCreateBook(CreateBookRequestDTO requestBook) throws InvalidException {
         Book newBook = new Book();
         newBook.setCategory(requestBook.getCategory());
         newBook.setTitle(requestBook.getTitle());
@@ -46,7 +49,9 @@ public class BookService {
         newBook.setQuantity(requestBook.getQuantity());
         newBook.setStatus(requestBook.getStatus());
         newBook.setActive(true);
-        return this.bookRepository.save(newBook);
+        newBook = this.bookRepository.save(newBook);
+        this.bookLogService.logCreateBook(newBook);
+        return newBook;
     }
 
     /**

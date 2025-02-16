@@ -51,16 +51,19 @@ public class BookAdminController {
                     .body(this.bookService.handleGetAllBooks(spec, pageable));
     }
 
-
     /**
      * {@code POST  /books}  : Creates a new book.
+     *
+     * @param reqBook the request body containing book details.
+     * @return a {@link ResponseEntity} with the created {@link CreateBookResponseDTO}.
+     * @throws InvalidException if the book creation process encounters an error.
      * 
-     * @param reqBook The request body containing the book details
-     * @return A {@link ResponseEntity} containing a {@link CreateBookResponseDTO} with the created book details.
+     * @implNote This method delegates book creation to {@code bookService} and 
+     *           converts the created book to a response DTO using {@code bookMapper}.
      */
     @PostMapping("/books")
     @ApiMessage("Create a book")
-    public ResponseEntity<CreateBookResponseDTO> createNewBook(@Valid @RequestBody CreateBookRequestDTO reqBook) {
+    public ResponseEntity<CreateBookResponseDTO> createNewBook(@Valid @RequestBody CreateBookRequestDTO reqBook) throws InvalidException {
         Book newBook = this.bookService.handleCreateBook(reqBook);
         return ResponseEntity
                     .status(HttpStatus.CREATED)
