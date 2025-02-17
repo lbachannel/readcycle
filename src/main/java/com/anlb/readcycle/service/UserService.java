@@ -324,18 +324,20 @@ public class UserService {
     }
 
     /**
-     * Deletes a user by their ID, ensuring that a user cannot delete themselves.
+     * Deletes a user by their ID and logs the deletion activity.
      *
-     * @param id The ID of the user to be deleted.
-     * @throws InvalidException If the access token is invalid or if the user attempts to delete themselves.
+     * @param id the ID of the user to be deleted
+     * @throws InvalidException if the access token is invalid, or the user attempts to delete their own account
      */
     public void handleDeleteUserById(long id) throws InvalidException {
         String email = SecurityUtil.getCurrentUserLogin()
                             .orElseThrow(() -> new InvalidException("Access Token invalid"));
+        User userLogin = this.handleGetUserByUsername(email);
         User user = this.handleGetUserById(id);
         if (user.getEmail().equals(email)) {
             throw new InvalidException("You can not delete yourself");
         }
+        this.userLogService.logDeleteUser(id, userLogin);
         this.userRepository.deleteById(id);
     }
 }

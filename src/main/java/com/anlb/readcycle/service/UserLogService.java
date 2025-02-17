@@ -11,7 +11,6 @@ import com.anlb.readcycle.dto.activitylog.ActivityDescription;
 import com.anlb.readcycle.dto.activitylog.ActivityGroup;
 import com.anlb.readcycle.dto.activitylog.ActivityLog;
 import com.anlb.readcycle.dto.activitylog.ActivityType;
-import com.anlb.readcycle.utils.SecurityUtil;
 import com.anlb.readcycle.utils.exception.InvalidException;
 
 import lombok.RequiredArgsConstructor;
@@ -89,6 +88,23 @@ public class UserLogService {
                 ActivityLog activityLog = ActivityLog.formatLogMessage(ActivityGroup.USER, ActivityType.UPDATE_USER, descriptions);
                 activityLogService.log(userLogin, activityLog);
             }
+        } catch (Exception e) {
+            log.error("logging activity error: ", e);
+        }
+    }
+
+    /**
+     * Logs the deletion of a user.
+     *
+     * @param id the ID of the deleted user
+     * @param userLogin the user performing the deletion
+     */
+    public void logDeleteUser(long id, User userLogin) {
+        try {
+            List<ActivityDescription> descriptions = new ArrayList<>();
+            descriptions.add(ActivityDescription.from("userId", String.valueOf(id) + " → " + "none" , "User id"));
+            ActivityLog activityLog = ActivityLog.formatLogMessage(ActivityGroup.USER, ActivityType.DELETE_USER, descriptions);
+            activityLogService.log(userLogin, activityLog);
         } catch (Exception e) {
             log.error("logging activity error: ", e);
         }
