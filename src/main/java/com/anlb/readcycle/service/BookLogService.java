@@ -57,7 +57,7 @@ public class BookLogService {
             if (book.getQuantity() != 0) {
                 descriptions.add(ActivityDescription.from("quantity", String.valueOf(book.getQuantity()), "Quantity"));
             }
-            if (!StringUtils.isBlank(String.valueOf(book.getStatus()))) {
+            if (book.getStatus() != null && !StringUtils.isBlank(String.valueOf(book.getStatus()))) {
                 descriptions.add(ActivityDescription.from("status", String.valueOf(book.getStatus()), "Status"));
             }
             descriptions.add(ActivityDescription.from("isActive", book.isActive() ? "True" : "False", "Active"));
