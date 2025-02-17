@@ -39,25 +39,25 @@ public class BookLogService {
         try {
             List<ActivityDescription> descriptions = new ArrayList<>();
             descriptions.add(ActivityDescription.from("bookId", String.valueOf(book.getId()), "Book id"));
-            if (book.getCategory() != null) {
+            if (!StringUtils.isBlank(book.getCategory())) {
                 descriptions.add(ActivityDescription.from("category", book.getCategory(), "Category"));
             }
-            if (book.getTitle() != null) {
+            if (!StringUtils.isBlank(book.getTitle())) {
                 descriptions.add(ActivityDescription.from("title", book.getTitle(), "Title"));
             }
-            if (book.getAuthor() != null) {
+            if (!StringUtils.isBlank(book.getAuthor())) {
                 descriptions.add(ActivityDescription.from("author", book.getAuthor(), "Author"));
             }
-            if (book.getPublisher() != null) {
+            if (!StringUtils.isBlank(book.getPublisher())) {
                 descriptions.add(ActivityDescription.from("publisher", book.getPublisher(), "Publisher"));
             }
-            if (book.getThumb() != null) {
+            if (!StringUtils.isBlank(book.getThumb())) {
                 descriptions.add(ActivityDescription.from("thumb", book.getThumb(), "Thumb"));
             }
             if (book.getQuantity() != 0) {
                 descriptions.add(ActivityDescription.from("quantity", String.valueOf(book.getQuantity()), "Quantity"));
             }
-            if (book.getStatus() != null) {
+            if (!StringUtils.isBlank(String.valueOf(book.getStatus()))) {
                 descriptions.add(ActivityDescription.from("status", String.valueOf(book.getStatus()), "Status"));
             }
             descriptions.add(ActivityDescription.from("isActive", book.isActive() ? "True" : "False", "Active"));
