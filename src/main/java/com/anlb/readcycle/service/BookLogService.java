@@ -98,7 +98,13 @@ public class BookLogService {
             }
 
             if (!StringUtils.equals(oldBook.getThumb(), newBook.getThumb())) {
-                descriptions.add(ActivityDescription.from("thumb", oldBook.getThumb() + " → " + newBook.getThumb(), "Thumb"));
+                if (StringUtils.isBlank(oldBook.getThumb())) {
+                    descriptions.add(ActivityDescription.from("thumb", null + " → " + newBook.getThumb(), "Thumb"));
+                } else if (StringUtils.isBlank(newBook.getThumb())) {
+                    descriptions.add(ActivityDescription.from("thumb", oldBook.getThumb() + " → " + null, "Thumb"));
+                } else {
+                    descriptions.add(ActivityDescription.from("thumb", oldBook.getThumb() + " → " + newBook.getThumb(), "Thumb"));
+                }
             }
 
             if (oldBook.getQuantity() != newBook.getQuantity()) {
