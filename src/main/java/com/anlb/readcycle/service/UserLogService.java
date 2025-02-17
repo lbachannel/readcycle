@@ -11,6 +11,7 @@ import com.anlb.readcycle.dto.activitylog.ActivityDescription;
 import com.anlb.readcycle.dto.activitylog.ActivityGroup;
 import com.anlb.readcycle.dto.activitylog.ActivityLog;
 import com.anlb.readcycle.dto.activitylog.ActivityType;
+import com.anlb.readcycle.utils.SecurityUtil;
 import com.anlb.readcycle.utils.exception.InvalidException;
 
 import lombok.RequiredArgsConstructor;
@@ -51,6 +52,43 @@ public class UserLogService {
 
             ActivityLog activityLog = ActivityLog.formatLogMessage(ActivityGroup.USER, ActivityType.CREATE_USER, descriptions);
             activityLogService.log(userLogin, activityLog);
+        } catch (Exception e) {
+            log.error("logging activity error: ", e);
+        }
+    }
+
+    /**
+     * Logs the update activity of a user.
+     *
+     * <p>This method compares the old and new user data to identify changes. If any relevant 
+     * attributes (such as date of birth, name, or role) have been updated, an {@link ActivityLog} 
+     * entry is created and logged.
+     *
+     * @param oldUser   the user's data before the update
+     * @param newUser   the user's data after the update
+     * @param userLogin the user performing the update action
+     */
+    public void logUpdateUser(User oldUser, User newUser, User userLogin) {
+        try {
+            List<ActivityDescription> descriptions = new ArrayList<>();
+            descriptions.add(ActivityDescription.from("userId", String.valueOf(newUser.getId()), "User id"));
+            
+            if (!StringUtils.equals(String.valueOf(oldUser.getDateOfBirth()), String.valueOf(newUser.getDateOfBirth()))) {
+                descriptions.add(ActivityDescription.from("dateOfBirth", oldUser.getDateOfBirth() + " → " + newUser.getDateOfBirth(), "Date of birth"));
+            }
+            
+            if (!StringUtils.equals(oldUser.getName(), newUser.getName())) {
+                descriptions.add(ActivityDescription.from("name", oldUser.getName() + " → " + newUser.getName(), "Name"));
+            }
+
+            if (!StringUtils.equals(oldUser.getRole().getName(), newUser.getRole().getName())) {
+                descriptions.add(ActivityDescription.from("role", oldUser.getRole().getName() + " → " + newUser.getRole().getName(), "Role"));
+            }
+
+            if (descriptions.size() > 1) {
+                ActivityLog activityLog = ActivityLog.formatLogMessage(ActivityGroup.USER, ActivityType.UPDATE_USER, descriptions);
+                activityLogService.log(userLogin, activityLog);
+            }
         } catch (Exception e) {
             log.error("logging activity error: ", e);
         }

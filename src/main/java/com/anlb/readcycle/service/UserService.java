@@ -296,14 +296,19 @@ public class UserService {
     }
 
     /**
-     * Updates an existing user's details based on the provided request data.
+     * Updates an existing user and logs the update activity.
      *
-     * @param reqUser the request DTO containing updated user information
-     * @return the updated User object
-     * @throws InvalidException if the user with the given ID does not exist
+     * <p>This method retrieves the user by ID, clones their current state, updates their 
+     * attributes based on the provided request data, validates the date format, and assigns 
+     * the appropriate role. The update action is then logged before saving the changes to the database.
+     *
+     * @param reqUser the DTO containing updated user information
+     * @return the updated and saved {@link User} entity
+     * @throws InvalidException if the access token is invalid or the current user cannot be retrieved
      */
     public User handleUpdateUser(UpdateUserRequestDTO reqUser) throws InvalidException {
         User updateUser = this.handleGetUserById(reqUser.getId());
+        User oldUser = updateUser.clone();
         updateUser.setName(reqUser.getName());
         updateUser.setEmail(reqUser.getEmail());
         if (RegisterValidator.isValidDateFormat(reqUser.getDateOfBirth())) {
@@ -311,7 +316,11 @@ public class UserService {
             updateUser.setDateOfBirth(LocalDate.parse(reqUser.getDateOfBirth(), formatter));
         }
         updateUser.setRole(this.roleService.handleFindByName(reqUser.getRole()));
-        return updateUser;
+        String email = SecurityUtil.getCurrentUserLogin()
+                            .orElseThrow(() -> new InvalidException("Access Token invalid"));
+        User user = this.handleGetUserByUsername(email);
+        this.userLogService.logUpdateUser(oldUser, updateUser, user);
+        return this.userRepository.save(updateUser);
     }
 
     /**
