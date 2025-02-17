@@ -132,6 +132,14 @@ public class BookLogService {
         }
     }
 
+    /**
+     * Logs an activity when a book's soft delete status is toggled.
+     *
+     * @param id        the unique identifier of the book
+     * @param oldActive the previous active status of the book (true if active, false if inactive)
+     * @param newActive the new active status of the book (true if active, false if inactive)
+     * @throws InvalidException if the current user's access token is invalid
+     */
     public void logToggleSoftDeleteBook(long id, boolean oldActive, boolean newActive) {
         try {
             List<ActivityDescription> descriptions = new ArrayList<>();
