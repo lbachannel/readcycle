@@ -131,4 +131,19 @@ public class BookLogService {
             log.error("logging activity error: ", e);
         }
     }
+
+    public void logToggleSoftDeleteBook(long id, boolean oldActive, boolean newActive) {
+        try {
+            List<ActivityDescription> descriptions = new ArrayList<>();
+            descriptions.add(ActivityDescription.from("bookId", String.valueOf(id), "Book id"));
+            descriptions.add(ActivityDescription.from("isActive", (oldActive ? "True" : "False")  + " → " + (newActive ? "True" : "False"), "Active"));
+            String email = SecurityUtil.getCurrentUserLogin()
+                            .orElseThrow(() -> new InvalidException("Access Token invalid"));
+            User user = this.userService.handleGetUserByUsername(email);
+            ActivityLog activityLog = ActivityLog.formatLogMessage(ActivityGroup.BOOK, ActivityType.SOFT_DELETE_BOOK, descriptions);
+            activityLogService.log(user, activityLog);
+        } catch (Exception e) {
+            log.error("logging activity error: ", e);
+        }
+    }
 }

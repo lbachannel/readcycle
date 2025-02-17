@@ -123,7 +123,9 @@ public class BookService {
      */
     public Book handleSoftDelete(long id) throws InvalidException {
         Book isDeletedBook = this.handleGetBookById(id);
+        boolean oldActive = isDeletedBook.isActive();
         isDeletedBook.setActive(!isDeletedBook.isActive());
+        this.bookLogService.logToggleSoftDeleteBook(isDeletedBook.getId(), oldActive, isDeletedBook.isActive());
         return this.bookRepository.save(isDeletedBook);
     }
 
