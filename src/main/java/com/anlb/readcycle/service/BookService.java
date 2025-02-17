@@ -190,9 +190,12 @@ public class BookService {
     /**
      * Deletes a book from the repository by its ID.
      *
+     * This method first logs the deletion activity using {@code bookLogService}
+     *              then proceeds to remove the book from the repository.
      * @param id the ID of the book to be deleted
      */
     public void handleDeleteBookById(long id) {
+        this.bookLogService.logDeleteBook(id);
         this.bookRepository.deleteById(id);
     }
 }

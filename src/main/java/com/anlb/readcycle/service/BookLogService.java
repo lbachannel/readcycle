@@ -154,4 +154,24 @@ public class BookLogService {
             log.error("logging activity error: ", e);
         }
     }
+
+    /**
+     * Logs the deletion of a book by recording an activity log.
+     *
+     * @param id the ID of the deleted book
+     * @throws InvalidException if the current user's access token is invalid
+     */
+    public void logDeleteBook(long id) {
+        try {
+            List<ActivityDescription> descriptions = new ArrayList<>();
+            descriptions.add(ActivityDescription.from("bookId", String.valueOf(id) + " → " + "none" , "Book id"));
+            String email = SecurityUtil.getCurrentUserLogin()
+                            .orElseThrow(() -> new InvalidException("Access Token invalid"));
+            User user = this.userService.handleGetUserByUsername(email);
+            ActivityLog activityLog = ActivityLog.formatLogMessage(ActivityGroup.BOOK, ActivityType.DELETE_BOOK, descriptions);
+            activityLogService.log(user, activityLog);
+        } catch (Exception e) {
+            log.error("logging activity error: ", e);
+        }
+    }
 }
