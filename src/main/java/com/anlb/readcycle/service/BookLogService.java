@@ -99,9 +99,9 @@ public class BookLogService {
 
             if (!StringUtils.equals(oldBook.getThumb(), newBook.getThumb())) {
                 if (StringUtils.isBlank(oldBook.getThumb())) {
-                    descriptions.add(ActivityDescription.from("thumb", null + " → " + newBook.getThumb(), "Thumb"));
+                    descriptions.add(ActivityDescription.from("thumb", "none" + " → " + newBook.getThumb(), "Thumb"));
                 } else if (StringUtils.isBlank(newBook.getThumb())) {
-                    descriptions.add(ActivityDescription.from("thumb", oldBook.getThumb() + " → " + null, "Thumb"));
+                    descriptions.add(ActivityDescription.from("thumb", oldBook.getThumb() + " → " + "none", "Thumb"));
                 } else {
                     descriptions.add(ActivityDescription.from("thumb", oldBook.getThumb() + " → " + newBook.getThumb(), "Thumb"));
                 }
