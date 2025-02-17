@@ -40,6 +40,7 @@ public class UserService {
     private final JwtDecoder jwtDecoder;
     private final RoleService roleService;
     private final UserMapper userMapper;
+    private final UserLogService userLogService;
 
     /**
      * Handles the registration process for a new member.
@@ -58,16 +59,20 @@ public class UserService {
     }
 
     /**
-     * Creates and saves a new user in the system.
-     * 
-     * This method sets the user's email verification status to true and persists the user entity to the database.
+     * Creates a new user and logs the creation activity.
      *
-     * @param user The {@link User} entity to be created.
-     * @return The saved {@link User} entity.
+     * @param user the user to be created
+     * @return the saved user with updated information
+     * @throws InvalidException if the current user cannot be retrieved due to an invalid access token
      */
-    public User handleCreateUser(User user) {
+    public User handleCreateUser(User user) throws InvalidException {
         user.setEmailVerified(true);
-        return this.userRepository.save(user);
+        user = this.userRepository.save(user);
+        String email = SecurityUtil.getCurrentUserLogin()
+                        .orElseThrow(() -> new InvalidException("Access Token invalid"));
+        User userLogin = this.handleGetUserByUsername(email);
+        this.userLogService.logCreateUser(user, userLogin);
+        return user;
     }
 
     /**
