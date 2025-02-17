@@ -12,7 +12,8 @@ public enum ActivityType {
 
     CREATE_BOOK("Create book"),
     UPDATE_BOOK("Update book"),
-    DELETE_BOOK("Delete book");
+    DELETE_BOOK("Delete book"),
+    SOFT_DELETE_BOOK("Toggle soft delete book");
 
     @Getter
     @Setter

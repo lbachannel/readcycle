@@ -16,11 +16,17 @@ import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = "books")
 @Data
+@SuperBuilder(toBuilder = true)
+@NoArgsConstructor
+@AllArgsConstructor
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -81,5 +87,9 @@ public class Book {
         this.updatedBy = SecurityUtil.getCurrentUserLogin().isPresent()
                     ? SecurityUtil.getCurrentUserLogin().get() : "";
         this.updatedAt = Instant.now();
+    }
+
+    public Book clone() {
+        return this.toBuilder().build();
     }
 }

@@ -40,6 +40,7 @@ public class UserService {
     private final JwtDecoder jwtDecoder;
     private final RoleService roleService;
     private final UserMapper userMapper;
+    private final UserLogService userLogService;
 
     /**
      * Handles the registration process for a new member.
@@ -58,16 +59,20 @@ public class UserService {
     }
 
     /**
-     * Creates and saves a new user in the system.
-     * 
-     * This method sets the user's email verification status to true and persists the user entity to the database.
+     * Creates a new user and logs the creation activity.
      *
-     * @param user The {@link User} entity to be created.
-     * @return The saved {@link User} entity.
+     * @param user the user to be created
+     * @return the saved user with updated information
+     * @throws InvalidException if the current user cannot be retrieved due to an invalid access token
      */
-    public User handleCreateUser(User user) {
+    public User handleCreateUser(User user) throws InvalidException {
         user.setEmailVerified(true);
-        return this.userRepository.save(user);
+        user = this.userRepository.save(user);
+        String email = SecurityUtil.getCurrentUserLogin()
+                        .orElseThrow(() -> new InvalidException("Access Token invalid"));
+        User userLogin = this.handleGetUserByUsername(email);
+        this.userLogService.logCreateUser(user, userLogin);
+        return user;
     }
 
     /**
@@ -291,14 +296,19 @@ public class UserService {
     }
 
     /**
-     * Updates an existing user's details based on the provided request data.
+     * Updates an existing user and logs the update activity.
      *
-     * @param reqUser the request DTO containing updated user information
-     * @return the updated User object
-     * @throws InvalidException if the user with the given ID does not exist
+     * <p>This method retrieves the user by ID, clones their current state, updates their 
+     * attributes based on the provided request data, validates the date format, and assigns 
+     * the appropriate role. The update action is then logged before saving the changes to the database.
+     *
+     * @param reqUser the DTO containing updated user information
+     * @return the updated and saved {@link User} entity
+     * @throws InvalidException if the access token is invalid or the current user cannot be retrieved
      */
     public User handleUpdateUser(UpdateUserRequestDTO reqUser) throws InvalidException {
         User updateUser = this.handleGetUserById(reqUser.getId());
+        User oldUser = updateUser.clone();
         updateUser.setName(reqUser.getName());
         updateUser.setEmail(reqUser.getEmail());
         if (RegisterValidator.isValidDateFormat(reqUser.getDateOfBirth())) {
@@ -306,22 +316,28 @@ public class UserService {
             updateUser.setDateOfBirth(LocalDate.parse(reqUser.getDateOfBirth(), formatter));
         }
         updateUser.setRole(this.roleService.handleFindByName(reqUser.getRole()));
-        return updateUser;
+        String email = SecurityUtil.getCurrentUserLogin()
+                            .orElseThrow(() -> new InvalidException("Access Token invalid"));
+        User user = this.handleGetUserByUsername(email);
+        this.userLogService.logUpdateUser(oldUser, updateUser, user);
+        return this.userRepository.save(updateUser);
     }
 
     /**
-     * Deletes a user by their ID, ensuring that a user cannot delete themselves.
+     * Deletes a user by their ID and logs the deletion activity.
      *
-     * @param id The ID of the user to be deleted.
-     * @throws InvalidException If the access token is invalid or if the user attempts to delete themselves.
+     * @param id the ID of the user to be deleted
+     * @throws InvalidException if the access token is invalid, or the user attempts to delete their own account
      */
     public void handleDeleteUserById(long id) throws InvalidException {
         String email = SecurityUtil.getCurrentUserLogin()
                             .orElseThrow(() -> new InvalidException("Access Token invalid"));
+        User userLogin = this.handleGetUserByUsername(email);
         User user = this.handleGetUserById(id);
         if (user.getEmail().equals(email)) {
             throw new InvalidException("You can not delete yourself");
         }
+        this.userLogService.logDeleteUser(id, userLogin);
         this.userRepository.deleteById(id);
     }
 }

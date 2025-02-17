@@ -28,14 +28,17 @@ public class BookService {
 
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
+    private final BookLogService bookLogService;
 
     /**
-     * Creates a new book record in the database.
+     * Creates a new book and logs the creation event.
      *
-     * @param requestBook The DTO containing details of the new book.
-     * @return The newly created {@link Book} entity after saving to the database.
+     * @param requestBook the DTO containing the book details.
+     * @return the newly created and saved {@link Book} entity.
+     * @throws InvalidException if the request is invalid.
+     * @implNote This method logs the book creation event using {@code bookLogService}.
      */
-    public Book handleCreateBook(CreateBookRequestDTO requestBook) {
+    public Book handleCreateBook(CreateBookRequestDTO requestBook) throws InvalidException {
         Book newBook = new Book();
         newBook.setCategory(requestBook.getCategory());
         newBook.setTitle(requestBook.getTitle());
@@ -46,7 +49,9 @@ public class BookService {
         newBook.setQuantity(requestBook.getQuantity());
         newBook.setStatus(requestBook.getStatus());
         newBook.setActive(true);
-        return this.bookRepository.save(newBook);
+        newBook = this.bookRepository.save(newBook);
+        this.bookLogService.logCreateBook(newBook);
+        return newBook;
     }
 
     /**
@@ -81,14 +86,19 @@ public class BookService {
     }
 
     /**
-     * Updates an existing book with new details provided in the request.
-     *
-     * @param requestBook The DTO containing updated book information.
-     * @return The updated {@link Book} entity after saving to the database.
-     * @throws InvalidException if the book with the given ID does not exist.
+     * Updates an existing book's details based on the provided request data.
+     * 
+     * <p>This method retrieves the book by its ID, creates a clone of the original book 
+     * for logging purposes, updates its attributes with new values from the request, 
+     * logs the changes, and then saves the updated book to the repository.</p>
+     * 
+     * @param requestBook the {@code UpdateBookRequestDTO} containing the new book details
+     * @return the updated {@code Book} object after saving to the repository
+     * @throws InvalidException if the book with the given ID does not exist
      */
     public Book handleUpdateBook(UpdateBookRequestDTO requestBook) throws InvalidException {
         Book updateBook = this.handleGetBookById(requestBook.getId());
+        Book oldBook = updateBook.clone();
         updateBook.setCategory(requestBook.getCategory());
         updateBook.setTitle(requestBook.getTitle());
         updateBook.setAuthor(requestBook.getAuthor());
@@ -97,6 +107,7 @@ public class BookService {
         updateBook.setDescription(requestBook.getDescription());
         updateBook.setQuantity(requestBook.getQuantity());
         updateBook.setStatus(requestBook.getStatus());
+        this.bookLogService.logUpdateBook(oldBook, updateBook);
         return this.bookRepository.save(updateBook);
     }
 
@@ -112,7 +123,9 @@ public class BookService {
      */
     public Book handleSoftDelete(long id) throws InvalidException {
         Book isDeletedBook = this.handleGetBookById(id);
+        boolean oldActive = isDeletedBook.isActive();
         isDeletedBook.setActive(!isDeletedBook.isActive());
+        this.bookLogService.logToggleSoftDeleteBook(isDeletedBook.getId(), oldActive, isDeletedBook.isActive());
         return this.bookRepository.save(isDeletedBook);
     }
 
@@ -177,9 +190,12 @@ public class BookService {
     /**
      * Deletes a book from the repository by its ID.
      *
+     * This method first logs the deletion activity using {@code bookLogService}
+     *              then proceeds to remove the book from the repository.
      * @param id the ID of the book to be deleted
      */
     public void handleDeleteBookById(long id) {
+        this.bookLogService.logDeleteBook(id);
         this.bookRepository.deleteById(id);
     }
 }
