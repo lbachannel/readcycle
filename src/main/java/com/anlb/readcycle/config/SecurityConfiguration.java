@@ -29,7 +29,7 @@ public class SecurityConfiguration {
             .cors(Customizer.withDefaults())
             .authorizeHttpRequests(
                 authz -> authz
-                .requestMatchers("/api/v1/user/register", "/api/v1/auth/verify-email/**", "/api/v1/auth/login", "/api/v1/auth/refresh", "/upload/**").permitAll()
+                .requestMatchers("/", "/api/v1/books/**", "/api/v1/user/register", "/api/v1/auth/verify-email/**", "/api/v1/auth/login", "/api/v1/auth/refresh", "/upload/**").permitAll()
                 .anyRequest().authenticated()
             )
             .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults())
