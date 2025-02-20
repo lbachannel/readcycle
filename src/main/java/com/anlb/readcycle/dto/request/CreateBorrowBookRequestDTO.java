@@ -1,21 +1,35 @@
 package com.anlb.readcycle.dto.request;
 
-import java.time.Instant;
+import java.util.List;
 
-import com.anlb.readcycle.domain.Book;
-import com.anlb.readcycle.domain.User;
-
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@Data
 public class CreateBorrowBookRequestDTO {
-    private String status;
-    private Instant borrowDate;
-    private Instant dueDate;
-    private Instant returnDate;
-    private double fineAmount;
-    private User user;
-    private Book book; 
+    private String username;
+    private List<Details> details;
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Data
+    public static class Details {
+        private long id;
+        private String category;
+        private String title;
+        private String author;
+        private String publisher;
+        private String thumb;
+        private int quantity;
+        private boolean isActive;
+        private String description;
+        private String status;
+    }
 }
