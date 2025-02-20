@@ -1,5 +1,8 @@
 package com.anlb.readcycle.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.anlb.readcycle.domain.Book;
@@ -30,5 +33,19 @@ public class CartService {
             this.cartRepository.save(newCart);
         }
         return newCart;
+    }
+
+    public List<Cart> handleGetCartsByUser() throws InvalidException {
+        String email = SecurityUtil.getCurrentUserLogin()
+                            .orElseThrow(() -> new InvalidException("Access Token invalid"));
+        User user = this.userService.handleGetUserByUsername(email);
+        if (user != null) {
+            return this.cartRepository.findAllByUser(user);
+        }
+        return new ArrayList<>();
+    }
+
+    public void handleDeleteCartById(long id) {
+        this.cartRepository.deleteById(id);
     }
 }
