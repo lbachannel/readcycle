@@ -13,6 +13,7 @@ import com.anlb.readcycle.dto.request.CreateBorrowBookRequestDTO.Details;
 import com.anlb.readcycle.mapper.BookMapper;
 import com.anlb.readcycle.repository.BookRepository;
 import com.anlb.readcycle.repository.BorrowRepository;
+import com.anlb.readcycle.utils.constant.BookStatusEnum;
 import com.anlb.readcycle.utils.exception.InvalidException;
 
 import lombok.RequiredArgsConstructor;
@@ -39,6 +40,9 @@ public class BorrowBookService {
         Book book = this.bookMapper.convertDetailsToBook(bookDetails);
         Book dbBook = this.bookService.handleGetBookById(book.getId());
         dbBook.setQuantity(dbBook.getQuantity() - 1);
+        if (dbBook.getQuantity() == 0) {
+            dbBook.setStatus(BookStatusEnum.UNAVAILABLE);
+        }
         dbBook = this.bookRepository.save(dbBook);
         borrow.setBook(dbBook);
         
