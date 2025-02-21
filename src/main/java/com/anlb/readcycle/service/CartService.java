@@ -48,4 +48,8 @@ public class CartService {
     public void handleDeleteCartById(long id) {
         this.cartRepository.deleteById(id);
     }
+
+    public void handleDeleteCarts(List<Long> ids) {
+        this.cartRepository.deleteAllById(ids);
+    }
 }
