@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import com.anlb.readcycle.domain.Book;
+import com.anlb.readcycle.dto.request.CreateBorrowBookRequestDTO.Details;
 import com.anlb.readcycle.dto.response.BookResponseDTO;
 import com.anlb.readcycle.dto.response.CreateBookResponseDTO;
 import com.anlb.readcycle.dto.response.UpdateBookResponseDTO;
@@ -112,5 +113,11 @@ public class BookMapper {
                                             ))
                                             .collect(Collectors.toList());
         return response;
+    }
+
+    public Book convertDetailsToBook(Details details) {
+        Book book = new Book();
+        book.setId(details.getId());
+        return book;
     }
 }
