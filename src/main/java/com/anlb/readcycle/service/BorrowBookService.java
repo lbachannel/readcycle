@@ -39,6 +39,9 @@ public class BorrowBookService {
         borrow.setUser(user);
         Book book = this.bookMapper.convertDetailsToBook(bookDetails);
         Book dbBook = this.bookService.handleGetBookById(book.getId());
+        if (dbBook.getQuantity() == 0) {
+            throw new InvalidException("Sorry the book you borrow is unavailable");
+        }
         dbBook.setQuantity(dbBook.getQuantity() - 1);
         if (dbBook.getQuantity() == 0) {
             dbBook.setStatus(BookStatusEnum.UNAVAILABLE);
