@@ -3,7 +3,6 @@ package com.anlb.readcycle.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.cache.spi.support.AbstractReadWriteAccess.Item;
 import org.springframework.stereotype.Service;
 
 import com.anlb.readcycle.domain.Book;
@@ -12,6 +11,7 @@ import com.anlb.readcycle.domain.User;
 import com.anlb.readcycle.dto.request.CreateBorrowBookRequestDTO;
 import com.anlb.readcycle.dto.request.CreateBorrowBookRequestDTO.Details;
 import com.anlb.readcycle.mapper.BookMapper;
+import com.anlb.readcycle.repository.BookRepository;
 import com.anlb.readcycle.repository.BorrowRepository;
 import com.anlb.readcycle.utils.exception.InvalidException;
 
@@ -24,6 +24,7 @@ public class BorrowBookService {
     private final UserService userService;
     private final BookMapper bookMapper;
     private final BookService bookService;
+    private final BookRepository bookRepository;
     private final BorrowRepository borrowRepository;
 
     public List<Borrow> handleBorrowBook(CreateBorrowBookRequestDTO reqBorrow) throws InvalidException {
@@ -36,7 +37,10 @@ public class BorrowBookService {
         Borrow borrow = new Borrow();
         borrow.setUser(user);
         Book book = this.bookMapper.convertDetailsToBook(bookDetails);
-        borrow.setBook(this.bookService.handleGetBookById(book.getId()));
+        Book dbBook = this.bookService.handleGetBookById(book.getId());
+        dbBook.setQuantity(dbBook.getQuantity() - 1);
+        dbBook = this.bookRepository.save(dbBook);
+        borrow.setBook(dbBook);
         
         borrows.add(borrow);
     }
