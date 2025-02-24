@@ -24,7 +24,7 @@ import com.anlb.readcycle.domain.User;
 import com.anlb.readcycle.dto.request.LoginRequestDto;
 import com.anlb.readcycle.dto.response.LoginResponseDto;
 import com.anlb.readcycle.mapper.UserMapper;
-import com.anlb.readcycle.service.UserService;
+import com.anlb.readcycle.service.IUserService;
 import com.anlb.readcycle.utils.SecurityUtil;
 import com.anlb.readcycle.utils.anotation.ApiMessage;
 import com.anlb.readcycle.utils.exception.InvalidException;
@@ -38,7 +38,7 @@ import lombok.RequiredArgsConstructor;
 public class AuthController {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final SecurityUtil securityUtil;
-    private final UserService userService;
+    private final IUserService userService;
     private final UserMapper userMapper;
 
     @Value("${anlb.jwt.refresh-token-validity-in-seconds}")

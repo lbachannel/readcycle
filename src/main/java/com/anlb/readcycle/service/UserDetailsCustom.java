@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 @Component("userDetailsService")
 @RequiredArgsConstructor
 public class UserDetailsCustom implements UserDetailsService {
-    private final UserService userService;
+    private final IUserService userService;
 
     /**
      * Loads a user by their username and returns a {@link UserDetails} object for authentication.

@@ -15,7 +15,7 @@ import com.anlb.readcycle.repository.BookRepository;
 import com.anlb.readcycle.repository.BorrowRepository;
 import com.anlb.readcycle.service.IBookService;
 import com.anlb.readcycle.service.IBorrowBookService;
-import com.anlb.readcycle.service.UserService;
+import com.anlb.readcycle.service.IUserService;
 import com.anlb.readcycle.utils.constant.BookStatusEnum;
 import com.anlb.readcycle.utils.constant.BorrowStatusEnum;
 import com.anlb.readcycle.utils.exception.InvalidException;
@@ -26,7 +26,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BorrowBookServiceImpl implements IBorrowBookService {
 
-    private final UserService userService;
+    private final IUserService userService;
     private final BookMapper bookMapper;
     private final IBookService bookService;
     private final BookRepository bookRepository;

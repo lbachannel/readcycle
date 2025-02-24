@@ -12,7 +12,7 @@ import com.anlb.readcycle.domain.User;
 import com.anlb.readcycle.repository.CartRepository;
 import com.anlb.readcycle.service.IBorrowBookService;
 import com.anlb.readcycle.service.ICartService;
-import com.anlb.readcycle.service.UserService;
+import com.anlb.readcycle.service.IUserService;
 import com.anlb.readcycle.utils.SecurityUtil;
 import com.anlb.readcycle.utils.constant.BorrowStatusEnum;
 import com.anlb.readcycle.utils.exception.InvalidException;
@@ -23,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CartServiceImpl implements ICartService {
 
-    private final UserService userService;
+    private final IUserService userService;
     private final CartRepository cartRepository;
     private final IBorrowBookService borrowBookService;
     

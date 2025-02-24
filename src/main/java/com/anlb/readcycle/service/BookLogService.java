@@ -24,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 public class BookLogService {
 
     private final ActivityLogService activityLogService;
-    private final UserService userService;
+    private final IUserService userService;
 
     /**
      * Logs the creation of a new book, capturing its details as an activity log.
