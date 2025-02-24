@@ -1,30 +1,24 @@
 package com.anlb.readcycle.utils.constant;
 
-import com.fasterxml.jackson.annotation.JsonValue;
-
-import lombok.Getter;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonCreator;
 
 public enum BorrowStatusEnum {
-    BORROWED("Borrowed"),
+    BORROWED, RETURNED, LATE, LOST;
 
-    RETURNED("Returned"), 
-    
-    LATE("Late"), 
-    
-    LOST("Lost");
-
-    @Getter
-    @Setter
-    private String name;
-
-    BorrowStatusEnum(String name) {
-        this.name = name;
-    }
-
-    @JsonValue
-    @Override
-    public String toString() {
-        return name;
+    /**
+     * @JsonCreator: allows automatic handling when receiving data from the client [ex: postman].
+     * logic:
+     *        if status empty or invalid return default value
+     */
+    @JsonCreator
+    public static BorrowStatusEnum fromString(String status) {
+        if (status == null || status.isEmpty()) {
+            return BORROWED;
+        }
+        try {
+            return BorrowStatusEnum.valueOf(status.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            return BORROWED;
+        }
     }
 }

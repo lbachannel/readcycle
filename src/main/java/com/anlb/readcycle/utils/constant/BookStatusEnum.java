@@ -8,7 +8,7 @@ public enum BookStatusEnum {
     /**
      * @JsonCreator: allows automatic handling when receiving data from the client [ex: postman].
      * logic:
-     *        if status empty or invalid return defailt value
+     *        if status empty or invalid return default value
      */
     @JsonCreator
     public static BookStatusEnum fromString(String status) {
