@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.anlb.readcycle.dto.response.file.UploadFileResponseDTO;
+import com.anlb.readcycle.dto.response.file.UploadFileResponseDto;
 import com.anlb.readcycle.service.FileService;
 import com.anlb.readcycle.utils.anotation.ApiMessage;
 import com.anlb.readcycle.utils.exception.StorageException;
@@ -36,20 +36,20 @@ public class FileController {
      * {@code POST  /file/upload} : upload of a single file.
      *
      * @param file The file to be uploaded.
-     * @return A {@link ResponseEntity} containing an {@link UploadFileResponseDTO} with the uploaded file details.
+     * @return A {@link ResponseEntity} containing an {@link UploadFileResponseDto} with the uploaded file details.
      * @throws StorageException If there is an error during file storage.
      * @throws URISyntaxException If there is an error in the file path URI.
      * @throws IOException If an I/O error occurs during file processing.
      */
     @PostMapping("/file/upload")
     @ApiMessage("Upload single file")
-    public ResponseEntity<UploadFileResponseDTO> upload(@RequestParam(name = "file") MultipartFile file) throws StorageException, URISyntaxException, IOException {
+    public ResponseEntity<UploadFileResponseDto> upload(@RequestParam(name = "file") MultipartFile file) throws StorageException, URISyntaxException, IOException {
         this.fileService.validationFile(file);
         // create a directory if not exist
         this.fileService.createDirectory(baseURI + "");
         // store file
         String uploadFile = this.fileService.store(file);
-        UploadFileResponseDTO response = new UploadFileResponseDTO(uploadFile, Instant.now());
+        UploadFileResponseDto response = new UploadFileResponseDto(uploadFile, Instant.now());
         return ResponseEntity.ok().body(response);
     }
 

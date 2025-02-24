@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UploadFileResponseDTO {
+public class UploadFileResponseDto {
     private String fileUploaded;
     private Instant uploadedAt;
 }
