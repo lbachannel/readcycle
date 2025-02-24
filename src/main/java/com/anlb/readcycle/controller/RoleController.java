@@ -46,7 +46,7 @@ public class RoleController {
     @GetMapping("/roles/{id}")
     @ApiMessage("Get role by id")
     public ResponseEntity<Role> getById(@PathVariable("id") long id) throws InvalidException {
-        Role role = this.roleService.handleGetRoleById(id);
+        Role role = roleService.handleGetRoleById(id);
         return ResponseEntity.ok().body(role);
     }
 
@@ -60,11 +60,11 @@ public class RoleController {
     @PostMapping("/roles")
     @ApiMessage("Create a role")
     public ResponseEntity<CreateRoleResponseDto> createRole(@Valid @RequestBody CreateRoleRequestDto roleDTO) throws InvalidException {
-        this.roleService.existByName(roleDTO.getName());
-        Role role = this.roleService.handleCreateRole(roleDTO);
+        roleService.existByName(roleDTO.getName());
+        Role role = roleService.handleCreateRole(roleDTO);
         return ResponseEntity
                     .status(HttpStatus.CREATED)
-                    .body(this.roleMapper.convertRoleToCreateRoleResponseDTO(role));
+                    .body(roleMapper.convertRoleToCreateRoleResponseDTO(role));
     }
 
     /**
@@ -78,11 +78,11 @@ public class RoleController {
     @ApiMessage("Update a role")
     public ResponseEntity<UpdateRoleResponseDto> updateRole(@Valid @RequestBody UpdateRoleRequestDto roleDTO) throws InvalidException {
         // check if role does not exits. then throw exception
-        this.roleService.checkRoleExitsById(roleDTO.getId());
-        Role updateRole = this.roleService.handleUpdateRole(roleDTO);
+        roleService.checkRoleExitsById(roleDTO.getId());
+        Role updateRole = roleService.handleUpdateRole(roleDTO);
         return ResponseEntity
                     .ok()
-                    .body(this.roleMapper.convertRoleToUpdateRoleResponseDTO(updateRole));
+                    .body(roleMapper.convertRoleToUpdateRoleResponseDTO(updateRole));
     }
 
     /**
@@ -96,7 +96,7 @@ public class RoleController {
     @GetMapping("/roles")
     @ApiMessage("Get roles")
     public ResponseEntity<ResultPaginateDto> getPermissions(@Filter Specification<Role> spec, Pageable pageable) {
-        return ResponseEntity.ok(this.roleService.handleGetRoles(spec, pageable));
+        return ResponseEntity.ok(roleService.handleGetRoles(spec, pageable));
     }
 
     /**
@@ -110,8 +110,8 @@ public class RoleController {
     @ApiMessage("Delete a role")
     public ResponseEntity<Void> deleteRole(@PathVariable("id") long id) throws InvalidException {
         // check if role does not exits. then throw exception
-        this.roleService.checkRoleExitsById(id);
-        this.roleService.handleDeleteRoleById(id);
+        roleService.checkRoleExitsById(id);
+        roleService.handleDeleteRoleById(id);
         return ResponseEntity.ok().body(null);
     }
 }

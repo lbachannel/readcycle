@@ -24,7 +24,7 @@ public class CartController {
     @PostMapping("/remove-carts")
     @ApiMessage("Delete carts")
     public ResponseEntity<Void> handleDeleteCarts(@RequestBody List<Long> ids) {
-        this.cartService.handleDeleteCarts(ids);
+        cartService.handleDeleteCarts(ids);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

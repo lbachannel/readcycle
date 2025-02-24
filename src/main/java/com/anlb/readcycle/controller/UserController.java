@@ -53,7 +53,7 @@ public class UserController {
     public ResponseEntity<ResultPaginateDto> getAllUsers(@Filter Specification<User> spec, Pageable pageable) {
         return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(this.userService.handleGetAllUsers(spec, pageable));
+                    .body(userService.handleGetAllUsers(spec, pageable));
     }
 
     /**
@@ -66,14 +66,14 @@ public class UserController {
     @ApiMessage("Register account")
     public ResponseEntity<RegisterResponseDto> registerMember(@Valid @RequestBody RegisterRequestDto registerDTO) {
         // convert DTO -> User
-        User newUser = this.userMapper.convertRegisterDTOToUser(registerDTO);
+        User newUser = userMapper.convertRegisterDTOToUser(registerDTO);
         // save user
-        newUser = this.userService.handleRegisterMember(newUser);
+        newUser = userService.handleRegisterMember(newUser);
         // send email
-        this.emailService.sendEmailFromTemplateSync(newUser, "ReadCycle - Verify your email", "verify-email");
+        emailService.sendEmailFromTemplateSync(newUser, "ReadCycle - Verify your email", "verify-email");
         return ResponseEntity
                     .status(HttpStatus.CREATED)
-                    .body(this.userMapper.convertUserToRegisterResponseDTO(newUser));
+                    .body(userMapper.convertUserToRegisterResponseDTO(newUser));
     }
 
     /**
@@ -87,12 +87,12 @@ public class UserController {
     @ApiMessage("Create a user")
     public ResponseEntity<CreateUserResponseDto> createNewUser(@Valid @RequestBody CreateUserRequestDto userDTO) throws InvalidException {
         // convert DTO -> User
-        User newUser = this.userMapper.convertCreateUserRequestDTOToUser(userDTO);
+        User newUser = userMapper.convertCreateUserRequestDTOToUser(userDTO);
         // save user
-        newUser = this.userService.handleCreateUser(newUser);
+        newUser = userService.handleCreateUser(newUser);
         return ResponseEntity
                     .status(HttpStatus.CREATED)
-                    .body(this.userMapper.convertUserToCreateResponseDTO(newUser));
+                    .body(userMapper.convertUserToCreateResponseDTO(newUser));
     }
 
     /**
@@ -105,9 +105,9 @@ public class UserController {
     @PutMapping("/users")
     @ApiMessage("Update user")
     public ResponseEntity<UpdateUserResponseDto> updateUser(@Valid @RequestBody UpdateUserRequestDto reqUser) throws InvalidException {
-        User updateUser = this.userService.handleUpdateUser(reqUser);
+        User updateUser = userService.handleUpdateUser(reqUser);
         return ResponseEntity
-                    .ok(this.userMapper.convertUserToUpdateUserResponseDTO(updateUser));
+                    .ok(userMapper.convertUserToUpdateUserResponseDTO(updateUser));
     }
 
     /**
@@ -120,8 +120,8 @@ public class UserController {
     @DeleteMapping("/users/{id}")
     @ApiMessage("Delete a user")
     public ResponseEntity<User> deleteUser(@PathVariable("id") long id) throws InvalidException {
-        User user = this.userService.handleGetUserById(id);
-        this.userService.handleDeleteUserById(user.getId());
+        User user = userService.handleGetUserById(id);
+        userService.handleDeleteUserById(user.getId());
         return ResponseEntity.ok().body(user);
     }
 }
