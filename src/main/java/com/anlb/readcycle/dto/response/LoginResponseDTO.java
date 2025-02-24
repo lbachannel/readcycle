@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Data
-public class LoginResponseDTO {
+public class LoginResponseDto {
     @JsonProperty("access_token")
     private String accessToken;
     private UserLogin user;

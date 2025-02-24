@@ -11,8 +11,8 @@ import com.anlb.readcycle.domain.User;
 import com.anlb.readcycle.dto.request.CreateUserRequestDto;
 import com.anlb.readcycle.dto.request.RegisterRequestDto;
 import com.anlb.readcycle.dto.response.CreateUserResponseDto;
-import com.anlb.readcycle.dto.response.LoginResponseDTO;
-import com.anlb.readcycle.dto.response.LoginResponseDTO.UserLogin;
+import com.anlb.readcycle.dto.response.LoginResponseDto;
+import com.anlb.readcycle.dto.response.LoginResponseDto.UserLogin;
 import com.anlb.readcycle.dto.response.RegisterResponseDTO;
 import com.anlb.readcycle.dto.response.UpdateUserResponseDTO;
 import com.anlb.readcycle.dto.response.UserResponseDTO;
@@ -159,19 +159,19 @@ public class UserMapper {
     }
 
     /**
-     * Converts a {@link User} entity into a {@link LoginResponseDTO}, including user details and an access token.
+     * Converts a {@link User} entity into a {@link LoginResponseDto}, including user details and an access token.
      *
      * @param dbUser        The authenticated user entity.
      * @param authentication The authentication object containing user credentials.
-     * @return A {@link LoginResponseDTO} containing user details and an access token.
+     * @return A {@link LoginResponseDto} containing user details and an access token.
      */
-    public LoginResponseDTO convertUserToLoginResponseDTO(User dbUser, Authentication authentication) {
+    public LoginResponseDto convertUserToLoginResponseDTO(User dbUser, Authentication authentication) {
         UserLogin user = new UserLogin();
         user.setId(dbUser.getId());
         user.setEmail(dbUser.getEmail());
         user.setName(dbUser.getName());
         user.setRole(dbUser.getRole());
-        LoginResponseDTO response = new LoginResponseDTO();
+        LoginResponseDto response = new LoginResponseDto();
         response.setUser(user);
 
         // set access token

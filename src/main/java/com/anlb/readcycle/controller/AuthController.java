@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.anlb.readcycle.domain.User;
 import com.anlb.readcycle.dto.request.LoginRequestDto;
-import com.anlb.readcycle.dto.response.LoginResponseDTO;
+import com.anlb.readcycle.dto.response.LoginResponseDto;
 import com.anlb.readcycle.mapper.UserMapper;
 import com.anlb.readcycle.service.UserService;
 import com.anlb.readcycle.utils.SecurityUtil;
@@ -73,19 +73,19 @@ public class AuthController {
      * {@code POST  /auth/login} : login.
      *
      * @param loginDTO The login request containing username and password.
-     * @return A {@link ResponseEntity} containing a {@link LoginResponseDTO} 
+     * @return A {@link ResponseEntity} containing a {@link LoginResponseDto} 
      *         with user details and a refresh token cookie.
      * @throws InvalidException If authentication fails or the access token is invalid.
      */
     @PostMapping("/auth/login")
     @ApiMessage("Login")
-    public ResponseEntity<LoginResponseDTO> login(@Valid @RequestBody LoginRequestDto loginDTO) throws InvalidException {
+    public ResponseEntity<LoginResponseDto> login(@Valid @RequestBody LoginRequestDto loginDTO) throws InvalidException {
         User dbUser = this.userService.handleGetUserByUsername(loginDTO.getUsername());
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginDTO.getUsername(), loginDTO.getPassword());
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        LoginResponseDTO response = this.userMapper.convertUserToLoginResponseDTO(dbUser, authentication);
+        LoginResponseDto response = this.userMapper.convertUserToLoginResponseDTO(dbUser, authentication);
         // create refresh token
         String refreshToken = this.securityUtil.createRefreshToken(loginDTO.getUsername(), response);
         // save refresh token into user
@@ -122,7 +122,7 @@ public class AuthController {
      */
     @GetMapping("/auth/account")
     @ApiMessage("Get current user login")
-    public ResponseEntity<LoginResponseDTO.UserGetAccount> getAccount() throws InvalidException {
+    public ResponseEntity<LoginResponseDto.UserGetAccount> getAccount() throws InvalidException {
         return ResponseEntity.ok().body(this.userService.getCurrentUserAccount());
     }
 
@@ -132,12 +132,12 @@ public class AuthController {
      * @param refreshTK The refresh token extracted from the "refresh_token" cookie.
      *              Defaults to "abc" if the cookie is missing.
      * @return A {@link ResponseEntity} containing the new authentication tokens
-     *              in a {@link LoginResponseDTO} along with a new refresh token cookie.
+     *              in a {@link LoginResponseDto} along with a new refresh token cookie.
      * @throws InvalidException If the refresh token is invalid or the user cannot be authenticated.
      */
     @GetMapping("/auth/refresh")
     @ApiMessage("Get refresh token")
-    public ResponseEntity<LoginResponseDTO> getRefreshToken(@CookieValue(name = "refresh_token", defaultValue = "abc") String refreshTK) throws InvalidException {
+    public ResponseEntity<LoginResponseDto> getRefreshToken(@CookieValue(name = "refresh_token", defaultValue = "abc") String refreshTK) throws InvalidException {
         // decode check token is real or fake
         Jwt decodedToken = this.securityUtil.checkValidRefreshToken(refreshTK);
 
@@ -145,7 +145,7 @@ public class AuthController {
         this.userService.handleGetUserByRefreshTokenAndEmail(refreshTK, decodedToken);
 
         // issue new token/set refresh token as cookies
-        LoginResponseDTO response = this.userService.generateLoginResponseFromToken(decodedToken);
+        LoginResponseDto response = this.userService.generateLoginResponseFromToken(decodedToken);
 
         // create refresh token
         String new_refresh_token = this.securityUtil.createRefreshToken(decodedToken.getSubject(), response);
