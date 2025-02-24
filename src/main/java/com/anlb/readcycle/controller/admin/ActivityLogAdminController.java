@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.anlb.readcycle.dto.activitylog.ActivityLog;
 import com.anlb.readcycle.dto.response.ResultPaginateDto;
-import com.anlb.readcycle.service.ActivityLogService;
+import com.anlb.readcycle.service.IActivityLogService;
 import com.anlb.readcycle.utils.anotation.ApiMessage;
 import com.turkraft.springfilter.boot.Filter;
 
@@ -21,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ActivityLogAdminController {
 
-    private final ActivityLogService activityLogService;
+    private final IActivityLogService activityLogService;
 
     /**
      * {@code GET  /activity-log} : get all activity logs with optional filtering and pagination.

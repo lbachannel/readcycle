@@ -12,7 +12,7 @@ import com.anlb.readcycle.dto.activitylog.ActivityDescription;
 import com.anlb.readcycle.dto.activitylog.ActivityGroup;
 import com.anlb.readcycle.dto.activitylog.ActivityLog;
 import com.anlb.readcycle.dto.activitylog.ActivityType;
-import com.anlb.readcycle.service.ActivityLogService;
+import com.anlb.readcycle.service.IActivityLogService;
 import com.anlb.readcycle.service.IBookLogService;
 import com.anlb.readcycle.service.IUserService;
 import com.anlb.readcycle.utils.SecurityUtil;
@@ -26,7 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class BookLogServiceImpl implements IBookLogService {
 
-    private final ActivityLogService activityLogService;
+    private final IActivityLogService activityLogService;
     private final IUserService userService;
 
     /**

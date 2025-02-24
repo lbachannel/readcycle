@@ -1,4 +1,4 @@
-package com.anlb.readcycle.service;
+package com.anlb.readcycle.service.impl;
 
 import java.util.List;
 
@@ -11,12 +11,13 @@ import com.anlb.readcycle.domain.User;
 import com.anlb.readcycle.dto.activitylog.ActivityLog;
 import com.anlb.readcycle.dto.response.ResultPaginateDto;
 import com.anlb.readcycle.repository.ActivityLogRepository;
+import com.anlb.readcycle.service.IActivityLogService;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class ActivityLogService {
+public class ActivityLogServiceImpl implements IActivityLogService {
     private final ActivityLogRepository activityLogRepository;
 
     /**
@@ -25,6 +26,7 @@ public class ActivityLogService {
      * @param user         The {@link User} who performed the activity.
      * @param activityLog  The {@link ActivityLog} object containing activity details.
      */
+    @Override
     public void log(User user, ActivityLog activityLog) {
         activityLog.setUsername(user.getEmail());
         activityLogRepository.save(activityLog);
@@ -37,6 +39,7 @@ public class ActivityLogService {
      * @param pageable The {@link Pageable} object containing pagination details.
      * @return A {@link ResultPaginateDto} containing the list of activity logs and pagination metadata.
      */
+    @Override
     public ResultPaginateDto handleGetAllActivityLog(Specification<ActivityLog> spec, Pageable pageable) {
         Page<ActivityLog> pageActivityLog = activityLogRepository.findAll(spec, pageable);
         ResultPaginateDto response = new ResultPaginateDto();
