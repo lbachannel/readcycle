@@ -157,6 +157,10 @@ public class UserService {
         }
     }
 
+    public User handleFindUserByVerifyToken(String token) {
+        return userRepository.findUserByVerificationEmailToken(token);
+    }
+
     /**
      * Deletes a user from the repository based on their email.
      *

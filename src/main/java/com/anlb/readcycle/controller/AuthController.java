@@ -54,8 +54,8 @@ public class AuthController {
     @ApiMessage("Verify email")
     public ResponseEntity<Void> verifyEmail(@RequestParam("token") String token) {
         if (!userService.validateToken(token)) {
-            String email = userService.extractEmailFromToken(token);
-            userService.handleDeleteUserByEmail(email);
+            User user = userService.handleFindUserByVerifyToken(token);
+            userService.handleDeleteUserByEmail(user.getEmail());
             return ResponseEntity
                 .status(HttpStatus.FOUND)
                 .location(URI.create("http://localhost:3000/verify-email-failed"))
