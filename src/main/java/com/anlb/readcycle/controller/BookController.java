@@ -13,7 +13,7 @@ import com.anlb.readcycle.domain.Book;
 import com.anlb.readcycle.dto.response.BookResponseDto;
 import com.anlb.readcycle.dto.response.ResultPaginateDto;
 import com.anlb.readcycle.mapper.BookMapper;
-import com.anlb.readcycle.service.BookService;
+import com.anlb.readcycle.service.IBookService;
 import com.anlb.readcycle.utils.anotation.ApiMessage;
 import com.anlb.readcycle.utils.exception.InvalidException;
 import com.turkraft.springfilter.boot.Filter;
@@ -25,7 +25,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BookController {
     
-    private final BookService bookService;
+    private final IBookService bookService;
     private final BookMapper bookMapper;
 
     /**

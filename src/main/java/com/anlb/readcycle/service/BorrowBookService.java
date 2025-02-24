@@ -25,7 +25,7 @@ public class BorrowBookService {
 
     private final UserService userService;
     private final BookMapper bookMapper;
-    private final BookService bookService;
+    private final IBookService bookService;
     private final BookRepository bookRepository;
     private final BorrowRepository borrowRepository;
 
