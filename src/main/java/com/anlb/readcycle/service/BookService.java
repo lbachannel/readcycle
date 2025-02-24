@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.anlb.readcycle.domain.Book;
-import com.anlb.readcycle.dto.request.CreateBookRequestDTO;
+import com.anlb.readcycle.dto.request.CreateBookRequestDto;
 import com.anlb.readcycle.dto.request.UpdateBookRequestDTO;
 import com.anlb.readcycle.dto.response.BookResponseDTO;
 import com.anlb.readcycle.dto.response.ResultPaginateDTO;
@@ -38,7 +38,7 @@ public class BookService {
      * @throws InvalidException if the request is invalid.
      * @implNote This method logs the book creation event using {@code bookLogService}.
      */
-    public Book handleCreateBook(CreateBookRequestDTO requestBook) throws InvalidException {
+    public Book handleCreateBook(CreateBookRequestDto requestBook) throws InvalidException {
         Book newBook = new Book();
         newBook.setCategory(requestBook.getCategory());
         newBook.setTitle(requestBook.getTitle());

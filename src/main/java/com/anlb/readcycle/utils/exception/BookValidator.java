@@ -3,16 +3,16 @@ package com.anlb.readcycle.utils.exception;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
-import com.anlb.readcycle.dto.request.CreateBookRequestDTO;
+import com.anlb.readcycle.dto.request.CreateBookRequestDto;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 @Service
-public class BookValidator implements ConstraintValidator<BookChecked, CreateBookRequestDTO> {
+public class BookValidator implements ConstraintValidator<BookChecked, CreateBookRequestDto> {
 
     @Override
-    public boolean isValid(CreateBookRequestDTO book, ConstraintValidatorContext context) {
+    public boolean isValid(CreateBookRequestDto book, ConstraintValidatorContext context) {
         boolean valid = true;
 
         // validation category

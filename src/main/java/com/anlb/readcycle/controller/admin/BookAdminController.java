@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.anlb.readcycle.domain.Book;
-import com.anlb.readcycle.dto.request.CreateBookRequestDTO;
+import com.anlb.readcycle.dto.request.CreateBookRequestDto;
 import com.anlb.readcycle.dto.request.UpdateBookRequestDTO;
 import com.anlb.readcycle.dto.response.CreateBookResponseDTO;
 import com.anlb.readcycle.dto.response.ResultPaginateDTO;
@@ -63,7 +63,7 @@ public class BookAdminController {
      */
     @PostMapping("/books")
     @ApiMessage("Create a book")
-    public ResponseEntity<CreateBookResponseDTO> createNewBook(@Valid @RequestBody CreateBookRequestDTO reqBook) throws InvalidException {
+    public ResponseEntity<CreateBookResponseDTO> createNewBook(@Valid @RequestBody CreateBookRequestDto reqBook) throws InvalidException {
         Book newBook = this.bookService.handleCreateBook(reqBook);
         return ResponseEntity
                     .status(HttpStatus.CREATED)
