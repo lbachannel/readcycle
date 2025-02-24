@@ -18,7 +18,7 @@ import com.anlb.readcycle.dto.request.CreateRoleRequestDto;
 import com.anlb.readcycle.dto.request.UpdateRoleRequestDto;
 import com.anlb.readcycle.dto.response.CreateRoleResponseDto;
 import com.anlb.readcycle.dto.response.ResultPaginateDto;
-import com.anlb.readcycle.dto.response.UpdateRoleResponseDTO;
+import com.anlb.readcycle.dto.response.UpdateRoleResponseDto;
 import com.anlb.readcycle.mapper.RoleMapper;
 import com.anlb.readcycle.service.RoleService;
 import com.anlb.readcycle.utils.anotation.ApiMessage;
@@ -71,12 +71,12 @@ public class RoleController {
      * {@code PUT  /roles} : Updates an existing role.
      *
      * @param roleDTO The request body containing updated role details.
-     * @return A {@link ResponseEntity} containing the updated role as a {@link UpdateRoleResponseDTO}.
+     * @return A {@link ResponseEntity} containing the updated role as a {@link UpdateRoleResponseDto}.
      * @throws InvalidException If the role does not exist.
      */
     @PutMapping("/roles")
     @ApiMessage("Update a role")
-    public ResponseEntity<UpdateRoleResponseDTO> updateRole(@Valid @RequestBody UpdateRoleRequestDto roleDTO) throws InvalidException {
+    public ResponseEntity<UpdateRoleResponseDto> updateRole(@Valid @RequestBody UpdateRoleRequestDto roleDTO) throws InvalidException {
         // check if role does not exits. then throw exception
         this.roleService.checkRoleExitsById(roleDTO.getId());
         Role updateRole = this.roleService.handleUpdateRole(roleDTO);
