@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.anlb.readcycle.domain.User;
 import com.anlb.readcycle.dto.request.CreateUserRequestDto;
-import com.anlb.readcycle.dto.request.RegisterRequestDTO;
+import com.anlb.readcycle.dto.request.RegisterRequestDto;
 import com.anlb.readcycle.dto.request.UpdateUserRequestDTO;
 import com.anlb.readcycle.dto.response.CreateUserResponseDTO;
 import com.anlb.readcycle.dto.response.RegisterResponseDTO;
@@ -64,7 +64,7 @@ public class UserController {
      */
     @PostMapping("/user/register")
     @ApiMessage("Register account")
-    public ResponseEntity<RegisterResponseDTO> registerMember(@Valid @RequestBody RegisterRequestDTO registerDTO) {
+    public ResponseEntity<RegisterResponseDTO> registerMember(@Valid @RequestBody RegisterRequestDto registerDTO) {
         // convert DTO -> User
         User newUser = this.userMapper.convertRegisterDTOToUser(registerDTO);
         // save user

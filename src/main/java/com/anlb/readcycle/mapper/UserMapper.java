@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.anlb.readcycle.domain.User;
 import com.anlb.readcycle.dto.request.CreateUserRequestDto;
-import com.anlb.readcycle.dto.request.RegisterRequestDTO;
+import com.anlb.readcycle.dto.request.RegisterRequestDto;
 import com.anlb.readcycle.dto.response.CreateUserResponseDTO;
 import com.anlb.readcycle.dto.response.LoginResponseDTO;
 import com.anlb.readcycle.dto.response.LoginResponseDTO.UserLogin;
@@ -32,17 +32,17 @@ public class UserMapper {
     private final SecurityUtil securityUtil;
 
     /**
-     * Converts a {@link RegisterRequestDTO} object to a {@link User} entity.
+     * Converts a {@link RegisterRequestDto} object to a {@link User} entity.
      * 
      * This method extracts user details from the DTO and creates a new {@link User} entity.
      * It also hashes the password before storing it.
      * If the provided date of birth is in a valid format, it is parsed into a {@link LocalDate}.
      * The user's role is set to the default role with ID 2.
      *
-     * @param registerDTO The {@link RegisterRequestDTO} containing user registration details.
+     * @param registerDTO The {@link RegisterRequestDto} containing user registration details.
      * @return A {@link User} entity populated with data from the DTO.
      */
-    public User convertRegisterDTOToUser(RegisterRequestDTO registerDTO) {
+    public User convertRegisterDTOToUser(RegisterRequestDto registerDTO) {
         User user = new User();
         user.setName(registerDTO.getFirstName() + " " + registerDTO.getLastName());
         user.setEmail(registerDTO.getEmail());

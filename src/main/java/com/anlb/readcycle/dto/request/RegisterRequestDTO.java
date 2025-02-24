@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @RegisterChecked
-public class RegisterRequestDTO {
+public class RegisterRequestDto {
     
     private String firstName;
     
