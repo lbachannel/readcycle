@@ -17,7 +17,7 @@ import com.anlb.readcycle.dto.response.ResultPaginateDto;
 import com.anlb.readcycle.mapper.BookMapper;
 import com.anlb.readcycle.repository.BookRepository;
 import com.anlb.readcycle.repository.specification.BookSpecifications;
-import com.anlb.readcycle.service.BookLogService;
+import com.anlb.readcycle.service.IBookLogService;
 import com.anlb.readcycle.service.IBookService;
 import com.anlb.readcycle.utils.exception.InvalidException;
 
@@ -30,7 +30,7 @@ public class BookServiceImpl implements IBookService {
 
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
-    private final BookLogService bookLogService;
+    private final IBookLogService bookLogService;
 
     /**
      * Creates a new book and logs the creation event.
