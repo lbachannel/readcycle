@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.anlb.readcycle.domain.Permission;
-import com.anlb.readcycle.dto.request.CreatePermissionRequestDTO;
+import com.anlb.readcycle.dto.request.CreatePermissionRequestDto;
 import com.anlb.readcycle.dto.request.UpdatePermissionRequestDTO;
 import com.anlb.readcycle.dto.response.ResultPaginateDTO;
 import com.anlb.readcycle.dto.response.ResultPaginateDTO.Meta;
@@ -52,7 +52,7 @@ public class PermissionService {
      * @param permissionDTO The request data containing permission details such as name, API path, method, and module.
      * @return The newly created {@link Permission} entity after being saved to the repository.
      */
-    public Permission handleCreatePermission(CreatePermissionRequestDTO permissionDTO) {
+    public Permission handleCreatePermission(CreatePermissionRequestDto permissionDTO) {
         Permission newPermission = new Permission();
         newPermission.setName(permissionDTO.getName());
         newPermission.setApiPath(permissionDTO.getApiPath());

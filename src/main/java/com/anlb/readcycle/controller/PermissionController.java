@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.anlb.readcycle.domain.Permission;
-import com.anlb.readcycle.dto.request.CreatePermissionRequestDTO;
+import com.anlb.readcycle.dto.request.CreatePermissionRequestDto;
 import com.anlb.readcycle.dto.request.UpdatePermissionRequestDTO;
 import com.anlb.readcycle.dto.response.CreatePermissionResponseDTO;
 import com.anlb.readcycle.dto.response.ResultPaginateDTO;
@@ -45,7 +45,7 @@ public class PermissionController {
      */
     @PostMapping("/permissions")
     @ApiMessage("Create a permission")
-    public ResponseEntity<CreatePermissionResponseDTO> createPermission(@Valid @RequestBody CreatePermissionRequestDTO permissionDTO) throws InvalidException {
+    public ResponseEntity<CreatePermissionResponseDTO> createPermission(@Valid @RequestBody CreatePermissionRequestDto permissionDTO) throws InvalidException {
         // check if permission exists
         this.permissionService.permissionExists(permissionDTO.getModule(), permissionDTO.getApiPath(), permissionDTO.getMethod());
         Permission newPermission = this.permissionService.handleCreatePermission(permissionDTO);
