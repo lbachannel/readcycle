@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @UserChecked
-public class CreateUserRequestDTO {
+public class CreateUserRequestDto {
     private String firstName;
     
     private String lastName;

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.anlb.readcycle.domain.User;
-import com.anlb.readcycle.dto.request.CreateUserRequestDTO;
+import com.anlb.readcycle.dto.request.CreateUserRequestDto;
 import com.anlb.readcycle.dto.request.RegisterRequestDTO;
 import com.anlb.readcycle.dto.request.UpdateUserRequestDTO;
 import com.anlb.readcycle.dto.response.CreateUserResponseDTO;
@@ -85,7 +85,7 @@ public class UserController {
      */
     @PostMapping("/users")
     @ApiMessage("Create a user")
-    public ResponseEntity<CreateUserResponseDTO> createNewUser(@Valid @RequestBody CreateUserRequestDTO userDTO) throws InvalidException {
+    public ResponseEntity<CreateUserResponseDTO> createNewUser(@Valid @RequestBody CreateUserRequestDto userDTO) throws InvalidException {
         // convert DTO -> User
         User newUser = this.userMapper.convertCreateUserRequestDTOToUser(userDTO);
         // save user

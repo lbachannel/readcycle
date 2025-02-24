@@ -8,7 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.anlb.readcycle.domain.User;
-import com.anlb.readcycle.dto.request.CreateUserRequestDTO;
+import com.anlb.readcycle.dto.request.CreateUserRequestDto;
 import com.anlb.readcycle.dto.request.RegisterRequestDTO;
 import com.anlb.readcycle.dto.response.CreateUserResponseDTO;
 import com.anlb.readcycle.dto.response.LoginResponseDTO;
@@ -60,13 +60,13 @@ public class UserMapper {
     }
 
     /**
-     * Converts a {@link CreateUserRequestDTO} object to a {@link User} entity.
+     * Converts a {@link CreateUserRequestDto} object to a {@link User} entity.
      *
      * @param userDTO the DTO containing user details
      * @return a {@link User} entity with the provided details
      * @throws InvalidException if any validation fails
      */
-    public User convertCreateUserRequestDTOToUser(CreateUserRequestDTO userDTO) throws InvalidException {
+    public User convertCreateUserRequestDTOToUser(CreateUserRequestDto userDTO) throws InvalidException {
         User user = new User();
         user.setName(userDTO.getFirstName() + " " + userDTO.getLastName());
         user.setEmail(userDTO.getEmail());

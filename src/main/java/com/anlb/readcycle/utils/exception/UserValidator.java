@@ -7,7 +7,7 @@ import java.time.format.DateTimeParseException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
-import com.anlb.readcycle.dto.request.CreateUserRequestDTO;
+import com.anlb.readcycle.dto.request.CreateUserRequestDto;
 import com.anlb.readcycle.service.UserService;
 
 import jakarta.validation.ConstraintValidator;
@@ -16,12 +16,12 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class UserValidator implements ConstraintValidator<UserChecked, CreateUserRequestDTO> {
+public class UserValidator implements ConstraintValidator<UserChecked, CreateUserRequestDto> {
 
     private final UserService userService;
 
     @Override
-    public boolean isValid(CreateUserRequestDTO user, ConstraintValidatorContext context) {
+    public boolean isValid(CreateUserRequestDto user, ConstraintValidatorContext context) {
         boolean valid = true;
 
         // validation first name
