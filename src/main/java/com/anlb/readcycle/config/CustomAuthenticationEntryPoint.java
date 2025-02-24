@@ -28,7 +28,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response,
             AuthenticationException authException) throws IOException, ServletException {
-        this.delegate.commence(request, response, authException);
+        delegate.commence(request, response, authException);
         response.setContentType("application/json");
         ResultResponseDto<Object> res = new ResultResponseDto<Object>();
         res.setStatusCode(HttpStatus.UNAUTHORIZED.value());

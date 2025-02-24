@@ -35,6 +35,6 @@ public class ActivityLogAdminController {
     public ResponseEntity<ResultPaginateDto> getAllActivityLog(@Filter Specification<ActivityLog> spec, Pageable pageable) {
         return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(this.activityLogService.handleGetAllActivityLog(spec, pageable));
+                    .body(activityLogService.handleGetAllActivityLog(spec, pageable));
     }
 }

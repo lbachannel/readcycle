@@ -47,11 +47,11 @@ public class PermissionController {
     @ApiMessage("Create a permission")
     public ResponseEntity<CreatePermissionResponseDto> createPermission(@Valid @RequestBody CreatePermissionRequestDto permissionDTO) throws InvalidException {
         // check if permission exists
-        this.permissionService.permissionExists(permissionDTO.getModule(), permissionDTO.getApiPath(), permissionDTO.getMethod());
+        permissionService.permissionExists(permissionDTO.getModule(), permissionDTO.getApiPath(), permissionDTO.getMethod());
         Permission newPermission = this.permissionService.handleCreatePermission(permissionDTO);
         return ResponseEntity
                     .status(HttpStatus.CREATED)
-                    .body(this.permissionMapper.convertPermissionToCreatePermissionResponseDTO(newPermission));
+                    .body(permissionMapper.convertPermissionToCreatePermissionResponseDTO(newPermission));
     }
 
     /**
@@ -65,11 +65,11 @@ public class PermissionController {
     @ApiMessage("Update a permission")
     public ResponseEntity<UpdatePermissionResponseDto> updatePermission(@Valid @RequestBody UpdatePermissionRequestDto permissionDTO) throws InvalidException {
         // check if permission exists
-        this.permissionService.permissionExists(permissionDTO.getModule(), permissionDTO.getApiPath(), permissionDTO.getMethod());
-        Permission updatePermission = this.permissionService.handleUpdatePermission(permissionDTO);
+        permissionService.permissionExists(permissionDTO.getModule(), permissionDTO.getApiPath(), permissionDTO.getMethod());
+        Permission updatePermission = permissionService.handleUpdatePermission(permissionDTO);
         return ResponseEntity
                     .ok()
-                    .body(this.permissionMapper.convertPermissionToUpdatePermissionResponseDTO(updatePermission));
+                    .body(permissionMapper.convertPermissionToUpdatePermissionResponseDTO(updatePermission));
     }
 
     /**
@@ -83,7 +83,7 @@ public class PermissionController {
     @GetMapping("/permissions")
     @ApiMessage("Get permissions")
     public ResponseEntity<ResultPaginateDto> getPermissions(@Filter Specification<Permission> spec, Pageable pageable) {
-        return ResponseEntity.ok(this.permissionService.handleGetPermissions(spec, pageable));
+        return ResponseEntity.ok(permissionService.handleGetPermissions(spec, pageable));
     }
 
     /**
@@ -96,7 +96,7 @@ public class PermissionController {
     @DeleteMapping("/permissions/{id}")
     @ApiMessage("delete a permission")
     public ResponseEntity<Void> deletePermission(@PathVariable("id") long id) throws InvalidException {
-        this.permissionService.delete(id);
+        permissionService.delete(id);
         return ResponseEntity.ok().body(null);
     }
 }

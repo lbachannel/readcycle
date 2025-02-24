@@ -29,7 +29,7 @@ public class UserDetailsCustom implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) {
         try {
-            com.anlb.readcycle.domain.User user = this.userService.handleGetUserByUsername(username);
+            com.anlb.readcycle.domain.User user = userService.handleGetUserByUsername(username);
             return new User(
                 user.getEmail(),
                 user.getPassword(),

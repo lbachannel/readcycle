@@ -27,7 +27,7 @@ public class ActivityLogService {
      */
     public void log(User user, ActivityLog activityLog) {
         activityLog.setUsername(user.getEmail());
-        this.activityLogRepository.save(activityLog);
+        activityLogRepository.save(activityLog);
     }
 
     /**
@@ -38,7 +38,7 @@ public class ActivityLogService {
      * @return A {@link ResultPaginateDto} containing the list of activity logs and pagination metadata.
      */
     public ResultPaginateDto handleGetAllActivityLog(Specification<ActivityLog> spec, Pageable pageable) {
-        Page<ActivityLog> pageActivityLog = this.activityLogRepository.findAll(spec, pageable);
+        Page<ActivityLog> pageActivityLog = activityLogRepository.findAll(spec, pageable);
         ResultPaginateDto response = new ResultPaginateDto();
         ResultPaginateDto.Meta meta = new ResultPaginateDto.Meta();
 

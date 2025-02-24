@@ -87,9 +87,9 @@ public class FileService {
      *
      * @param fileName the name of the file to be deleted.
      * @throws URISyntaxException if the file path URI is invalid.
-    * @throws StorageException 
-    * @throws IOException if an error occurs while deleting the file.
-    */
+     * @throws StorageException 
+     * @throws IOException if an error occurs while deleting the file.
+     */
     public void delete(String fileName) throws URISyntaxException, StorageException, IOException {
         URI uri = new URI(baseURI + "/" + fileName);
         Path path = Paths.get(uri);

@@ -53,16 +53,16 @@ public class AuthController {
     @GetMapping("/auth/verify-email")
     @ApiMessage("Verify email")
     public ResponseEntity<Void> verifyEmail(@RequestParam("token") String token) {
-        if (!this.userService.validateToken(token)) {
-            String email = this.userService.extractEmailFromToken(token);
-            this.userService.handleDeleteUserByEmail(email);
+        if (!userService.validateToken(token)) {
+            String email = userService.extractEmailFromToken(token);
+            userService.handleDeleteUserByEmail(email);
             return ResponseEntity
                 .status(HttpStatus.FOUND)
                 .location(URI.create("http://localhost:3000/verify-email-failed"))
                 .build();
         }
         
-        this.userService.handleVerifyEmail(token);
+        userService.handleVerifyEmail(token);
         return ResponseEntity
             .status(HttpStatus.FOUND)
             .location(URI.create("http://localhost:3000/verify-email-success"))
@@ -80,18 +80,18 @@ public class AuthController {
     @PostMapping("/auth/login")
     @ApiMessage("Login")
     public ResponseEntity<LoginResponseDto> login(@Valid @RequestBody LoginRequestDto loginDTO) throws InvalidException {
-        User dbUser = this.userService.handleGetUserByUsername(loginDTO.getUsername());
+        User dbUser = userService.handleGetUserByUsername(loginDTO.getUsername());
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginDTO.getUsername(), loginDTO.getPassword());
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        LoginResponseDto response = this.userMapper.convertUserToLoginResponseDTO(dbUser, authentication);
+        LoginResponseDto response = userMapper.convertUserToLoginResponseDTO(dbUser, authentication);
         // create refresh token
-        String refreshToken = this.securityUtil.createRefreshToken(loginDTO.getUsername(), response);
+        String refreshToken = securityUtil.createRefreshToken(loginDTO.getUsername(), response);
         // save refresh token into user
         String email = SecurityUtil.getCurrentUserLogin()
                             .orElseThrow(() -> new InvalidException("Access Token invalid"));
-        this.userService.handleUpdateRefreshTokenIntoUser(refreshToken, email);
+        userService.handleUpdateRefreshTokenIntoUser(refreshToken, email);
 
         /**
          * set cookies
@@ -123,7 +123,7 @@ public class AuthController {
     @GetMapping("/auth/account")
     @ApiMessage("Get current user login")
     public ResponseEntity<LoginResponseDto.UserGetAccount> getAccount() throws InvalidException {
-        return ResponseEntity.ok().body(this.userService.getCurrentUserAccount());
+        return ResponseEntity.ok().body(userService.getCurrentUserAccount());
     }
 
     /**
@@ -139,20 +139,20 @@ public class AuthController {
     @ApiMessage("Get refresh token")
     public ResponseEntity<LoginResponseDto> getRefreshToken(@CookieValue(name = "refresh_token", defaultValue = "abc") String refreshTK) throws InvalidException {
         // decode check token is real or fake
-        Jwt decodedToken = this.securityUtil.checkValidRefreshToken(refreshTK);
+        Jwt decodedToken = securityUtil.checkValidRefreshToken(refreshTK);
 
         // check user by token and email
-        this.userService.handleGetUserByRefreshTokenAndEmail(refreshTK, decodedToken);
+        userService.handleGetUserByRefreshTokenAndEmail(refreshTK, decodedToken);
 
         // issue new token/set refresh token as cookies
-        LoginResponseDto response = this.userService.generateLoginResponseFromToken(decodedToken);
+        LoginResponseDto response = userService.generateLoginResponseFromToken(decodedToken);
 
         // create refresh token
-        String new_refresh_token = this.securityUtil.createRefreshToken(decodedToken.getSubject(), response);
+        String new_refresh_token = securityUtil.createRefreshToken(decodedToken.getSubject(), response);
 
         String email = decodedToken.getSubject();
         // update user
-        this.userService.handleUpdateRefreshTokenIntoUser(new_refresh_token, email);
+        userService.handleUpdateRefreshTokenIntoUser(new_refresh_token, email);
         // set cookies
         ResponseCookie responseCookie = ResponseCookie
                                                 .from("refresh_token", new_refresh_token)
@@ -180,7 +180,7 @@ public class AuthController {
         String email = SecurityUtil.getCurrentUserLogin()
         .orElseThrow(() -> new InvalidException("Access Token invalid"));
         // update refresh token = null
-        this.userService.handleUpdateRefreshTokenIntoUser(null, email);
+        userService.handleUpdateRefreshTokenIntoUser(null, email);
 
         // remove refresh token cookie
         ResponseCookie deletResponseCookie = ResponseCookie

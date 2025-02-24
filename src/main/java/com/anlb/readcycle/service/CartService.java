@@ -27,7 +27,7 @@ public class CartService {
     public Cart handleAddBookToCart(Book book) throws InvalidException {
         String email = SecurityUtil.getCurrentUserLogin()
                             .orElseThrow(() -> new InvalidException("Access Token invalid"));
-        User user = this.userService.handleGetUserByUsername(email);
+        User user = userService.handleGetUserByUsername(email);
 
         Borrow borrow = borrowBookService.handleFindBorrowByUserAndBookAndStatus(user, book, BorrowStatusEnum.BORROWED);
         if (borrow != null) {
@@ -47,7 +47,7 @@ public class CartService {
             newCart.setSum(1);
             newCart.setUser(user);
             newCart.setBook(book);
-            this.cartRepository.save(newCart);
+            cartRepository.save(newCart);
         }
         return newCart;
     }
@@ -55,18 +55,18 @@ public class CartService {
     public List<Cart> handleGetCartsByUser() throws InvalidException {
         String email = SecurityUtil.getCurrentUserLogin()
                             .orElseThrow(() -> new InvalidException("Access Token invalid"));
-        User user = this.userService.handleGetUserByUsername(email);
+        User user = userService.handleGetUserByUsername(email);
         if (user != null) {
-            return this.cartRepository.findAllByUser(user);
+            return cartRepository.findAllByUser(user);
         }
         return new ArrayList<>();
     }
 
     public void handleDeleteCartById(long id) {
-        this.cartRepository.deleteById(id);
+        cartRepository.deleteById(id);
     }
 
     public void handleDeleteCarts(List<Long> ids) {
-        this.cartRepository.deleteAllById(ids);
+        cartRepository.deleteAllById(ids);
     }
 }

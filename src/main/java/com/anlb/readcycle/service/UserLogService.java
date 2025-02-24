@@ -52,7 +52,7 @@ public class UserLogService {
             ActivityLog activityLog = ActivityLog.formatLogMessage(ActivityGroup.USER, ActivityType.CREATE_USER, descriptions);
             activityLogService.log(userLogin, activityLog);
         } catch (Exception e) {
-            log.error("logging activity error: ", e);
+            log.error("logging activity error: {}", e);
         }
     }
 
@@ -89,7 +89,7 @@ public class UserLogService {
                 activityLogService.log(userLogin, activityLog);
             }
         } catch (Exception e) {
-            log.error("logging activity error: ", e);
+            log.error("logging activity error: {}", e);
         }
     }
 
@@ -106,7 +106,7 @@ public class UserLogService {
             ActivityLog activityLog = ActivityLog.formatLogMessage(ActivityGroup.USER, ActivityType.DELETE_USER, descriptions);
             activityLogService.log(userLogin, activityLog);
         } catch (Exception e) {
-            log.error("logging activity error: ", e);
+            log.error("logging activity error: {}", e);
         }
     }
 }

@@ -48,7 +48,7 @@ public class BookAdminController {
     public ResponseEntity<ResultPaginateDto> getAllBooks(@Filter Specification<Book> spec, Pageable pageable) {
         return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(this.bookService.handleGetAllBooks(spec, pageable));
+                    .body(bookService.handleGetAllBooks(spec, pageable));
     }
 
     /**
@@ -64,10 +64,10 @@ public class BookAdminController {
     @PostMapping("/books")
     @ApiMessage("Create a book")
     public ResponseEntity<CreateBookResponseDto> createNewBook(@Valid @RequestBody CreateBookRequestDto reqBook) throws InvalidException {
-        Book newBook = this.bookService.handleCreateBook(reqBook);
+        Book newBook = bookService.handleCreateBook(reqBook);
         return ResponseEntity
                     .status(HttpStatus.CREATED)
-                    .body(this.bookMapper.convertBookToCreateBookResponseDTO(newBook));
+                    .body(bookMapper.convertBookToCreateBookResponseDTO(newBook));
     }
 
     /**
@@ -80,9 +80,9 @@ public class BookAdminController {
     @PutMapping("/books")
     @ApiMessage("Update book")
     public ResponseEntity<UpdateBookResponseDto> updateBook(@RequestBody UpdateBookRequestDto reqBook) throws InvalidException {
-        Book updateBook = this.bookService.handleUpdateBook(reqBook);
+        Book updateBook = bookService.handleUpdateBook(reqBook);
         return ResponseEntity
-                    .ok(this.bookMapper.convertBookToUpdateBookResponseDTO(updateBook));
+                    .ok(bookMapper.convertBookToUpdateBookResponseDTO(updateBook));
     }
 
     /**
@@ -95,8 +95,8 @@ public class BookAdminController {
     @PutMapping("/books/{id}")
     @ApiMessage("Toggle soft delete a book")
     public ResponseEntity<Book> toggleSoftDeleteBook(@PathVariable("id") int id) throws InvalidException {
-        Book isDeletedBook = this.bookService.handleGetBookById(id);
-        isDeletedBook = this.bookService.handleSoftDelete(isDeletedBook.getId());
+        Book isDeletedBook = bookService.handleGetBookById(id);
+        isDeletedBook = bookService.handleSoftDelete(isDeletedBook.getId());
         return ResponseEntity
                     .ok()
                     .body(isDeletedBook);
@@ -111,8 +111,8 @@ public class BookAdminController {
     @DeleteMapping("/books/{id}")
     @ApiMessage("Delete a book")
     public ResponseEntity<Book> deleteBook(@PathVariable("id") long id) throws InvalidException {
-        Book book = this.bookService.handleGetBookById(id);
-        this.bookService.handleDeleteBookById(book.getId());
+        Book book = bookService.handleGetBookById(id);
+        bookService.handleDeleteBookById(book.getId());
         return ResponseEntity.ok().body(book);
     }
 }

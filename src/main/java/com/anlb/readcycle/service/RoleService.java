@@ -37,7 +37,7 @@ public class RoleService {
      * @throws InvalidException if a role with the given name already exists.
      */
     public void existByName(String name) throws InvalidException {
-        boolean roleExits = this.roleRepository.existsByName(name);
+        boolean roleExits = roleRepository.existsByName(name);
         if (roleExits) {
             throw new InvalidException("Role with name: " + name + " already exists");
         }
@@ -50,7 +50,7 @@ public class RoleService {
      * @throws InvalidException if the role does not exist.
      */
     public void checkRoleExitsById(long id) throws InvalidException {
-        if (!this.roleRepository.existsById(id)) {
+        if (!roleRepository.existsById(id)) {
             throw new InvalidException("Role with id: " + id + " does not exist.");
         }
     }
@@ -72,11 +72,11 @@ public class RoleService {
                                             .stream()
                                             .map(x -> x.getId())
                                             .collect(Collectors.toList());
-            List<Permission> dbPermissions = this.permissionRepository.findByIdIn(reqPermissions);
+            List<Permission> dbPermissions = permissionRepository.findByIdIn(reqPermissions);
 
             newRole.setPermissions(dbPermissions);
         }
-        return this.roleRepository.save(newRole);
+        return roleRepository.save(newRole);
     }
 
     /**
@@ -86,7 +86,7 @@ public class RoleService {
      * @return An {@link Optional} containing the {@link Role} if found, or an empty {@link Optional} if not.
      */
     public Optional<Role> handleFindById(long id) {
-        return this.roleRepository.findById(id);
+        return roleRepository.findById(id);
     }
 
     /**
@@ -97,7 +97,7 @@ public class RoleService {
      * @throws InvalidException if no role with the given name exists
      */
     public Role handleFindByName(String name) throws InvalidException {
-        Role role = this.roleRepository.findByName(name);
+        Role role = roleRepository.findByName(name);
         if (role == null) {
             throw new InvalidException("Role with name: " + name + " does exists");
         }
@@ -112,7 +112,7 @@ public class RoleService {
      * @throws NoSuchElementException if the role with the given ID does not exist.
      */
     public Role handleUpdateRole(UpdateRoleRequestDto roleDTO) {
-        Role updateRole = this.roleRepository.findById(roleDTO.getId()).get();
+        Role updateRole = roleRepository.findById(roleDTO.getId()).get();
         updateRole.setName(roleDTO.getName());
         updateRole.setDescription(roleDTO.getDescription());
         updateRole.setActive(roleDTO.isActive());
@@ -121,11 +121,11 @@ public class RoleService {
                                             .stream()
                                             .map(x -> x.getId())
                                             .collect(Collectors.toList());
-            List<Permission> dbPermissions = this.permissionRepository.findByIdIn(reqPermissions);
+            List<Permission> dbPermissions = permissionRepository.findByIdIn(reqPermissions);
 
             updateRole.setPermissions(dbPermissions);
         }
-        return this.roleRepository.save(updateRole);
+        return roleRepository.save(updateRole);
     }
 
     /**
@@ -136,7 +136,7 @@ public class RoleService {
      * @return A {@link ResultPaginateDto} containing the paginated list of roles and metadata.
      */
     public ResultPaginateDto handleGetRoles(Specification<Role> spec, Pageable pageable) {
-        Page<Role> dbRoles = this.roleRepository.findAll(spec, pageable);
+        Page<Role> dbRoles = roleRepository.findAll(spec, pageable);
         ResultPaginateDto resultPaginateDTO = new ResultPaginateDto();
         Meta meta = new Meta();
         meta.setPage(pageable.getPageNumber() + 1);
@@ -157,7 +157,7 @@ public class RoleService {
      * @param id The ID of the role to be deleted.
      */
     public void handleDeleteRoleById(long id) {
-        this.roleRepository.deleteById(id);
+        roleRepository.deleteById(id);
     }
 
     /**
@@ -168,7 +168,7 @@ public class RoleService {
      * @throws InvalidException if the role with the given ID does not exist.
      */
     public Role handleGetRoleById(long id) throws InvalidException {
-        Optional<Role> role = this.roleRepository.findById(id);
+        Optional<Role> role = roleRepository.findById(id);
         if (role.isEmpty()) {
             throw new InvalidException("Role with id: " + id + " does not exist");
         }

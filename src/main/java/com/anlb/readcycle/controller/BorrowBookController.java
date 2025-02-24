@@ -40,7 +40,7 @@ public class BorrowBookController {
     public ResponseEntity<Cart> handleAddToCart(@RequestBody Book book) throws InvalidException {
         return ResponseEntity
                     .status(HttpStatus.CREATED)
-                    .body(this.cartService.handleAddBookToCart(book));
+                    .body(cartService.handleAddBookToCart(book));
     }
 
     @PostMapping("/borrow")
@@ -48,15 +48,15 @@ public class BorrowBookController {
     public ResponseEntity<List<Borrow>> handleBorrowBook(@RequestBody CreateBorrowBookRequestDto reqBorrow) throws InvalidException {
         return ResponseEntity
                     .status(HttpStatus.CREATED)
-                    .body(this.borrowBookService.handleBorrowBook(reqBorrow));
+                    .body(borrowBookService.handleBorrowBook(reqBorrow));
     }
 
     @GetMapping("/carts")
     @ApiMessage("Get carts by user")
     public ResponseEntity<List<CreateCartResponseDto>> getCartsByUser() throws InvalidException {
-        List<Cart> listCart = this.cartService.handleGetCartsByUser();
+        List<Cart> listCart = cartService.handleGetCartsByUser();
         List<CreateCartResponseDto> carts = listCart.stream()
-                                            .map(cart -> this.cartMapper.convertCartToCreateCartResponseDTO(cart))
+                                            .map(cart -> cartMapper.convertCartToCreateCartResponseDTO(cart))
                                             .collect(Collectors.toList());
         return ResponseEntity
                     .ok()
@@ -66,7 +66,7 @@ public class BorrowBookController {
     @DeleteMapping("/carts/{id}")
     @ApiMessage("Delete cart")
     public ResponseEntity<Void> deleteCart(@PathVariable("id") long id) {
-        this.cartService.handleDeleteCartById(id);
+        cartService.handleDeleteCartById(id);
         return ResponseEntity
                     .ok()
                     .body(null);

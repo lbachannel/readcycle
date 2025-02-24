@@ -38,10 +38,10 @@ public class BookController {
     @GetMapping("/books/{id}")
     @ApiMessage("Get book by id")
     public ResponseEntity<BookResponseDto> getBookById(@PathVariable("id") long id) throws InvalidException {
-        Book currentBook = this.bookService.handleGetBookByIdAndActive(id, true);
+        Book currentBook = bookService.handleGetBookByIdAndActive(id, true);
         return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(this.bookMapper.convertBookToBookResponseDTO(currentBook));
+                    .body(bookMapper.convertBookToBookResponseDTO(currentBook));
     }
 
     /**
@@ -57,7 +57,7 @@ public class BookController {
     public ResponseEntity<ResultPaginateDto> getAllBooks(@Filter Specification<Book> spec, Pageable pageable) {
         return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(this.bookService.handleGetAllBooksClient(spec, pageable));
+                    .body(bookService.handleGetAllBooksClient(spec, pageable));
     }
 
 }

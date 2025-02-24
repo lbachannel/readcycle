@@ -44,11 +44,11 @@ public class FileController {
     @PostMapping("/file/upload")
     @ApiMessage("Upload single file")
     public ResponseEntity<UploadFileResponseDto> upload(@RequestParam(name = "file") MultipartFile file) throws StorageException, URISyntaxException, IOException {
-        this.fileService.validationFile(file);
+        fileService.validationFile(file);
         // create a directory if not exist
-        this.fileService.createDirectory(baseURI + "");
+        fileService.createDirectory(baseURI + "");
         // store file
-        String uploadFile = this.fileService.store(file);
+        String uploadFile = fileService.store(file);
         UploadFileResponseDto response = new UploadFileResponseDto(uploadFile, Instant.now());
         return ResponseEntity.ok().body(response);
     }
@@ -65,7 +65,7 @@ public class FileController {
     @DeleteMapping("/file/delete/{file}")
     @ApiMessage("Delete single file")
     public ResponseEntity<Void> deleteFile(@PathVariable("file") String file) throws StorageException, URISyntaxException, IOException {
-        this.fileService.delete(file);
+        fileService.delete(file);
         return ResponseEntity
                         .status(HttpStatus.NO_CONTENT)
                         .build();
