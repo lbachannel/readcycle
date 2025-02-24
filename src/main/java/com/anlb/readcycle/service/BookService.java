@@ -49,8 +49,8 @@ public class BookService {
         newBook.setQuantity(requestBook.getQuantity());
         newBook.setStatus(requestBook.getStatus());
         newBook.setActive(true);
-        newBook = this.bookRepository.save(newBook);
-        this.bookLogService.logCreateBook(newBook);
+        newBook = bookRepository.save(newBook);
+        bookLogService.logCreateBook(newBook);
         return newBook;
     }
 
@@ -62,7 +62,7 @@ public class BookService {
      * @throws InvalidException If no book with the given ID exists.
      */
     public Book handleGetBookById(long id) throws InvalidException {
-        Book book = this.bookRepository.findById(id).orElse(null);
+        Book book = bookRepository.findById(id).orElse(null);
         if (book == null) {
             throw new InvalidException("Book with id: " + id + " does not exists");
         }
@@ -78,11 +78,11 @@ public class BookService {
      * @throws InvalidException if no book with the given ID and active status is found.
      */
     public Book handleGetBookByIdAndActive(long id, boolean isActive) throws InvalidException {
-        Book currentBook = this.bookRepository.findByIdAndIsActive(id, isActive).orElse(null);
+        Book currentBook = bookRepository.findByIdAndIsActive(id, isActive).orElse(null);
         if (currentBook == null) {
             throw new InvalidException("Book with id: " + id + " does not exists");
         }
-        return this.bookRepository.findByIdAndIsActive(id, isActive).get();
+        return bookRepository.findByIdAndIsActive(id, isActive).get();
     }
 
     /**
@@ -97,7 +97,7 @@ public class BookService {
      * @throws InvalidException if the book with the given ID does not exist
      */
     public Book handleUpdateBook(UpdateBookRequestDto requestBook) throws InvalidException {
-        Book updateBook = this.handleGetBookById(requestBook.getId());
+        Book updateBook = handleGetBookById(requestBook.getId());
         Book oldBook = updateBook.clone();
         updateBook.setCategory(requestBook.getCategory());
         updateBook.setTitle(requestBook.getTitle());
@@ -107,8 +107,8 @@ public class BookService {
         updateBook.setDescription(requestBook.getDescription());
         updateBook.setQuantity(requestBook.getQuantity());
         updateBook.setStatus(requestBook.getStatus());
-        this.bookLogService.logUpdateBook(oldBook, updateBook);
-        return this.bookRepository.save(updateBook);
+        bookLogService.logUpdateBook(oldBook, updateBook);
+        return bookRepository.save(updateBook);
     }
 
     /**
@@ -122,11 +122,11 @@ public class BookService {
      * @throws InvalidException if the book with the given ID does not exist
      */
     public Book handleSoftDelete(long id) throws InvalidException {
-        Book isDeletedBook = this.handleGetBookById(id);
+        Book isDeletedBook = handleGetBookById(id);
         boolean oldActive = isDeletedBook.isActive();
         isDeletedBook.setActive(!isDeletedBook.isActive());
-        this.bookLogService.logToggleSoftDeleteBook(isDeletedBook.getId(), oldActive, isDeletedBook.isActive());
-        return this.bookRepository.save(isDeletedBook);
+        bookLogService.logToggleSoftDeleteBook(isDeletedBook.getId(), oldActive, isDeletedBook.isActive());
+        return bookRepository.save(isDeletedBook);
     }
 
     /**
@@ -138,7 +138,7 @@ public class BookService {
      *         and associated metadata.
      */
     public ResultPaginateDto handleGetAllBooks(Specification<Book> spec, Pageable pageable) {
-        Page<Book> pageBook = this.bookRepository.findAll(spec, pageable);
+        Page<Book> pageBook = bookRepository.findAll(spec, pageable);
         ResultPaginateDto response = new ResultPaginateDto();
         ResultPaginateDto.Meta meta = new ResultPaginateDto.Meta();
 
@@ -167,7 +167,7 @@ public class BookService {
      */
     public ResultPaginateDto handleGetAllBooksClient(Specification<Book> spec, Pageable pageable) {
         spec = spec.and(BookSpecifications.isActive());
-        Page<Book> pageBook = this.bookRepository.findAll(spec, pageable);
+        Page<Book> pageBook = bookRepository.findAll(spec, pageable);
         ResultPaginateDto response = new ResultPaginateDto();
         ResultPaginateDto.Meta meta = new ResultPaginateDto.Meta();
 
@@ -181,7 +181,7 @@ public class BookService {
 
         List<BookResponseDto> listBook = pageBook.getContent()
                                             .stream()
-                                            .map(item -> this.bookMapper.convertBookToBookResponseDTO(item))
+                                            .map(item -> bookMapper.convertBookToBookResponseDTO(item))
                                             .collect(Collectors.toList());
         response.setResult(listBook);
         return response;
@@ -195,7 +195,7 @@ public class BookService {
      * @param id the ID of the book to be deleted
      */
     public void handleDeleteBookById(long id) {
-        this.bookLogService.logDeleteBook(id);
-        this.bookRepository.deleteById(id);
+        bookLogService.logDeleteBook(id);
+        bookRepository.deleteById(id);
     }
 }

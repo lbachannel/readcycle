@@ -41,7 +41,7 @@ public class SecurityUtil {
     private long verifyEmailExpired;
     public String createVerifyEmailToken(String email) {
         Instant now = Instant.now();
-        Instant validity = now.plus(this.verifyEmailExpired, ChronoUnit.SECONDS);
+        Instant validity = now.plus(verifyEmailExpired, ChronoUnit.SECONDS);
 
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuedAt(now)
@@ -63,7 +63,7 @@ public class SecurityUtil {
         userToken.setEmail(loginResponse.getUser().getEmail());
         userToken.setName(loginResponse.getUser().getName());
         Instant now = Instant.now();
-        Instant validity = now.plus(this.accessTokenExpired, ChronoUnit.SECONDS);
+        Instant validity = now.plus(accessTokenExpired, ChronoUnit.SECONDS);
 
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuedAt(now)
@@ -72,7 +72,7 @@ public class SecurityUtil {
                 .claim("user", userToken)
                 .build();
         JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITHM).build();
-        return this.jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).getTokenValue();
+        return jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).getTokenValue();
     }
 
     // refresh token
@@ -94,7 +94,7 @@ public class SecurityUtil {
                 .claim("user", userToken)
                 .build();
         JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITHM).build();
-        return this.jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).getTokenValue();
+        return jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).getTokenValue();
     }
 
     /**

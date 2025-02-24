@@ -58,7 +58,7 @@ public class PermissionService {
         newPermission.setApiPath(permissionDTO.getApiPath());
         newPermission.setMethod(permissionDTO.getMethod());
         newPermission.setModule(permissionDTO.getModule());
-        return this.permissionRepository.save(newPermission);
+        return permissionRepository.save(newPermission);
     }
 
     /**
@@ -70,11 +70,11 @@ public class PermissionService {
      * @throws InvalidException if no permission with the given ID exists.
      */
     public Permission handleFindById(long id) throws InvalidException {
-        Optional<Permission> permission = this.permissionRepository.findById(id);
+        Optional<Permission> permission = permissionRepository.findById(id);
         if (permission.isEmpty()) {
             throw new InvalidException("Permission with id: " + id + " does not exist.");
         }
-        return this.permissionRepository.findById(id).get();
+        return permissionRepository.findById(id).get();
     }
 
     /**
@@ -86,12 +86,12 @@ public class PermissionService {
      * @throws InvalidException if the permission with the given ID does not exist.
      */
     public Permission handleUpdatePermission(UpdatePermissionRequestDto permissionDTO) throws InvalidException {
-        Permission updatePermission = this.handleFindById(permissionDTO.getId());
+        Permission updatePermission = handleFindById(permissionDTO.getId());
         updatePermission.setName(permissionDTO.getName());
         updatePermission.setApiPath(permissionDTO.getApiPath());
         updatePermission.setMethod(permissionDTO.getMethod());
         updatePermission.setModule(permissionDTO.getModule());
-        return this.permissionRepository.save(updatePermission);
+        return permissionRepository.save(updatePermission);
     }
 
     /**
@@ -102,7 +102,7 @@ public class PermissionService {
      * @return A {@link ResultPaginateDto} containing the paginated list of permissions along with metadata.
      */
     public ResultPaginateDto handleGetPermissions(Specification<Permission> spec, Pageable pageable) {
-        Page<Permission> dbPermissions = this.permissionRepository.findAll(spec, pageable);
+        Page<Permission> dbPermissions = permissionRepository.findAll(spec, pageable);
         ResultPaginateDto resultPaginateDTO = new ResultPaginateDto();
         Meta meta = new Meta();
         meta.setPage(pageable.getPageNumber() + 1);
@@ -127,11 +127,11 @@ public class PermissionService {
      */
     public void delete(long id) throws InvalidException {
         // delete permission_role
-        Permission currentPermission = this.handleFindById(id);
+        Permission currentPermission = handleFindById(id);
         currentPermission
                 .getRoles()
                 .forEach(role -> role.getPermissions().remove(currentPermission));
         // delete permission
-        this.permissionRepository.delete(currentPermission);
+        permissionRepository.delete(currentPermission);
     }
 }

@@ -31,7 +31,7 @@ public class BorrowBookService {
 
     public List<Borrow> handleBorrowBook(CreateBorrowBookRequestDto reqBorrow) throws InvalidException {
         List<Details> listBook = reqBorrow.getDetails();
-        User user = this.userService.handleGetUserByUsername(reqBorrow.getUsername());
+        User user = userService.handleGetUserByUsername(reqBorrow.getUsername());
 
         List<Borrow> borrows = new ArrayList<>();
 

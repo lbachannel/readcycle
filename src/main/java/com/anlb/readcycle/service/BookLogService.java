@@ -35,7 +35,7 @@ public class BookLogService {
     public void logCreateBook(Book book) throws InvalidException {
         String email = SecurityUtil.getCurrentUserLogin()
                             .orElseThrow(() -> new InvalidException("Access Token invalid"));
-        User user = this.userService.handleGetUserByUsername(email);
+        User user = userService.handleGetUserByUsername(email);
         try {
             List<ActivityDescription> descriptions = new ArrayList<>();
             descriptions.add(ActivityDescription.from("bookId", String.valueOf(book.getId()), "Book id"));
@@ -122,7 +122,7 @@ public class BookLogService {
             if (descriptions.size() > 1) {
                 String email = SecurityUtil.getCurrentUserLogin()
                             .orElseThrow(() -> new InvalidException("Access Token invalid"));
-                User user = this.userService.handleGetUserByUsername(email);
+                User user = userService.handleGetUserByUsername(email);
                 ActivityLog activityLog = ActivityLog.formatLogMessage(ActivityGroup.BOOK, ActivityType.UPDATE_BOOK, descriptions);
                 activityLogService.log(user, activityLog);
             }
@@ -147,7 +147,7 @@ public class BookLogService {
             descriptions.add(ActivityDescription.from("isActive", (oldActive ? "True" : "False")  + " → " + (newActive ? "True" : "False"), "Active"));
             String email = SecurityUtil.getCurrentUserLogin()
                             .orElseThrow(() -> new InvalidException("Access Token invalid"));
-            User user = this.userService.handleGetUserByUsername(email);
+            User user = userService.handleGetUserByUsername(email);
             ActivityLog activityLog = ActivityLog.formatLogMessage(ActivityGroup.BOOK, ActivityType.SOFT_DELETE_BOOK, descriptions);
             activityLogService.log(user, activityLog);
         } catch (Exception e) {
@@ -167,7 +167,7 @@ public class BookLogService {
             descriptions.add(ActivityDescription.from("bookId", String.valueOf(id) + " → " + "none" , "Book id"));
             String email = SecurityUtil.getCurrentUserLogin()
                             .orElseThrow(() -> new InvalidException("Access Token invalid"));
-            User user = this.userService.handleGetUserByUsername(email);
+            User user = userService.handleGetUserByUsername(email);
             ActivityLog activityLog = ActivityLog.formatLogMessage(ActivityGroup.BOOK, ActivityType.DELETE_BOOK, descriptions);
             activityLogService.log(user, activityLog);
         } catch (Exception e) {

@@ -15,7 +15,9 @@ import com.anlb.readcycle.domain.User;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class EmailService {
@@ -33,15 +35,15 @@ public class EmailService {
      * @param isHtml     Indicates whether the email content is in HTML format.
      */
     public void sendEmailSync(String to, String subject, String content, boolean isMultipart, boolean isHtml) {
-        MimeMessage mimeMessage = this.javaMailSender.createMimeMessage();
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         try {
             MimeMessageHelper message = new MimeMessageHelper(mimeMessage, isMultipart, StandardCharsets.UTF_8.name());
             message.setTo(to);
             message.setSubject(subject);
             message.setText(content, isHtml);
-            this.javaMailSender.send(mimeMessage);
+            javaMailSender.send(mimeMessage);
         } catch (MailException | MessagingException e) {
-            System.out.println("ERROR SEND EMAIL: " + e);
+            log.error("ERROR SEND EMAIL: {}", e);
         }
     }
 
@@ -59,6 +61,6 @@ public class EmailService {
         String verifyUrl = "http://localhost:8080/api/v1/auth/verify-email?token=" + user.getVerificationEmailToken();
         context.setVariable("verifyEmailToken", verifyUrl);
         String content = this.templateEngine.process(templateName, context);
-        this.sendEmailSync(user.getEmail(), subject, content, false, true);
+        sendEmailSync(user.getEmail(), subject, content, false, true);
     }
 }

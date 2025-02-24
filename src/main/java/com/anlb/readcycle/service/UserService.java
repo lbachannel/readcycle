@@ -52,10 +52,10 @@ public class UserService {
      * @return The saved {@link User} entity with the verification token.
      */
     public User handleRegisterMember(User user) {
-        String verifyEmailToken = this.securityUtil.createVerifyEmailToken(user.getEmail());
+        String verifyEmailToken = securityUtil.createVerifyEmailToken(user.getEmail());
         user.setEmailVerified(false);
         user.setVerificationEmailToken(verifyEmailToken);
-        return this.userRepository.save(user);
+        return userRepository.save(user);
     }
 
     /**
@@ -67,11 +67,11 @@ public class UserService {
      */
     public User handleCreateUser(User user) throws InvalidException {
         user.setEmailVerified(true);
-        user = this.userRepository.save(user);
+        user = userRepository.save(user);
         String email = SecurityUtil.getCurrentUserLogin()
                         .orElseThrow(() -> new InvalidException("Access Token invalid"));
         User userLogin = this.handleGetUserByUsername(email);
-        this.userLogService.logCreateUser(user, userLogin);
+        userLogService.logCreateUser(user, userLogin);
         return user;
     }
 
@@ -82,7 +82,7 @@ public class UserService {
      * @return {@code true} if a user with the given email exists, {@code false} otherwise.
      */
     public boolean handleCheckExistsByEmail(String email) {
-        return this.userRepository.existsByEmail(email);
+        return userRepository.existsByEmail(email);
     }
 
     /**
@@ -93,7 +93,7 @@ public class UserService {
      *
      */
     public User handleGetUserByUsername(String username) throws InvalidException {
-        User user = this.userRepository.findByEmail(username);
+        User user = userRepository.findByEmail(username);
         if (user == null) {
             throw new InvalidException("Bad credentials");
         }
@@ -114,10 +114,10 @@ public class UserService {
      * @throws NoSuchElementException if the token is not found in the repository.
      */
     public User handleVerifyEmail(String token) {
-        User user = this.userRepository.findByVerificationEmailToken(token).get();
+        User user = userRepository.findByVerificationEmailToken(token).get();
         user.setEmailVerified(true);
         user.setVerificationEmailToken(null);
-        return this.userRepository.save(user);
+        return userRepository.save(user);
     }
 
     /**
@@ -163,7 +163,7 @@ public class UserService {
      * @param email The email of the user to be deleted.
      */
     public void handleDeleteUserByEmail(String email) {
-        this.userRepository.deleteByEmail(email);
+        userRepository.deleteByEmail(email);
     }
 
     /**
@@ -177,10 +177,10 @@ public class UserService {
      * @throws InvalidException if the current user's email is not available (indicating an invalid access token)
      */
     public void handleUpdateRefreshTokenIntoUser(String refreshToken, String email) throws InvalidException {
-        User user = this.handleGetUserByUsername(email);
+        User user = handleGetUserByUsername(email);
         if (user != null) {
             user.setRefreshToken(refreshToken);
-            this.userRepository.save(user);
+            userRepository.save(user);
         }
     }
 
@@ -192,7 +192,7 @@ public class UserService {
      * @throws InvalidException if no user is found with the provided refresh token and email
      */
     public void handleGetUserByRefreshTokenAndEmail(String refreshToken, Jwt decodedToken) throws InvalidException {  
-        User dbUser = this.userRepository.findByRefreshTokenAndEmail(refreshToken, decodedToken.getSubject());
+        User dbUser = userRepository.findByRefreshTokenAndEmail(refreshToken, decodedToken.getSubject());
         if (dbUser == null) {
             throw new InvalidException("Refresh token is not valid");
         }
@@ -206,7 +206,7 @@ public class UserService {
      * @throws InvalidException if the user associated with the token does not exist
      */
     public LoginResponseDto generateLoginResponseFromToken (Jwt decodedToken) throws InvalidException {
-        User dbUser = this.handleGetUserByUsername(decodedToken.getSubject());
+        User dbUser = handleGetUserByUsername(decodedToken.getSubject());
         UserLogin user = new UserLogin(
             dbUser.getId(),
             dbUser.getEmail(),
@@ -218,7 +218,7 @@ public class UserService {
         response.setUser(user);
 
         // set access token
-        String accessToken = this.securityUtil.createAccessToken(decodedToken.getSubject(), response);
+        String accessToken = securityUtil.createAccessToken(decodedToken.getSubject(), response);
         response.setAccessToken(accessToken);
         return response;
     }
@@ -231,7 +231,7 @@ public class UserService {
      * @return A {@link ResultPaginateDto} containing the paginated user list and metadata.
      */
     public ResultPaginateDto handleGetAllUsers(Specification<User> spec, Pageable pageable) {
-        Page<User> pageUser = this.userRepository.findAll(spec, pageable);
+        Page<User> pageUser = userRepository.findAll(spec, pageable);
         ResultPaginateDto rs = new ResultPaginateDto();
         ResultPaginateDto.Meta mt = new ResultPaginateDto.Meta();
 
@@ -246,7 +246,7 @@ public class UserService {
         // remove sensitive data
         List<UserResponseDto> listUser = pageUser.getContent()
                                             .stream()
-                                            .map(item -> this.userMapper.convertUserToUserResponseDTO(item))
+                                            .map(item -> userMapper.convertUserToUserResponseDTO(item))
                                             .collect(Collectors.toList());
 
         rs.setResult(listUser);
@@ -263,9 +263,9 @@ public class UserService {
     public UserGetAccount getCurrentUserAccount() throws InvalidException {
         String email = SecurityUtil.getCurrentUserLogin().isPresent()
                         ? SecurityUtil.getCurrentUserLogin().get() : "";
-        User dbUser = this.handleGetUserByUsername(email);
-        UserLogin userLogin = this.userMapper.convertUserToUserLogin(dbUser);
-        return this.convertUserLoginToUserGetAccount(userLogin);
+        User dbUser = handleGetUserByUsername(email);
+        UserLogin userLogin = userMapper.convertUserToUserLogin(dbUser);
+        return convertUserLoginToUserGetAccount(userLogin);
     }
 
     /**
@@ -288,7 +288,7 @@ public class UserService {
      * @throws InvalidException if no user with the given ID exists
      */
     public User handleGetUserById(long id) throws InvalidException {
-        User user = this.userRepository.findById(id).orElse(null);
+        User user = userRepository.findById(id).orElse(null);
         if (user == null) {
             throw new InvalidException("User with id: " + id + " does not exists");
         }
@@ -307,7 +307,7 @@ public class UserService {
      * @throws InvalidException if the access token is invalid or the current user cannot be retrieved
      */
     public User handleUpdateUser(UpdateUserRequestDto reqUser) throws InvalidException {
-        User updateUser = this.handleGetUserById(reqUser.getId());
+        User updateUser = handleGetUserById(reqUser.getId());
         User oldUser = updateUser.clone();
         updateUser.setName(reqUser.getName());
         updateUser.setEmail(reqUser.getEmail());
@@ -315,12 +315,12 @@ public class UserService {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             updateUser.setDateOfBirth(LocalDate.parse(reqUser.getDateOfBirth(), formatter));
         }
-        updateUser.setRole(this.roleService.handleFindByName(reqUser.getRole()));
+        updateUser.setRole(roleService.handleFindByName(reqUser.getRole()));
         String email = SecurityUtil.getCurrentUserLogin()
                             .orElseThrow(() -> new InvalidException("Access Token invalid"));
-        User user = this.handleGetUserByUsername(email);
-        this.userLogService.logUpdateUser(oldUser, updateUser, user);
-        return this.userRepository.save(updateUser);
+        User user = handleGetUserByUsername(email);
+        userLogService.logUpdateUser(oldUser, updateUser, user);
+        return userRepository.save(updateUser);
     }
 
     /**
@@ -332,12 +332,12 @@ public class UserService {
     public void handleDeleteUserById(long id) throws InvalidException {
         String email = SecurityUtil.getCurrentUserLogin()
                             .orElseThrow(() -> new InvalidException("Access Token invalid"));
-        User userLogin = this.handleGetUserByUsername(email);
-        User user = this.handleGetUserById(id);
+        User userLogin = handleGetUserByUsername(email);
+        User user = handleGetUserById(id);
         if (user.getEmail().equals(email)) {
             throw new InvalidException("You can not delete yourself");
         }
-        this.userLogService.logDeleteUser(id, userLogin);
-        this.userRepository.deleteById(id);
+        userLogService.logDeleteUser(id, userLogin);
+        userRepository.deleteById(id);
     }
 }
