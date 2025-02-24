@@ -3,20 +3,20 @@ package com.anlb.readcycle.mapper;
 import org.springframework.stereotype.Service;
 
 import com.anlb.readcycle.domain.Role;
-import com.anlb.readcycle.dto.response.CreateRoleResponseDTO;
+import com.anlb.readcycle.dto.response.CreateRoleResponseDto;
 import com.anlb.readcycle.dto.response.UpdateRoleResponseDTO;
 
 @Service
 public class RoleMapper {
     
     /**
-     * Converts a {@link Role} entity to a {@link CreateRoleResponseDTO}.
+     * Converts a {@link Role} entity to a {@link CreateRoleResponseDto}.
      *
      * @param role The {@link Role} entity to be converted.
-     * @return A {@link CreateRoleResponseDTO} containing role details.
+     * @return A {@link CreateRoleResponseDto} containing role details.
      */
-    public CreateRoleResponseDTO convertRoleToCreateRoleResponseDTO(Role role) {
-        CreateRoleResponseDTO response = new CreateRoleResponseDTO();
+    public CreateRoleResponseDto convertRoleToCreateRoleResponseDTO(Role role) {
+        CreateRoleResponseDto response = new CreateRoleResponseDto();
         response.setId(role.getId());
         response.setName(role.getName());
         response.setDescription(role.getDescription());

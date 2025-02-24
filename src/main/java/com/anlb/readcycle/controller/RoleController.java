@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.anlb.readcycle.domain.Role;
 import com.anlb.readcycle.dto.request.CreateRoleRequestDto;
 import com.anlb.readcycle.dto.request.UpdateRoleRequestDto;
-import com.anlb.readcycle.dto.response.CreateRoleResponseDTO;
+import com.anlb.readcycle.dto.response.CreateRoleResponseDto;
 import com.anlb.readcycle.dto.response.ResultPaginateDTO;
 import com.anlb.readcycle.dto.response.UpdateRoleResponseDTO;
 import com.anlb.readcycle.mapper.RoleMapper;
@@ -54,12 +54,12 @@ public class RoleController {
      * {@code POST  /roles} : Creates a new role.
      *
      * @param roleDTO The request body containing role details.
-     * @return A {@link ResponseEntity} containing the created role as a {@link CreateRoleResponseDTO}.
+     * @return A {@link ResponseEntity} containing the created role as a {@link CreateRoleResponseDto}.
      * @throws InvalidException If a role with the same name already exists.
      */
     @PostMapping("/roles")
     @ApiMessage("Create a role")
-    public ResponseEntity<CreateRoleResponseDTO> createRole(@Valid @RequestBody CreateRoleRequestDto roleDTO) throws InvalidException {
+    public ResponseEntity<CreateRoleResponseDto> createRole(@Valid @RequestBody CreateRoleRequestDto roleDTO) throws InvalidException {
         this.roleService.existByName(roleDTO.getName());
         Role role = this.roleService.handleCreateRole(roleDTO);
         return ResponseEntity
