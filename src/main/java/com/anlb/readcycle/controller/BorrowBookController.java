@@ -46,7 +46,6 @@ public class BorrowBookController {
     @PostMapping("/borrow")
     @ApiMessage("Borrow books")
     public ResponseEntity<List<Borrow>> handleBorrowBook(@RequestBody CreateBorrowBookRequestDTO reqBorrow) throws InvalidException {
-
         return ResponseEntity
                     .status(HttpStatus.CREATED)
                     .body(this.borrowBookService.handleBorrowBook(reqBorrow));

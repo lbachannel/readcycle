@@ -4,7 +4,6 @@ import java.time.Instant;
 
 import com.anlb.readcycle.utils.SecurityUtil;
 import com.anlb.readcycle.utils.constant.BookStatusEnum;
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -54,11 +53,11 @@ public class Book {
     @Column(name = "quantity")
     private int quantity;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss a", timezone = "GMT+7")
+    // @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss a")
     @Column(name = "created_at")
     private Instant createdAt;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss a", timezone = "GMT+7")
+    // @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss a")
     @Column(name = "updated_at")
     private Instant updatedAt;
 
