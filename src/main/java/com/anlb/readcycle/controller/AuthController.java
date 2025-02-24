@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.anlb.readcycle.domain.User;
-import com.anlb.readcycle.dto.request.LoginRequestDTO;
+import com.anlb.readcycle.dto.request.LoginRequestDto;
 import com.anlb.readcycle.dto.response.LoginResponseDTO;
 import com.anlb.readcycle.mapper.UserMapper;
 import com.anlb.readcycle.service.UserService;
@@ -79,7 +79,7 @@ public class AuthController {
      */
     @PostMapping("/auth/login")
     @ApiMessage("Login")
-    public ResponseEntity<LoginResponseDTO> login(@Valid @RequestBody LoginRequestDTO loginDTO) throws InvalidException {
+    public ResponseEntity<LoginResponseDTO> login(@Valid @RequestBody LoginRequestDto loginDTO) throws InvalidException {
         User dbUser = this.userService.handleGetUserByUsername(loginDTO.getUsername());
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginDTO.getUsername(), loginDTO.getPassword());
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
