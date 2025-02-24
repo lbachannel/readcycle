@@ -25,8 +25,8 @@ import com.anlb.readcycle.mapper.UserMapper;
 import com.anlb.readcycle.dto.response.LoginResponseDto.UserGetAccount;
 import com.anlb.readcycle.dto.response.LoginResponseDto.UserLogin;
 import com.anlb.readcycle.repository.UserRepository;
+import com.anlb.readcycle.service.IRoleService;
 import com.anlb.readcycle.service.IUserService;
-import com.anlb.readcycle.service.RoleService;
 import com.anlb.readcycle.service.UserLogService;
 import com.anlb.readcycle.utils.SecurityUtil;
 import com.anlb.readcycle.utils.exception.InvalidException;
@@ -41,7 +41,7 @@ public class UserServiceImpl implements IUserService {
     private final UserRepository userRepository;
     private final SecurityUtil securityUtil;
     private final JwtDecoder jwtDecoder;
-    private final RoleService roleService;
+    private final IRoleService roleService;
     private final UserMapper userMapper;
     private final UserLogService userLogService;
 

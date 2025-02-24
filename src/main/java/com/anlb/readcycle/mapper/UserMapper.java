@@ -13,10 +13,10 @@ import com.anlb.readcycle.dto.request.RegisterRequestDto;
 import com.anlb.readcycle.dto.response.CreateUserResponseDto;
 import com.anlb.readcycle.dto.response.LoginResponseDto;
 import com.anlb.readcycle.dto.response.LoginResponseDto.UserLogin;
+import com.anlb.readcycle.service.IRoleService;
 import com.anlb.readcycle.dto.response.RegisterResponseDto;
 import com.anlb.readcycle.dto.response.UpdateUserResponseDto;
 import com.anlb.readcycle.dto.response.UserResponseDto;
-import com.anlb.readcycle.service.RoleService;
 import com.anlb.readcycle.utils.SecurityUtil;
 import com.anlb.readcycle.utils.exception.InvalidException;
 import com.anlb.readcycle.utils.exception.RegisterValidator;
@@ -28,7 +28,7 @@ import lombok.RequiredArgsConstructor;
 public class UserMapper {
     
     private final PasswordEncoder passwordEncoder;
-    private final RoleService roleService;
+    private final IRoleService roleService;
     private final SecurityUtil securityUtil;
 
     /**
