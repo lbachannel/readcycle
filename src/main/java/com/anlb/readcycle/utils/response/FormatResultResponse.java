@@ -9,7 +9,7 @@ import org.springframework.http.server.ServletServerHttpResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
-import com.anlb.readcycle.dto.response.ResultResponseDTO;
+import com.anlb.readcycle.dto.response.ResultResponseDto;
 import com.anlb.readcycle.utils.anotation.ApiMessage;
 
 import jakarta.servlet.http.HttpServletResponse;
@@ -29,7 +29,7 @@ public class FormatResultResponse implements ResponseBodyAdvice<Object> {
         HttpServletResponse servletResponse = ((ServletServerHttpResponse) response).getServletResponse();
         int status = servletResponse.getStatus();
 
-        ResultResponseDTO<Object> restResponse = new ResultResponseDTO<>();
+        ResultResponseDto<Object> restResponse = new ResultResponseDto<>();
         restResponse.setStatusCode(status);
         if (body instanceof String) {
             return body;

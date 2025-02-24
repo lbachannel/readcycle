@@ -12,17 +12,17 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.anlb.readcycle.dto.response.ResultResponseDTO;
+import com.anlb.readcycle.dto.response.ResultResponseDto;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ResultResponseDTO<Object>> validationError(MethodArgumentNotValidException ex) {
+    public ResponseEntity<ResultResponseDto<Object>> validationError(MethodArgumentNotValidException ex) {
         BindingResult result = ex.getBindingResult();
         final List<FieldError> fieldErrors = result.getFieldErrors();
 
-        ResultResponseDTO<Object> res = new ResultResponseDTO<Object>();
+        ResultResponseDto<Object> res = new ResultResponseDto<Object>();
         res.setStatusCode(HttpStatus.BAD_REQUEST.value());
 
         String errorDetails = ex.getBody() != null ? ex.getBody().getDetail() : "Validation failed";
@@ -40,8 +40,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = {
         InvalidException.class
     })
-    public ResponseEntity<ResultResponseDTO<Object>> handleInvalidException(Exception ex) {
-        ResultResponseDTO<Object> response = new ResultResponseDTO<Object>();
+    public ResponseEntity<ResultResponseDto<Object>> handleInvalidException(Exception ex) {
+        ResultResponseDto<Object> response = new ResultResponseDto<Object>();
         response.setStatusCode(HttpStatus.UNAUTHORIZED.value());
         response.setError(ex.getMessage());
         response.setMessage(ex.getMessage());
@@ -51,8 +51,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = {
         StorageException.class,
     })
-    public ResponseEntity<ResultResponseDTO<Object>> handleFileUploadException(Exception ex) {
-        ResultResponseDTO<Object> res = new ResultResponseDTO<Object>();
+    public ResponseEntity<ResultResponseDto<Object>> handleFileUploadException(Exception ex) {
+        ResultResponseDto<Object> res = new ResultResponseDto<Object>();
         res.setStatusCode(HttpStatus.BAD_REQUEST.value());
         res.setMessage(ex.getMessage());
         res.setError("Exception upload file...");
