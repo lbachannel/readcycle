@@ -3,20 +3,20 @@ package com.anlb.readcycle.mapper;
 import org.springframework.stereotype.Service;
 
 import com.anlb.readcycle.domain.Permission;
-import com.anlb.readcycle.dto.response.CreatePermissionResponseDTO;
+import com.anlb.readcycle.dto.response.CreatePermissionResponseDto;
 import com.anlb.readcycle.dto.response.UpdatePermissionResponseDTO;
 
 @Service
 public class PermissionMapper {
     
     /**
-     * Converts a {@link Permission} entity into a {@link CreatePermissionResponseDTO}.
+     * Converts a {@link Permission} entity into a {@link CreatePermissionResponseDto}.
      *
      * @param permission The {@link Permission} entity to be converted.
-     * @return A {@link CreatePermissionResponseDTO} containing the permission details.
+     * @return A {@link CreatePermissionResponseDto} containing the permission details.
      */
-    public CreatePermissionResponseDTO convertPermissionToCreatePermissionResponseDTO(Permission permission) {
-        CreatePermissionResponseDTO response = new CreatePermissionResponseDTO();
+    public CreatePermissionResponseDto convertPermissionToCreatePermissionResponseDTO(Permission permission) {
+        CreatePermissionResponseDto response = new CreatePermissionResponseDto();
         response.setId(permission.getId());
         response.setName(permission.getName());
         response.setApiPath(permission.getApiPath());

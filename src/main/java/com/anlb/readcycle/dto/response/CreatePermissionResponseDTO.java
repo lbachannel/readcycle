@@ -9,7 +9,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CreatePermissionResponseDTO {
+public class CreatePermissionResponseDto {
     private long id;
     private String name;
     private String apiPath;

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.anlb.readcycle.domain.Permission;
 import com.anlb.readcycle.dto.request.CreatePermissionRequestDto;
 import com.anlb.readcycle.dto.request.UpdatePermissionRequestDto;
-import com.anlb.readcycle.dto.response.CreatePermissionResponseDTO;
+import com.anlb.readcycle.dto.response.CreatePermissionResponseDto;
 import com.anlb.readcycle.dto.response.ResultPaginateDTO;
 import com.anlb.readcycle.dto.response.UpdatePermissionResponseDTO;
 import com.anlb.readcycle.mapper.PermissionMapper;
@@ -40,12 +40,12 @@ public class PermissionController {
      * {@code POST  /permissions} : Creates a new permission.
      *
      * @param permissionDTO The request data containing module, API path, and method for the permission.
-     * @return A {@link ResponseEntity} containing the created permission details in a {@link CreatePermissionResponseDTO}.
+     * @return A {@link ResponseEntity} containing the created permission details in a {@link CreatePermissionResponseDto}.
      * @throws InvalidException If the permission already exists or validation fails.
      */
     @PostMapping("/permissions")
     @ApiMessage("Create a permission")
-    public ResponseEntity<CreatePermissionResponseDTO> createPermission(@Valid @RequestBody CreatePermissionRequestDto permissionDTO) throws InvalidException {
+    public ResponseEntity<CreatePermissionResponseDto> createPermission(@Valid @RequestBody CreatePermissionRequestDto permissionDTO) throws InvalidException {
         // check if permission exists
         this.permissionService.permissionExists(permissionDTO.getModule(), permissionDTO.getApiPath(), permissionDTO.getMethod());
         Permission newPermission = this.permissionService.handleCreatePermission(permissionDTO);
