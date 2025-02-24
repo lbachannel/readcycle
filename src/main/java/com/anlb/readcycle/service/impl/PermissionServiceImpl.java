@@ -1,4 +1,4 @@
-package com.anlb.readcycle.service;
+package com.anlb.readcycle.service.impl;
 
 import java.util.Optional;
 
@@ -14,6 +14,7 @@ import com.anlb.readcycle.dto.request.UpdatePermissionRequestDto;
 import com.anlb.readcycle.dto.response.ResultPaginateDto;
 import com.anlb.readcycle.dto.response.ResultPaginateDto.Meta;
 import com.anlb.readcycle.repository.PermissionRepository;
+import com.anlb.readcycle.service.IPermissionService;
 import com.anlb.readcycle.utils.exception.InvalidException;
 
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class PermissionService {
+public class PermissionServiceImpl implements IPermissionService {
 
     private final PermissionRepository permissionRepository;
 
@@ -34,6 +35,7 @@ public class PermissionService {
      * @param method  The HTTP method of the permission.
      * @throws InvalidException if a permission with the same module, API path, and method already exists.
      */
+    @Override
     public void permissionExists(String module, String apiPath, String method) throws InvalidException {
         boolean checkPermissionExists = permissionRepository.existsByModuleAndApiPathAndMethod(
             module,
@@ -52,6 +54,7 @@ public class PermissionService {
      * @param permissionDTO The request data containing permission details such as name, API path, method, and module.
      * @return The newly created {@link Permission} entity after being saved to the repository.
      */
+    @Override
     public Permission handleCreatePermission(CreatePermissionRequestDto permissionDTO) {
         Permission newPermission = new Permission();
         newPermission.setName(permissionDTO.getName());
@@ -69,6 +72,7 @@ public class PermissionService {
      * @return The {@link Permission} entity if found.
      * @throws InvalidException if no permission with the given ID exists.
      */
+    @Override
     public Permission handleFindById(long id) throws InvalidException {
         Optional<Permission> permission = permissionRepository.findById(id);
         if (permission.isEmpty()) {
@@ -85,6 +89,7 @@ public class PermissionService {
      * @return The updated {@link Permission} entity after being saved to the repository.
      * @throws InvalidException if the permission with the given ID does not exist.
      */
+    @Override
     public Permission handleUpdatePermission(UpdatePermissionRequestDto permissionDTO) throws InvalidException {
         Permission updatePermission = handleFindById(permissionDTO.getId());
         updatePermission.setName(permissionDTO.getName());
@@ -101,6 +106,7 @@ public class PermissionService {
      * @param pageable The {@link Pageable} object defining pagination and sorting criteria.
      * @return A {@link ResultPaginateDto} containing the paginated list of permissions along with metadata.
      */
+    @Override
     public ResultPaginateDto handleGetPermissions(Specification<Permission> spec, Pageable pageable) {
         Page<Permission> dbPermissions = permissionRepository.findAll(spec, pageable);
         ResultPaginateDto resultPaginateDTO = new ResultPaginateDto();
@@ -125,6 +131,7 @@ public class PermissionService {
      * @param id The ID of the permission to be deleted.
      * @throws InvalidException if the permission with the given ID does not exist.
      */
+    @Override
     public void delete(long id) throws InvalidException {
         // delete permission_role
         Permission currentPermission = handleFindById(id);
