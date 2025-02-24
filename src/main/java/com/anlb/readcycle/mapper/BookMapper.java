@@ -8,20 +8,20 @@ import org.springframework.stereotype.Service;
 import com.anlb.readcycle.domain.Book;
 import com.anlb.readcycle.dto.request.CreateBorrowBookRequestDto.Details;
 import com.anlb.readcycle.dto.response.BookResponseDto;
-import com.anlb.readcycle.dto.response.CreateBookResponseDTO;
+import com.anlb.readcycle.dto.response.CreateBookResponseDto;
 import com.anlb.readcycle.dto.response.UpdateBookResponseDTO;
 
 @Service
 public class BookMapper {
     
     /**
-     * Converts a {@link Book} entity to a {@link CreateBookResponseDTO}.
+     * Converts a {@link Book} entity to a {@link CreateBookResponseDto}.
      *
      * @param book The {@link Book} entity to be converted.
-     * @return A {@link CreateBookResponseDTO} containing the book's details.
+     * @return A {@link CreateBookResponseDto} containing the book's details.
      */
-    public CreateBookResponseDTO convertBookToCreateBookResponseDTO(Book book) {
-        CreateBookResponseDTO response = new CreateBookResponseDTO();
+    public CreateBookResponseDto convertBookToCreateBookResponseDTO(Book book) {
+        CreateBookResponseDto response = new CreateBookResponseDto();
         response.setId(book.getId());
         response.setCategory(book.getCategory());
         response.setTitle(book.getTitle());

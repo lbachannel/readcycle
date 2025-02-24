@@ -10,7 +10,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CreateBookResponseDTO {
+public class CreateBookResponseDto {
     private long id;
     private String category;
     private String title;

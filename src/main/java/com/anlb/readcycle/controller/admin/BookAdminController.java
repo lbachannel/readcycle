@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.anlb.readcycle.domain.Book;
 import com.anlb.readcycle.dto.request.CreateBookRequestDto;
 import com.anlb.readcycle.dto.request.UpdateBookRequestDto;
-import com.anlb.readcycle.dto.response.CreateBookResponseDTO;
+import com.anlb.readcycle.dto.response.CreateBookResponseDto;
 import com.anlb.readcycle.dto.response.ResultPaginateDTO;
 import com.anlb.readcycle.dto.response.UpdateBookResponseDTO;
 import com.anlb.readcycle.mapper.BookMapper;
@@ -55,7 +55,7 @@ public class BookAdminController {
      * {@code POST  /books}  : Creates a new book.
      *
      * @param reqBook the request body containing book details.
-     * @return a {@link ResponseEntity} with the created {@link CreateBookResponseDTO}.
+     * @return a {@link ResponseEntity} with the created {@link CreateBookResponseDto}.
      * @throws InvalidException if the book creation process encounters an error.
      * 
      * @implNote This method delegates book creation to {@code bookService} and 
@@ -63,7 +63,7 @@ public class BookAdminController {
      */
     @PostMapping("/books")
     @ApiMessage("Create a book")
-    public ResponseEntity<CreateBookResponseDTO> createNewBook(@Valid @RequestBody CreateBookRequestDto reqBook) throws InvalidException {
+    public ResponseEntity<CreateBookResponseDto> createNewBook(@Valid @RequestBody CreateBookRequestDto reqBook) throws InvalidException {
         Book newBook = this.bookService.handleCreateBook(reqBook);
         return ResponseEntity
                     .status(HttpStatus.CREATED)
