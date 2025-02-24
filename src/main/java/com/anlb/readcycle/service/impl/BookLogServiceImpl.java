@@ -1,4 +1,4 @@
-package com.anlb.readcycle.service;
+package com.anlb.readcycle.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +12,9 @@ import com.anlb.readcycle.dto.activitylog.ActivityDescription;
 import com.anlb.readcycle.dto.activitylog.ActivityGroup;
 import com.anlb.readcycle.dto.activitylog.ActivityLog;
 import com.anlb.readcycle.dto.activitylog.ActivityType;
+import com.anlb.readcycle.service.IActivityLogService;
+import com.anlb.readcycle.service.IBookLogService;
+import com.anlb.readcycle.service.IUserService;
 import com.anlb.readcycle.utils.SecurityUtil;
 import com.anlb.readcycle.utils.exception.InvalidException;
 
@@ -21,10 +24,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class BookLogService {
+public class BookLogServiceImpl implements IBookLogService {
 
-    private final ActivityLogService activityLogService;
-    private final UserService userService;
+    private final IActivityLogService activityLogService;
+    private final IUserService userService;
 
     /**
      * Logs the creation of a new book, capturing its details as an activity log.
@@ -32,6 +35,7 @@ public class BookLogService {
      * @param book The {@link Book} object containing details of the created book.
      * @throws InvalidException If the current user's authentication token is invalid.
      */
+    @Override
     public void logCreateBook(Book book) throws InvalidException {
         String email = SecurityUtil.getCurrentUserLogin()
                             .orElseThrow(() -> new InvalidException("Access Token invalid"));
@@ -76,6 +80,7 @@ public class BookLogService {
      * @param newBook the updated {@code Book} object
      * @throws InvalidException if the current user cannot be retrieved from the security context
      */
+    @Override
     public void logUpdateBook(Book oldBook, Book newBook) {
         try {
             List<ActivityDescription> descriptions = new ArrayList<>();
@@ -140,6 +145,7 @@ public class BookLogService {
      * @param newActive the new active status of the book (true if active, false if inactive)
      * @throws InvalidException if the current user's access token is invalid
      */
+    @Override
     public void logToggleSoftDeleteBook(long id, boolean oldActive, boolean newActive) {
         try {
             List<ActivityDescription> descriptions = new ArrayList<>();
@@ -161,6 +167,7 @@ public class BookLogService {
      * @param id the ID of the deleted book
      * @throws InvalidException if the current user's access token is invalid
      */
+    @Override
     public void logDeleteBook(long id) {
         try {
             List<ActivityDescription> descriptions = new ArrayList<>();

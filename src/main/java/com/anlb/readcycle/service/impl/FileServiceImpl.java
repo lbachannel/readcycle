@@ -1,4 +1,4 @@
-package com.anlb.readcycle.service;
+package com.anlb.readcycle.service.impl;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,10 +16,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.anlb.readcycle.service.IFileService;
 import com.anlb.readcycle.utils.exception.StorageException;
 
 @Service
-public class FileService {
+public class FileServiceImpl implements IFileService {
     
     @Value("${anlb.upload-file.base-uri}")
     private String baseURI;
@@ -30,6 +31,7 @@ public class FileService {
      * @param folder the URI string representing the directory path.
      * @throws URISyntaxException if the provided folder string is not a valid URI.
      */
+    @Override
     public void createDirectory(String folder) throws URISyntaxException {
         URI uri = new URI(folder);
         Path path = Paths.get(uri);
@@ -51,6 +53,7 @@ public class FileService {
      * @throws URISyntaxException if the constructed URI is invalid.
      * @throws IOException if an I/O error occurs while storing the file.
      */
+    @Override
     public String store(MultipartFile file) throws URISyntaxException, IOException {
         // create unique filename
         String finalName = System.currentTimeMillis() + "-" + file.getOriginalFilename();
@@ -70,6 +73,7 @@ public class FileService {
      * @param file the uploaded {@link MultipartFile} to be validated.
      * @throws StorageException if the file is empty or has an invalid extension.
      */
+    @Override
     public void validationFile(MultipartFile file) throws StorageException {
         if (file == null || file.isEmpty()) {
             throw new StorageException("File is empty. Please upload a file.");
@@ -90,6 +94,7 @@ public class FileService {
      * @throws StorageException 
      * @throws IOException if an error occurs while deleting the file.
      */
+    @Override
     public void delete(String fileName) throws URISyntaxException, StorageException, IOException {
         URI uri = new URI(baseURI + "/" + fileName);
         Path path = Paths.get(uri);

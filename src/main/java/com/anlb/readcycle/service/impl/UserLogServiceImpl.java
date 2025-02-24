@@ -1,4 +1,4 @@
-package com.anlb.readcycle.service;
+package com.anlb.readcycle.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +11,8 @@ import com.anlb.readcycle.dto.activitylog.ActivityDescription;
 import com.anlb.readcycle.dto.activitylog.ActivityGroup;
 import com.anlb.readcycle.dto.activitylog.ActivityLog;
 import com.anlb.readcycle.dto.activitylog.ActivityType;
+import com.anlb.readcycle.service.IActivityLogService;
+import com.anlb.readcycle.service.IUserLogService;
 import com.anlb.readcycle.utils.exception.InvalidException;
 
 import lombok.RequiredArgsConstructor;
@@ -19,9 +21,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class UserLogService {
+public class UserLogServiceImpl implements IUserLogService {
 
-    private final ActivityLogService activityLogService;
+    private final IActivityLogService activityLogService;
 
     /**
      * Logs the creation of a new user.
@@ -30,6 +32,7 @@ public class UserLogService {
      * @param userLogin  the user performing the creation action
      * @throws InvalidException if any issue occurs during logging
      */
+    @Override
     public void logCreateUser(User user, User userLogin) throws InvalidException {
         try {
             List<ActivityDescription> descriptions = new ArrayList<>();
@@ -67,6 +70,7 @@ public class UserLogService {
      * @param newUser   the user's data after the update
      * @param userLogin the user performing the update action
      */
+    @Override
     public void logUpdateUser(User oldUser, User newUser, User userLogin) {
         try {
             List<ActivityDescription> descriptions = new ArrayList<>();
@@ -99,6 +103,7 @@ public class UserLogService {
      * @param id the ID of the deleted user
      * @param userLogin the user performing the deletion
      */
+    @Override
     public void logDeleteUser(long id, User userLogin) {
         try {
             List<ActivityDescription> descriptions = new ArrayList<>();

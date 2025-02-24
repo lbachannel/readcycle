@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.anlb.readcycle.dto.response.file.UploadFileResponseDto;
-import com.anlb.readcycle.service.FileService;
+import com.anlb.readcycle.service.IFileService;
 import com.anlb.readcycle.utils.anotation.ApiMessage;
 import com.anlb.readcycle.utils.exception.StorageException;
 
@@ -30,7 +30,7 @@ public class FileController {
     @Value("${anlb.upload-file.base-uri}")
     private String baseURI;
 
-    private final FileService fileService;
+    private final IFileService fileService;
 
     /**
      * {@code POST  /file/upload} : upload of a single file.

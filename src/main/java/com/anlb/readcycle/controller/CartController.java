@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.anlb.readcycle.service.CartService;
+import com.anlb.readcycle.service.ICartService;
 import com.anlb.readcycle.utils.anotation.ApiMessage;
 
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CartController {
 
-    private final CartService cartService;
+    private final ICartService cartService;
     
     @PostMapping("/remove-carts")
     @ApiMessage("Delete carts")

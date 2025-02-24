@@ -8,7 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import com.anlb.readcycle.dto.request.CreateUserRequestDto;
-import com.anlb.readcycle.service.UserService;
+import com.anlb.readcycle.service.IUserService;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
@@ -18,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserValidator implements ConstraintValidator<UserChecked, CreateUserRequestDto> {
 
-    private final UserService userService;
+    private final IUserService userService;
 
     @Override
     public boolean isValid(CreateUserRequestDto user, ConstraintValidatorContext context) {

@@ -1,4 +1,4 @@
-package com.anlb.readcycle.service;
+package com.anlb.readcycle.service.impl;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -18,13 +18,14 @@ import com.anlb.readcycle.dto.response.ResultPaginateDto;
 import com.anlb.readcycle.dto.response.ResultPaginateDto.Meta;
 import com.anlb.readcycle.repository.PermissionRepository;
 import com.anlb.readcycle.repository.RoleRepository;
+import com.anlb.readcycle.service.IRoleService;
 import com.anlb.readcycle.utils.exception.InvalidException;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class RoleService {
+public class RoleServiceImpl implements IRoleService {
 
     private final RoleRepository roleRepository;
     private final PermissionRepository permissionRepository;
@@ -36,6 +37,7 @@ public class RoleService {
      * @param name The name of the role to check.
      * @throws InvalidException if a role with the given name already exists.
      */
+    @Override
     public void existByName(String name) throws InvalidException {
         boolean roleExits = roleRepository.existsByName(name);
         if (roleExits) {
@@ -49,6 +51,7 @@ public class RoleService {
      * @param id The ID of the role to check.
      * @throws InvalidException if the role does not exist.
      */
+    @Override
     public void checkRoleExitsById(long id) throws InvalidException {
         if (!roleRepository.existsById(id)) {
             throw new InvalidException("Role with id: " + id + " does not exist.");
@@ -62,6 +65,7 @@ public class RoleService {
      * @param roleDTO The {@link CreateRoleRequestDto} containing role details.
      * @return The newly created {@link Role} entity.
      */
+    @Override
     public Role handleCreateRole(CreateRoleRequestDto roleDTO) {
         Role newRole = new Role();
         newRole.setName(roleDTO.getName());
@@ -85,6 +89,7 @@ public class RoleService {
      * @param id The ID of the role to retrieve.
      * @return An {@link Optional} containing the {@link Role} if found, or an empty {@link Optional} if not.
      */
+    @Override
     public Optional<Role> handleFindById(long id) {
         return roleRepository.findById(id);
     }
@@ -96,6 +101,7 @@ public class RoleService {
      * @return the {@link Role} entity if found
      * @throws InvalidException if no role with the given name exists
      */
+    @Override
     public Role handleFindByName(String name) throws InvalidException {
         Role role = roleRepository.findByName(name);
         if (role == null) {
@@ -111,6 +117,7 @@ public class RoleService {
      * @return The updated {@link Role} entity.
      * @throws NoSuchElementException if the role with the given ID does not exist.
      */
+    @Override
     public Role handleUpdateRole(UpdateRoleRequestDto roleDTO) {
         Role updateRole = roleRepository.findById(roleDTO.getId()).get();
         updateRole.setName(roleDTO.getName());
@@ -135,6 +142,7 @@ public class RoleService {
      * @param pageable The {@link Pageable} object containing pagination and sorting information.
      * @return A {@link ResultPaginateDto} containing the paginated list of roles and metadata.
      */
+    @Override
     public ResultPaginateDto handleGetRoles(Specification<Role> spec, Pageable pageable) {
         Page<Role> dbRoles = roleRepository.findAll(spec, pageable);
         ResultPaginateDto resultPaginateDTO = new ResultPaginateDto();
@@ -156,6 +164,7 @@ public class RoleService {
      *
      * @param id The ID of the role to be deleted.
      */
+    @Override
     public void handleDeleteRoleById(long id) {
         roleRepository.deleteById(id);
     }
@@ -167,6 +176,7 @@ public class RoleService {
      * @return The {@link Role} object if found.
      * @throws InvalidException if the role with the given ID does not exist.
      */
+    @Override
     public Role handleGetRoleById(long id) throws InvalidException {
         Optional<Role> role = roleRepository.findById(id);
         if (role.isEmpty()) {

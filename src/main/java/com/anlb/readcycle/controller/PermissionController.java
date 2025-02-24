@@ -20,7 +20,7 @@ import com.anlb.readcycle.dto.response.CreatePermissionResponseDto;
 import com.anlb.readcycle.dto.response.ResultPaginateDto;
 import com.anlb.readcycle.dto.response.UpdatePermissionResponseDto;
 import com.anlb.readcycle.mapper.PermissionMapper;
-import com.anlb.readcycle.service.PermissionService;
+import com.anlb.readcycle.service.IPermissionService;
 import com.anlb.readcycle.utils.anotation.ApiMessage;
 import com.anlb.readcycle.utils.exception.InvalidException;
 import com.turkraft.springfilter.boot.Filter;
@@ -33,7 +33,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PermissionController {
 
-    private final PermissionService permissionService;
+    private final IPermissionService permissionService;
     private final PermissionMapper permissionMapper;
 
     /**

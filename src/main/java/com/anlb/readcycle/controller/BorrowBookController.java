@@ -19,8 +19,8 @@ import com.anlb.readcycle.domain.Cart;
 import com.anlb.readcycle.dto.request.CreateBorrowBookRequestDto;
 import com.anlb.readcycle.dto.response.CreateCartResponseDto;
 import com.anlb.readcycle.mapper.CartMapper;
-import com.anlb.readcycle.service.BorrowBookService;
-import com.anlb.readcycle.service.CartService;
+import com.anlb.readcycle.service.IBorrowBookService;
+import com.anlb.readcycle.service.ICartService;
 import com.anlb.readcycle.utils.anotation.ApiMessage;
 import com.anlb.readcycle.utils.exception.InvalidException;
 
@@ -31,9 +31,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BorrowBookController {
 
-    private final CartService cartService;
+    private final ICartService cartService;
     private final CartMapper cartMapper;
-    private final BorrowBookService borrowBookService;
+    private final IBorrowBookService borrowBookService;
     
     @PostMapping("/add-to-cart")
     @ApiMessage("Add book to cart")

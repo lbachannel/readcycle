@@ -20,7 +20,7 @@ import com.anlb.readcycle.dto.response.CreateRoleResponseDto;
 import com.anlb.readcycle.dto.response.ResultPaginateDto;
 import com.anlb.readcycle.dto.response.UpdateRoleResponseDto;
 import com.anlb.readcycle.mapper.RoleMapper;
-import com.anlb.readcycle.service.RoleService;
+import com.anlb.readcycle.service.IRoleService;
 import com.anlb.readcycle.utils.anotation.ApiMessage;
 import com.anlb.readcycle.utils.exception.InvalidException;
 import com.turkraft.springfilter.boot.Filter;
@@ -33,7 +33,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class RoleController {
     
-    private final RoleService roleService;
+    private final IRoleService roleService;
     private final RoleMapper roleMapper;
 
     /**

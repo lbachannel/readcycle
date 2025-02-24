@@ -1,4 +1,4 @@
-package com.anlb.readcycle.service;
+package com.anlb.readcycle.service.impl;
 
 import java.nio.charset.StandardCharsets;
 
@@ -11,6 +11,7 @@ import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
 import com.anlb.readcycle.domain.User;
+import com.anlb.readcycle.service.IEmailService;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -20,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class EmailService {
+public class EmailServiceImpl implements IEmailService {
 
     private final JavaMailSender javaMailSender;
     private final SpringTemplateEngine templateEngine;
@@ -34,6 +35,7 @@ public class EmailService {
      * @param isMultipart Indicates whether the email supports multipart content.
      * @param isHtml     Indicates whether the email content is in HTML format.
      */
+    @Override
     public void sendEmailSync(String to, String subject, String content, boolean isMultipart, boolean isHtml) {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         try {
@@ -55,6 +57,7 @@ public class EmailService {
      * @param templateName The name of the email template to be processed.
      */
     @Async
+    @Override
     public void sendEmailFromTemplateSync(User user, String subject, String templateName) {
         Context context = new Context();
         context.setVariable("email", user.getEmail());

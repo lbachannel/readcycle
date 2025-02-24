@@ -1,4 +1,4 @@
-package com.anlb.readcycle.service;
+package com.anlb.readcycle.service.impl;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -25,6 +25,9 @@ import com.anlb.readcycle.mapper.UserMapper;
 import com.anlb.readcycle.dto.response.LoginResponseDto.UserGetAccount;
 import com.anlb.readcycle.dto.response.LoginResponseDto.UserLogin;
 import com.anlb.readcycle.repository.UserRepository;
+import com.anlb.readcycle.service.IRoleService;
+import com.anlb.readcycle.service.IUserLogService;
+import com.anlb.readcycle.service.IUserService;
 import com.anlb.readcycle.utils.SecurityUtil;
 import com.anlb.readcycle.utils.exception.InvalidException;
 import com.anlb.readcycle.utils.exception.RegisterValidator;
@@ -34,13 +37,13 @@ import lombok.RequiredArgsConstructor;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class UserService {
+public class UserServiceImpl implements IUserService {
     private final UserRepository userRepository;
     private final SecurityUtil securityUtil;
     private final JwtDecoder jwtDecoder;
-    private final RoleService roleService;
+    private final IRoleService roleService;
     private final UserMapper userMapper;
-    private final UserLogService userLogService;
+    private final IUserLogService userLogService;
 
     /**
      * Handles the registration process for a new member.
@@ -51,6 +54,7 @@ public class UserService {
      * @param user The {@link User} entity to be registered.
      * @return The saved {@link User} entity with the verification token.
      */
+    @Override
     public User handleRegisterMember(User user) {
         String verifyEmailToken = securityUtil.createVerifyEmailToken(user.getEmail());
         user.setEmailVerified(false);
@@ -65,6 +69,7 @@ public class UserService {
      * @return the saved user with updated information
      * @throws InvalidException if the current user cannot be retrieved due to an invalid access token
      */
+    @Override
     public User handleCreateUser(User user) throws InvalidException {
         user.setEmailVerified(true);
         user = userRepository.save(user);
@@ -81,6 +86,7 @@ public class UserService {
      * @param email The email address to check.
      * @return {@code true} if a user with the given email exists, {@code false} otherwise.
      */
+    @Override
     public boolean handleCheckExistsByEmail(String email) {
         return userRepository.existsByEmail(email);
     }
@@ -92,6 +98,7 @@ public class UserService {
      * @return The {@code User} object corresponding to the given username.
      *
      */
+    @Override
     public User handleGetUserByUsername(String username) throws InvalidException {
         User user = userRepository.findByEmail(username);
         if (user == null) {
@@ -113,6 +120,7 @@ public class UserService {
      * @return The updated {@link User} object with email verification set to {@code true}.
      * @throws NoSuchElementException if the token is not found in the repository.
      */
+    @Override
     public User handleVerifyEmail(String token) {
         User user = userRepository.findByVerificationEmailToken(token).get();
         user.setEmailVerified(true);
@@ -128,6 +136,7 @@ public class UserService {
      * @return {@code true} if the token is valid and not expired, otherwise {@code false}.
      * @throws JwtException if the token is malformed or cannot be decoded.
      */
+    @Override
     public boolean validateToken(String token) {
         try {
             Jwt jwt = jwtDecoder.decode(token);
@@ -148,6 +157,7 @@ public class UserService {
      * @param token The JWT token from which the email will be extracted.
      * @return The email contained in the token, or {@code null} if extraction fails.
      */
+    @Override
     public String extractEmailFromToken(String token) {
         try {
             Jwt jwt = jwtDecoder.decode(token);
@@ -157,6 +167,7 @@ public class UserService {
         }
     }
 
+    @Override
     public User handleFindUserByVerifyToken(String token) {
         return userRepository.findUserByVerificationEmailToken(token);
     }
@@ -166,6 +177,7 @@ public class UserService {
      *
      * @param email The email of the user to be deleted.
      */
+    @Override
     public void handleDeleteUserByEmail(String email) {
         userRepository.deleteByEmail(email);
     }
@@ -180,6 +192,7 @@ public class UserService {
      * @param refreshToken the new refresh token to be set for the user
      * @throws InvalidException if the current user's email is not available (indicating an invalid access token)
      */
+    @Override
     public void handleUpdateRefreshTokenIntoUser(String refreshToken, String email) throws InvalidException {
         User user = handleGetUserByUsername(email);
         if (user != null) {
@@ -195,6 +208,7 @@ public class UserService {
      * @param decodedToken the decoded JWT containing the user's subject (email or username)
      * @throws InvalidException if no user is found with the provided refresh token and email
      */
+    @Override
     public void handleGetUserByRefreshTokenAndEmail(String refreshToken, Jwt decodedToken) throws InvalidException {  
         User dbUser = userRepository.findByRefreshTokenAndEmail(refreshToken, decodedToken.getSubject());
         if (dbUser == null) {
@@ -209,6 +223,7 @@ public class UserService {
      * @return a {@link LoginResponseDto} containing user details and an access token
      * @throws InvalidException if the user associated with the token does not exist
      */
+    @Override
     public LoginResponseDto generateLoginResponseFromToken (Jwt decodedToken) throws InvalidException {
         User dbUser = handleGetUserByUsername(decodedToken.getSubject());
         UserLogin user = new UserLogin(
@@ -234,6 +249,7 @@ public class UserService {
      * @param pageable The pagination and sorting information.
      * @return A {@link ResultPaginateDto} containing the paginated user list and metadata.
      */
+    @Override
     public ResultPaginateDto handleGetAllUsers(Specification<User> spec, Pageable pageable) {
         Page<User> pageUser = userRepository.findAll(spec, pageable);
         ResultPaginateDto rs = new ResultPaginateDto();
@@ -264,6 +280,7 @@ public class UserService {
      * @return A {@link UserGetAccount} containing the authenticated user's details.
      * @throws InvalidException If the user is not found or their account is invalid.
      */
+    @Override
     public UserGetAccount getCurrentUserAccount() throws InvalidException {
         String email = SecurityUtil.getCurrentUserLogin().isPresent()
                         ? SecurityUtil.getCurrentUserLogin().get() : "";
@@ -278,6 +295,7 @@ public class UserService {
      * @param userLogin The UserLogin object containing user details.
      * @return A UserGetAccount object that encapsulates the user information.
      */
+    @Override
     public UserGetAccount convertUserLoginToUserGetAccount(UserLogin userLogin) {
         UserGetAccount userGetAccount = new UserGetAccount();
         userGetAccount.setUser(userLogin);
@@ -291,6 +309,7 @@ public class UserService {
      * @return the User object if found
      * @throws InvalidException if no user with the given ID exists
      */
+    @Override
     public User handleGetUserById(long id) throws InvalidException {
         User user = userRepository.findById(id).orElse(null);
         if (user == null) {
@@ -310,6 +329,7 @@ public class UserService {
      * @return the updated and saved {@link User} entity
      * @throws InvalidException if the access token is invalid or the current user cannot be retrieved
      */
+    @Override
     public User handleUpdateUser(UpdateUserRequestDto reqUser) throws InvalidException {
         User updateUser = handleGetUserById(reqUser.getId());
         User oldUser = updateUser.clone();
@@ -333,6 +353,7 @@ public class UserService {
      * @param id the ID of the user to be deleted
      * @throws InvalidException if the access token is invalid, or the user attempts to delete their own account
      */
+    @Override
     public void handleDeleteUserById(long id) throws InvalidException {
         String email = SecurityUtil.getCurrentUserLogin()
                             .orElseThrow(() -> new InvalidException("Access Token invalid"));
