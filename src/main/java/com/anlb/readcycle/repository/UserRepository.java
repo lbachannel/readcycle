@@ -16,4 +16,6 @@ public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificat
     void deleteByEmail(String email);
 
     User findByRefreshTokenAndEmail(String token, String email);
+
+    User findUserByVerificationEmailToken(String token);
 }
