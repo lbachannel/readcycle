@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.anlb.readcycle.domain.Permission;
 import com.anlb.readcycle.dto.request.CreatePermissionRequestDto;
-import com.anlb.readcycle.dto.request.UpdatePermissionRequestDTO;
+import com.anlb.readcycle.dto.request.UpdatePermissionRequestDto;
 import com.anlb.readcycle.dto.response.CreatePermissionResponseDTO;
 import com.anlb.readcycle.dto.response.ResultPaginateDTO;
 import com.anlb.readcycle.dto.response.UpdatePermissionResponseDTO;
@@ -63,7 +63,7 @@ public class PermissionController {
      */
     @PutMapping("/permissions")
     @ApiMessage("Update a permission")
-    public ResponseEntity<UpdatePermissionResponseDTO> updatePermission(@Valid @RequestBody UpdatePermissionRequestDTO permissionDTO) throws InvalidException {
+    public ResponseEntity<UpdatePermissionResponseDTO> updatePermission(@Valid @RequestBody UpdatePermissionRequestDto permissionDTO) throws InvalidException {
         // check if permission exists
         this.permissionService.permissionExists(permissionDTO.getModule(), permissionDTO.getApiPath(), permissionDTO.getMethod());
         Permission updatePermission = this.permissionService.handleUpdatePermission(permissionDTO);

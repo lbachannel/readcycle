@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.anlb.readcycle.domain.Permission;
 import com.anlb.readcycle.dto.request.CreatePermissionRequestDto;
-import com.anlb.readcycle.dto.request.UpdatePermissionRequestDTO;
+import com.anlb.readcycle.dto.request.UpdatePermissionRequestDto;
 import com.anlb.readcycle.dto.response.ResultPaginateDTO;
 import com.anlb.readcycle.dto.response.ResultPaginateDTO.Meta;
 import com.anlb.readcycle.repository.PermissionRepository;
@@ -81,11 +81,11 @@ public class PermissionService {
      * Updates an existing {@link Permission} entity based on the provided request data.
      * If the permission does not exist, an {@link InvalidException} is thrown.
      *
-     * @param permissionDTO The {@link UpdatePermissionRequestDTO} containing updated permission details.
+     * @param permissionDTO The {@link UpdatePermissionRequestDto} containing updated permission details.
      * @return The updated {@link Permission} entity after being saved to the repository.
      * @throws InvalidException if the permission with the given ID does not exist.
      */
-    public Permission handleUpdatePermission(UpdatePermissionRequestDTO permissionDTO) throws InvalidException {
+    public Permission handleUpdatePermission(UpdatePermissionRequestDto permissionDTO) throws InvalidException {
         Permission updatePermission = this.handleFindById(permissionDTO.getId());
         updatePermission.setName(permissionDTO.getName());
         updatePermission.setApiPath(permissionDTO.getApiPath());
