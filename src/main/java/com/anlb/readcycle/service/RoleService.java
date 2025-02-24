@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import com.anlb.readcycle.domain.Permission;
 import com.anlb.readcycle.domain.Role;
 import com.anlb.readcycle.dto.request.CreateRoleRequestDto;
-import com.anlb.readcycle.dto.request.UpdateRoleRequestDTO;
+import com.anlb.readcycle.dto.request.UpdateRoleRequestDto;
 import com.anlb.readcycle.dto.response.ResultPaginateDTO;
 import com.anlb.readcycle.dto.response.ResultPaginateDTO.Meta;
 import com.anlb.readcycle.repository.PermissionRepository;
@@ -107,11 +107,11 @@ public class RoleService {
     /**
      * Updates an existing {@link Role} entity with the provided details.
      *
-     * @param roleDTO The {@link UpdateRoleRequestDTO} containing updated role information.
+     * @param roleDTO The {@link UpdateRoleRequestDto} containing updated role information.
      * @return The updated {@link Role} entity.
      * @throws NoSuchElementException if the role with the given ID does not exist.
      */
-    public Role handleUpdateRole(UpdateRoleRequestDTO roleDTO) {
+    public Role handleUpdateRole(UpdateRoleRequestDto roleDTO) {
         Role updateRole = this.roleRepository.findById(roleDTO.getId()).get();
         updateRole.setName(roleDTO.getName());
         updateRole.setDescription(roleDTO.getDescription());

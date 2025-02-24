@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.anlb.readcycle.domain.Role;
 import com.anlb.readcycle.dto.request.CreateRoleRequestDto;
-import com.anlb.readcycle.dto.request.UpdateRoleRequestDTO;
+import com.anlb.readcycle.dto.request.UpdateRoleRequestDto;
 import com.anlb.readcycle.dto.response.CreateRoleResponseDTO;
 import com.anlb.readcycle.dto.response.ResultPaginateDTO;
 import com.anlb.readcycle.dto.response.UpdateRoleResponseDTO;
@@ -76,7 +76,7 @@ public class RoleController {
      */
     @PutMapping("/roles")
     @ApiMessage("Update a role")
-    public ResponseEntity<UpdateRoleResponseDTO> updateRole(@Valid @RequestBody UpdateRoleRequestDTO roleDTO) throws InvalidException {
+    public ResponseEntity<UpdateRoleResponseDTO> updateRole(@Valid @RequestBody UpdateRoleRequestDto roleDTO) throws InvalidException {
         // check if role does not exits. then throw exception
         this.roleService.checkRoleExitsById(roleDTO.getId());
         Role updateRole = this.roleService.handleUpdateRole(roleDTO);

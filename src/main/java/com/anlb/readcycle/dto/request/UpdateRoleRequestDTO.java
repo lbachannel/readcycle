@@ -10,7 +10,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UpdateRoleRequestDTO {
+public class UpdateRoleRequestDto {
     private long id;
     @NotBlank(message = "Name is required")
     private String name;
