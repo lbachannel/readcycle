@@ -15,7 +15,7 @@ import com.anlb.readcycle.dto.response.LoginResponseDto;
 import com.anlb.readcycle.dto.response.LoginResponseDto.UserLogin;
 import com.anlb.readcycle.dto.response.RegisterResponseDto;
 import com.anlb.readcycle.dto.response.UpdateUserResponseDto;
-import com.anlb.readcycle.dto.response.UserResponseDTO;
+import com.anlb.readcycle.dto.response.UserResponseDto;
 import com.anlb.readcycle.service.RoleService;
 import com.anlb.readcycle.utils.SecurityUtil;
 import com.anlb.readcycle.utils.exception.InvalidException;
@@ -121,14 +121,14 @@ public class UserMapper {
     }
 
     /**
-     * Converts a {@link User} entity to a {@link UserResponseDTO}.
+     * Converts a {@link User} entity to a {@link UserResponseDto}.
      *
      * @param user The {@link User} entity to convert.
-     * @return A {@link UserResponseDTO} containing user details.
+     * @return A {@link UserResponseDto} containing user details.
      */
-    public UserResponseDTO convertUserToUserResponseDTO(User user) {
-        UserResponseDTO response = new UserResponseDTO();
-        UserResponseDTO.RoleUser roleUser = new UserResponseDTO.RoleUser();
+    public UserResponseDto convertUserToUserResponseDTO(User user) {
+        UserResponseDto response = new UserResponseDto();
+        UserResponseDto.RoleUser roleUser = new UserResponseDto.RoleUser();
 
         response.setId(user.getId());
         response.setEmail(user.getEmail());

@@ -20,7 +20,7 @@ import com.anlb.readcycle.domain.User;
 import com.anlb.readcycle.dto.request.UpdateUserRequestDto;
 import com.anlb.readcycle.dto.response.LoginResponseDto;
 import com.anlb.readcycle.dto.response.ResultPaginateDto;
-import com.anlb.readcycle.dto.response.UserResponseDTO;
+import com.anlb.readcycle.dto.response.UserResponseDto;
 import com.anlb.readcycle.mapper.UserMapper;
 import com.anlb.readcycle.dto.response.LoginResponseDto.UserGetAccount;
 import com.anlb.readcycle.dto.response.LoginResponseDto.UserLogin;
@@ -244,7 +244,7 @@ public class UserService {
         rs.setMeta(mt);
 
         // remove sensitive data
-        List<UserResponseDTO> listUser = pageUser.getContent()
+        List<UserResponseDto> listUser = pageUser.getContent()
                                             .stream()
                                             .map(item -> this.userMapper.convertUserToUserResponseDTO(item))
                                             .collect(Collectors.toList());
