@@ -3,6 +3,7 @@ package com.anlb.readcycle.utils.exception;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -102,6 +103,8 @@ public class RegisterValidator implements ConstraintValidator<RegisterChecked, R
             }
         }
 
+        String regexPassword = "(?=.*[@#$%^&+=!]).{10,}$";
+
         // validation password
         if (StringUtils.isBlank(user.getPassword())) {
             context.buildConstraintViolationWithTemplate("Password is required")
@@ -109,8 +112,15 @@ public class RegisterValidator implements ConstraintValidator<RegisterChecked, R
                     .addConstraintViolation()
                     .disableDefaultConstraintViolation();
             valid = false;
-        } else if (2 >= user.getPassword().length()) {
-            context.buildConstraintViolationWithTemplate("Password must be greater than or equal to 3")
+        } else if (9 >= user.getPassword().length()) {
+            context.buildConstraintViolationWithTemplate("Password must be greater than or equal to 10")
+                    .addPropertyNode("password")
+                    .addConstraintViolation()
+                    .disableDefaultConstraintViolation();
+            valid = false;
+        } else if (!Pattern.matches(regexPassword, user.getPassword())) {
+            context.buildConstraintViolationWithTemplate(
+                    "Password must contain at least one special character")
                     .addPropertyNode("password")
                     .addConstraintViolation()
                     .disableDefaultConstraintViolation();
@@ -124,8 +134,15 @@ public class RegisterValidator implements ConstraintValidator<RegisterChecked, R
                     .addConstraintViolation()
                     .disableDefaultConstraintViolation();
             valid = false;
-        } else if (2 >= user.getConfirmPassword().length()) {
-            context.buildConstraintViolationWithTemplate("Confirm password must be greater than or equal to 3")
+        } else if (9 >= user.getConfirmPassword().length()) {
+            context.buildConstraintViolationWithTemplate("Confirm password must be greater than or equal to 10")
+                    .addPropertyNode("confirmPassword")
+                    .addConstraintViolation()
+                    .disableDefaultConstraintViolation();
+            valid = false;
+        } else if (!Pattern.matches(regexPassword, user.getConfirmPassword())) {
+            context.buildConstraintViolationWithTemplate(
+                    "Confirm password must contain at least one special character")
                     .addPropertyNode("confirmPassword")
                     .addConstraintViolation()
                     .disableDefaultConstraintViolation();
