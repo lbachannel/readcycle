@@ -10,7 +10,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UpdateBookResponseDTO {
+public class UpdateBookResponseDto {
     private long id;
     private String category;
     private String title;

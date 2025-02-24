@@ -9,7 +9,7 @@ import com.anlb.readcycle.domain.Book;
 import com.anlb.readcycle.dto.request.CreateBorrowBookRequestDto.Details;
 import com.anlb.readcycle.dto.response.BookResponseDto;
 import com.anlb.readcycle.dto.response.CreateBookResponseDto;
-import com.anlb.readcycle.dto.response.UpdateBookResponseDTO;
+import com.anlb.readcycle.dto.response.UpdateBookResponseDto;
 
 @Service
 public class BookMapper {
@@ -38,13 +38,13 @@ public class BookMapper {
     }
 
     /**
-     * Converts a {@link Book} entity to an {@link UpdateBookResponseDTO}.
+     * Converts a {@link Book} entity to an {@link UpdateBookResponseDto}.
      *
      * @param updateBook The {@link Book} entity to be converted.
-     * @return An {@link UpdateBookResponseDTO} containing the book's updated details.
+     * @return An {@link UpdateBookResponseDto} containing the book's updated details.
      */
-    public UpdateBookResponseDTO convertBookToUpdateBookResponseDTO(Book updateBook) {
-        UpdateBookResponseDTO response = new UpdateBookResponseDTO();
+    public UpdateBookResponseDto convertBookToUpdateBookResponseDTO(Book updateBook) {
+        UpdateBookResponseDto response = new UpdateBookResponseDto();
         response.setId(updateBook.getId());
         response.setCategory(updateBook.getCategory());
         response.setTitle(updateBook.getTitle());

@@ -18,7 +18,7 @@ import com.anlb.readcycle.dto.request.CreateBookRequestDto;
 import com.anlb.readcycle.dto.request.UpdateBookRequestDto;
 import com.anlb.readcycle.dto.response.CreateBookResponseDto;
 import com.anlb.readcycle.dto.response.ResultPaginateDto;
-import com.anlb.readcycle.dto.response.UpdateBookResponseDTO;
+import com.anlb.readcycle.dto.response.UpdateBookResponseDto;
 import com.anlb.readcycle.mapper.BookMapper;
 import com.anlb.readcycle.service.BookService;
 import com.anlb.readcycle.utils.anotation.ApiMessage;
@@ -74,12 +74,12 @@ public class BookAdminController {
      * {@code PUT  /books}  : Updates an existing Book.
      * 
      * @param reqBook The request body containing the updated book details.
-     * @return A {@link ResponseEntity} containing an {@link UpdateBookResponseDTO} with the updated book details.
+     * @return A {@link ResponseEntity} containing an {@link UpdateBookResponseDto} with the updated book details.
      * @throws InvalidException If the update request is invalid.
      */
     @PutMapping("/books")
     @ApiMessage("Update book")
-    public ResponseEntity<UpdateBookResponseDTO> updateBook(@RequestBody UpdateBookRequestDto reqBook) throws InvalidException {
+    public ResponseEntity<UpdateBookResponseDto> updateBook(@RequestBody UpdateBookRequestDto reqBook) throws InvalidException {
         Book updateBook = this.bookService.handleUpdateBook(reqBook);
         return ResponseEntity
                     .ok(this.bookMapper.convertBookToUpdateBookResponseDTO(updateBook));
