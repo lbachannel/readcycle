@@ -14,8 +14,8 @@ import com.anlb.readcycle.domain.Permission;
 import com.anlb.readcycle.domain.Role;
 import com.anlb.readcycle.dto.request.CreateRoleRequestDto;
 import com.anlb.readcycle.dto.request.UpdateRoleRequestDto;
-import com.anlb.readcycle.dto.response.ResultPaginateDTO;
-import com.anlb.readcycle.dto.response.ResultPaginateDTO.Meta;
+import com.anlb.readcycle.dto.response.ResultPaginateDto;
+import com.anlb.readcycle.dto.response.ResultPaginateDto.Meta;
 import com.anlb.readcycle.repository.PermissionRepository;
 import com.anlb.readcycle.repository.RoleRepository;
 import com.anlb.readcycle.utils.exception.InvalidException;
@@ -133,11 +133,11 @@ public class RoleService {
      *
      * @param spec     The {@link Specification} used to filter roles.
      * @param pageable The {@link Pageable} object containing pagination and sorting information.
-     * @return A {@link ResultPaginateDTO} containing the paginated list of roles and metadata.
+     * @return A {@link ResultPaginateDto} containing the paginated list of roles and metadata.
      */
-    public ResultPaginateDTO handleGetRoles(Specification<Role> spec, Pageable pageable) {
+    public ResultPaginateDto handleGetRoles(Specification<Role> spec, Pageable pageable) {
         Page<Role> dbRoles = this.roleRepository.findAll(spec, pageable);
-        ResultPaginateDTO resultPaginateDTO = new ResultPaginateDTO();
+        ResultPaginateDto resultPaginateDTO = new ResultPaginateDto();
         Meta meta = new Meta();
         meta.setPage(pageable.getPageNumber() + 1);
         meta.setPageSize(pageable.getPageSize());

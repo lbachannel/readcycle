@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.anlb.readcycle.domain.User;
 import com.anlb.readcycle.dto.activitylog.ActivityLog;
-import com.anlb.readcycle.dto.response.ResultPaginateDTO;
+import com.anlb.readcycle.dto.response.ResultPaginateDto;
 import com.anlb.readcycle.repository.ActivityLogRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -35,12 +35,12 @@ public class ActivityLogService {
      *
      * @param spec     The {@link Specification} used to filter the activity logs.
      * @param pageable The {@link Pageable} object containing pagination details.
-     * @return A {@link ResultPaginateDTO} containing the list of activity logs and pagination metadata.
+     * @return A {@link ResultPaginateDto} containing the list of activity logs and pagination metadata.
      */
-    public ResultPaginateDTO handleGetAllActivityLog(Specification<ActivityLog> spec, Pageable pageable) {
+    public ResultPaginateDto handleGetAllActivityLog(Specification<ActivityLog> spec, Pageable pageable) {
         Page<ActivityLog> pageActivityLog = this.activityLogRepository.findAll(spec, pageable);
-        ResultPaginateDTO response = new ResultPaginateDTO();
-        ResultPaginateDTO.Meta meta = new ResultPaginateDTO.Meta();
+        ResultPaginateDto response = new ResultPaginateDto();
+        ResultPaginateDto.Meta meta = new ResultPaginateDto.Meta();
 
         meta.setPage(pageable.getPageNumber() + 1);
         meta.setPageSize(pageable.getPageSize());

@@ -17,7 +17,7 @@ import com.anlb.readcycle.domain.Role;
 import com.anlb.readcycle.dto.request.CreateRoleRequestDto;
 import com.anlb.readcycle.dto.request.UpdateRoleRequestDto;
 import com.anlb.readcycle.dto.response.CreateRoleResponseDto;
-import com.anlb.readcycle.dto.response.ResultPaginateDTO;
+import com.anlb.readcycle.dto.response.ResultPaginateDto;
 import com.anlb.readcycle.dto.response.UpdateRoleResponseDTO;
 import com.anlb.readcycle.mapper.RoleMapper;
 import com.anlb.readcycle.service.RoleService;
@@ -91,11 +91,11 @@ public class RoleController {
      *
      * @param spec     The filtering criteria for retrieving roles.
      * @param pageable The pagination information.
-     * @return A {@link ResponseEntity} containing a paginated list of roles as a {@link ResultPaginateDTO}.
+     * @return A {@link ResponseEntity} containing a paginated list of roles as a {@link ResultPaginateDto}.
      */
     @GetMapping("/roles")
     @ApiMessage("Get roles")
-    public ResponseEntity<ResultPaginateDTO> getPermissions(@Filter Specification<Role> spec, Pageable pageable) {
+    public ResponseEntity<ResultPaginateDto> getPermissions(@Filter Specification<Role> spec, Pageable pageable) {
         return ResponseEntity.ok(this.roleService.handleGetRoles(spec, pageable));
     }
 

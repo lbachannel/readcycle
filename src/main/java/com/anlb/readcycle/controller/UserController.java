@@ -19,7 +19,7 @@ import com.anlb.readcycle.dto.request.RegisterRequestDto;
 import com.anlb.readcycle.dto.request.UpdateUserRequestDto;
 import com.anlb.readcycle.dto.response.CreateUserResponseDto;
 import com.anlb.readcycle.dto.response.RegisterResponseDto;
-import com.anlb.readcycle.dto.response.ResultPaginateDTO;
+import com.anlb.readcycle.dto.response.ResultPaginateDto;
 import com.anlb.readcycle.dto.response.UpdateUserResponseDTO;
 import com.anlb.readcycle.mapper.UserMapper;
 import com.anlb.readcycle.service.EmailService;
@@ -50,7 +50,7 @@ public class UserController {
      */
     @GetMapping("/users")
     @ApiMessage("Get all users")
-    public ResponseEntity<ResultPaginateDTO> getAllUsers(@Filter Specification<User> spec, Pageable pageable) {
+    public ResponseEntity<ResultPaginateDto> getAllUsers(@Filter Specification<User> spec, Pageable pageable) {
         return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(this.userService.handleGetAllUsers(spec, pageable));

@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ResultPaginateDTO {
+public class ResultPaginateDto {
     private Meta meta;
     private Object result;
 

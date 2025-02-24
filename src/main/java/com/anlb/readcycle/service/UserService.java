@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.anlb.readcycle.domain.User;
 import com.anlb.readcycle.dto.request.UpdateUserRequestDto;
 import com.anlb.readcycle.dto.response.LoginResponseDto;
-import com.anlb.readcycle.dto.response.ResultPaginateDTO;
+import com.anlb.readcycle.dto.response.ResultPaginateDto;
 import com.anlb.readcycle.dto.response.UserResponseDTO;
 import com.anlb.readcycle.mapper.UserMapper;
 import com.anlb.readcycle.dto.response.LoginResponseDto.UserGetAccount;
@@ -228,12 +228,12 @@ public class UserService {
      *
      * @param spec     The specification to filter users.
      * @param pageable The pagination and sorting information.
-     * @return A {@link ResultPaginateDTO} containing the paginated user list and metadata.
+     * @return A {@link ResultPaginateDto} containing the paginated user list and metadata.
      */
-    public ResultPaginateDTO handleGetAllUsers(Specification<User> spec, Pageable pageable) {
+    public ResultPaginateDto handleGetAllUsers(Specification<User> spec, Pageable pageable) {
         Page<User> pageUser = this.userRepository.findAll(spec, pageable);
-        ResultPaginateDTO rs = new ResultPaginateDTO();
-        ResultPaginateDTO.Meta mt = new ResultPaginateDTO.Meta();
+        ResultPaginateDto rs = new ResultPaginateDto();
+        ResultPaginateDto.Meta mt = new ResultPaginateDto.Meta();
 
         mt.setPage(pageable.getPageNumber() + 1);
         mt.setPageSize(pageable.getPageSize());

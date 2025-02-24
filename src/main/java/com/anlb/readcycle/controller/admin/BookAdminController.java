@@ -17,7 +17,7 @@ import com.anlb.readcycle.domain.Book;
 import com.anlb.readcycle.dto.request.CreateBookRequestDto;
 import com.anlb.readcycle.dto.request.UpdateBookRequestDto;
 import com.anlb.readcycle.dto.response.CreateBookResponseDto;
-import com.anlb.readcycle.dto.response.ResultPaginateDTO;
+import com.anlb.readcycle.dto.response.ResultPaginateDto;
 import com.anlb.readcycle.dto.response.UpdateBookResponseDTO;
 import com.anlb.readcycle.mapper.BookMapper;
 import com.anlb.readcycle.service.BookService;
@@ -41,11 +41,11 @@ public class BookAdminController {
      *
      * @param spec     The specification used for filtering the books.
      * @param pageable The pagination information.
-     * @return A {@link ResponseEntity} containing a {@link ResultPaginateDTO} with the list of books.
+     * @return A {@link ResponseEntity} containing a {@link ResultPaginateDto} with the list of books.
      */
     @GetMapping("/books")
     @ApiMessage("Get all books")
-    public ResponseEntity<ResultPaginateDTO> getAllBooks(@Filter Specification<Book> spec, Pageable pageable) {
+    public ResponseEntity<ResultPaginateDto> getAllBooks(@Filter Specification<Book> spec, Pageable pageable) {
         return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(this.bookService.handleGetAllBooks(spec, pageable));

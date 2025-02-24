@@ -13,7 +13,7 @@ import com.anlb.readcycle.domain.Book;
 import com.anlb.readcycle.dto.request.CreateBookRequestDto;
 import com.anlb.readcycle.dto.request.UpdateBookRequestDto;
 import com.anlb.readcycle.dto.response.BookResponseDto;
-import com.anlb.readcycle.dto.response.ResultPaginateDTO;
+import com.anlb.readcycle.dto.response.ResultPaginateDto;
 import com.anlb.readcycle.mapper.BookMapper;
 import com.anlb.readcycle.repository.BookRepository;
 import com.anlb.readcycle.repository.specification.BookSpecifications;
@@ -134,13 +134,13 @@ public class BookService {
      *
      * @param spec     The {@link Specification} used to filter books based on criteria.
      * @param pageable The {@link Pageable} object containing pagination information.
-     * @return A {@link ResultPaginateDTO} containing the paginated list of books
+     * @return A {@link ResultPaginateDto} containing the paginated list of books
      *         and associated metadata.
      */
-    public ResultPaginateDTO handleGetAllBooks(Specification<Book> spec, Pageable pageable) {
+    public ResultPaginateDto handleGetAllBooks(Specification<Book> spec, Pageable pageable) {
         Page<Book> pageBook = this.bookRepository.findAll(spec, pageable);
-        ResultPaginateDTO response = new ResultPaginateDTO();
-        ResultPaginateDTO.Meta meta = new ResultPaginateDTO.Meta();
+        ResultPaginateDto response = new ResultPaginateDto();
+        ResultPaginateDto.Meta meta = new ResultPaginateDto.Meta();
 
         meta.setPage(pageable.getPageNumber() + 1);
         meta.setPageSize(pageable.getPageSize());
@@ -163,13 +163,13 @@ public class BookService {
      *
      * @param spec     The specification used to filter books.
      * @param pageable The pagination information including page number and size.
-     * @return A {@link ResultPaginateDTO} containing the paginated list of books and metadata.
+     * @return A {@link ResultPaginateDto} containing the paginated list of books and metadata.
      */
-    public ResultPaginateDTO handleGetAllBooksClient(Specification<Book> spec, Pageable pageable) {
+    public ResultPaginateDto handleGetAllBooksClient(Specification<Book> spec, Pageable pageable) {
         spec = spec.and(BookSpecifications.isActive());
         Page<Book> pageBook = this.bookRepository.findAll(spec, pageable);
-        ResultPaginateDTO response = new ResultPaginateDTO();
-        ResultPaginateDTO.Meta meta = new ResultPaginateDTO.Meta();
+        ResultPaginateDto response = new ResultPaginateDto();
+        ResultPaginateDto.Meta meta = new ResultPaginateDto.Meta();
 
         meta.setPage(pageable.getPageNumber() + 1);
         meta.setPageSize(pageable.getPageSize());

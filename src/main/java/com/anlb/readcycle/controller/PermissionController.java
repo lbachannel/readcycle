@@ -17,7 +17,7 @@ import com.anlb.readcycle.domain.Permission;
 import com.anlb.readcycle.dto.request.CreatePermissionRequestDto;
 import com.anlb.readcycle.dto.request.UpdatePermissionRequestDto;
 import com.anlb.readcycle.dto.response.CreatePermissionResponseDto;
-import com.anlb.readcycle.dto.response.ResultPaginateDTO;
+import com.anlb.readcycle.dto.response.ResultPaginateDto;
 import com.anlb.readcycle.dto.response.UpdatePermissionResponseDTO;
 import com.anlb.readcycle.mapper.PermissionMapper;
 import com.anlb.readcycle.service.PermissionService;
@@ -78,11 +78,11 @@ public class PermissionController {
      *
      * @param spec The filter specification for querying permissions.
      * @param pageable The pagination information.
-     * @return A {@link ResponseEntity} containing a paginated list of permissions in a {@link ResultPaginateDTO}.
+     * @return A {@link ResponseEntity} containing a paginated list of permissions in a {@link ResultPaginateDto}.
      */
     @GetMapping("/permissions")
     @ApiMessage("Get permissions")
-    public ResponseEntity<ResultPaginateDTO> getPermissions(@Filter Specification<Permission> spec, Pageable pageable) {
+    public ResponseEntity<ResultPaginateDto> getPermissions(@Filter Specification<Permission> spec, Pageable pageable) {
         return ResponseEntity.ok(this.permissionService.handleGetPermissions(spec, pageable));
     }
 

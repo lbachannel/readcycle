@@ -11,8 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.anlb.readcycle.domain.Permission;
 import com.anlb.readcycle.dto.request.CreatePermissionRequestDto;
 import com.anlb.readcycle.dto.request.UpdatePermissionRequestDto;
-import com.anlb.readcycle.dto.response.ResultPaginateDTO;
-import com.anlb.readcycle.dto.response.ResultPaginateDTO.Meta;
+import com.anlb.readcycle.dto.response.ResultPaginateDto;
+import com.anlb.readcycle.dto.response.ResultPaginateDto.Meta;
 import com.anlb.readcycle.repository.PermissionRepository;
 import com.anlb.readcycle.utils.exception.InvalidException;
 
@@ -99,11 +99,11 @@ public class PermissionService {
      *
      * @param spec The {@link Specification} used to filter permissions.
      * @param pageable The {@link Pageable} object defining pagination and sorting criteria.
-     * @return A {@link ResultPaginateDTO} containing the paginated list of permissions along with metadata.
+     * @return A {@link ResultPaginateDto} containing the paginated list of permissions along with metadata.
      */
-    public ResultPaginateDTO handleGetPermissions(Specification<Permission> spec, Pageable pageable) {
+    public ResultPaginateDto handleGetPermissions(Specification<Permission> spec, Pageable pageable) {
         Page<Permission> dbPermissions = this.permissionRepository.findAll(spec, pageable);
-        ResultPaginateDTO resultPaginateDTO = new ResultPaginateDTO();
+        ResultPaginateDto resultPaginateDTO = new ResultPaginateDto();
         Meta meta = new Meta();
         meta.setPage(pageable.getPageNumber() + 1);
         meta.setPageSize(pageable.getPageSize());
