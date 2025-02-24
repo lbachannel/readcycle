@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.anlb.readcycle.domain.Book;
 import com.anlb.readcycle.dto.request.CreateBookRequestDto;
-import com.anlb.readcycle.dto.request.UpdateBookRequestDTO;
+import com.anlb.readcycle.dto.request.UpdateBookRequestDto;
 import com.anlb.readcycle.dto.response.CreateBookResponseDTO;
 import com.anlb.readcycle.dto.response.ResultPaginateDTO;
 import com.anlb.readcycle.dto.response.UpdateBookResponseDTO;
@@ -79,7 +79,7 @@ public class BookAdminController {
      */
     @PutMapping("/books")
     @ApiMessage("Update book")
-    public ResponseEntity<UpdateBookResponseDTO> updateBook(@RequestBody UpdateBookRequestDTO reqBook) throws InvalidException {
+    public ResponseEntity<UpdateBookResponseDTO> updateBook(@RequestBody UpdateBookRequestDto reqBook) throws InvalidException {
         Book updateBook = this.bookService.handleUpdateBook(reqBook);
         return ResponseEntity
                     .ok(this.bookMapper.convertBookToUpdateBookResponseDTO(updateBook));

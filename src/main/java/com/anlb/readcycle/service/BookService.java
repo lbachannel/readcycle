@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.anlb.readcycle.domain.Book;
 import com.anlb.readcycle.dto.request.CreateBookRequestDto;
-import com.anlb.readcycle.dto.request.UpdateBookRequestDTO;
+import com.anlb.readcycle.dto.request.UpdateBookRequestDto;
 import com.anlb.readcycle.dto.response.BookResponseDTO;
 import com.anlb.readcycle.dto.response.ResultPaginateDTO;
 import com.anlb.readcycle.mapper.BookMapper;
@@ -96,7 +96,7 @@ public class BookService {
      * @return the updated {@code Book} object after saving to the repository
      * @throws InvalidException if the book with the given ID does not exist
      */
-    public Book handleUpdateBook(UpdateBookRequestDTO requestBook) throws InvalidException {
+    public Book handleUpdateBook(UpdateBookRequestDto requestBook) throws InvalidException {
         Book updateBook = this.handleGetBookById(requestBook.getId());
         Book oldBook = updateBook.clone();
         updateBook.setCategory(requestBook.getCategory());
