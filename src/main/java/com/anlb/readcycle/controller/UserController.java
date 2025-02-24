@@ -22,7 +22,7 @@ import com.anlb.readcycle.dto.response.RegisterResponseDto;
 import com.anlb.readcycle.dto.response.ResultPaginateDto;
 import com.anlb.readcycle.dto.response.UpdateUserResponseDto;
 import com.anlb.readcycle.mapper.UserMapper;
-import com.anlb.readcycle.service.EmailService;
+import com.anlb.readcycle.service.IEmailService;
 import com.anlb.readcycle.service.IUserService;
 import com.anlb.readcycle.utils.anotation.ApiMessage;
 import com.anlb.readcycle.utils.exception.InvalidException;
@@ -36,7 +36,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final EmailService emailService;
+    private final IEmailService emailService;
     private final IUserService userService;
     private final UserMapper userMapper;
 
