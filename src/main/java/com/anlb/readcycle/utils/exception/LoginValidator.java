@@ -1,5 +1,7 @@
 package com.anlb.readcycle.utils.exception;
 
+import java.util.regex.Pattern;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +39,8 @@ public class LoginValidator implements ConstraintValidator<LoginChecked, LoginRe
             valid = false;
         }
         
+        String regexPassword = "(?=.*[@#$%^&+=!]).{10,}$";
+        
         // validation password
         if (StringUtils.isBlank(account.getPassword())) {
             context.buildConstraintViolationWithTemplate("Please enter password")
@@ -44,8 +48,15 @@ public class LoginValidator implements ConstraintValidator<LoginChecked, LoginRe
                     .addConstraintViolation()
                     .disableDefaultConstraintViolation();
             valid = false;
-        } else if (2 >= account.getPassword().length()) {
-            context.buildConstraintViolationWithTemplate("Password must be greater than or equal to 3")
+        } else if (9 >= account.getPassword().length()) {
+            context.buildConstraintViolationWithTemplate("Password must be greater than or equal to 10")
+                    .addPropertyNode("password")
+                    .addConstraintViolation()
+                    .disableDefaultConstraintViolation();
+            valid = false;
+        } else if (!Pattern.matches(regexPassword, account.getPassword())) {
+            context.buildConstraintViolationWithTemplate(
+                    "Password must contain at least one special character")
                     .addPropertyNode("password")
                     .addConstraintViolation()
                     .disableDefaultConstraintViolation();
