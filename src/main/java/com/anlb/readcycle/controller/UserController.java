@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.anlb.readcycle.domain.User;
 import com.anlb.readcycle.dto.request.CreateUserRequestDto;
 import com.anlb.readcycle.dto.request.RegisterRequestDto;
-import com.anlb.readcycle.dto.request.UpdateUserRequestDTO;
+import com.anlb.readcycle.dto.request.UpdateUserRequestDto;
 import com.anlb.readcycle.dto.response.CreateUserResponseDTO;
 import com.anlb.readcycle.dto.response.RegisterResponseDTO;
 import com.anlb.readcycle.dto.response.ResultPaginateDTO;
@@ -104,7 +104,7 @@ public class UserController {
      */
     @PutMapping("/users")
     @ApiMessage("Update user")
-    public ResponseEntity<UpdateUserResponseDTO> updateUser(@Valid @RequestBody UpdateUserRequestDTO reqUser) throws InvalidException {
+    public ResponseEntity<UpdateUserResponseDTO> updateUser(@Valid @RequestBody UpdateUserRequestDto reqUser) throws InvalidException {
         User updateUser = this.userService.handleUpdateUser(reqUser);
         return ResponseEntity
                     .ok(this.userMapper.convertUserToUpdateUserResponseDTO(updateUser));

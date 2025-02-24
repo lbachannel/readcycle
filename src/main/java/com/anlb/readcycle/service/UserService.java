@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.anlb.readcycle.domain.User;
-import com.anlb.readcycle.dto.request.UpdateUserRequestDTO;
+import com.anlb.readcycle.dto.request.UpdateUserRequestDto;
 import com.anlb.readcycle.dto.response.LoginResponseDTO;
 import com.anlb.readcycle.dto.response.ResultPaginateDTO;
 import com.anlb.readcycle.dto.response.UserResponseDTO;
@@ -306,7 +306,7 @@ public class UserService {
      * @return the updated and saved {@link User} entity
      * @throws InvalidException if the access token is invalid or the current user cannot be retrieved
      */
-    public User handleUpdateUser(UpdateUserRequestDTO reqUser) throws InvalidException {
+    public User handleUpdateUser(UpdateUserRequestDto reqUser) throws InvalidException {
         User updateUser = this.handleGetUserById(reqUser.getId());
         User oldUser = updateUser.clone();
         updateUser.setName(reqUser.getName());

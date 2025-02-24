@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UpdateUserRequestDTO {
+public class UpdateUserRequestDto {
     private long id;
     @NotBlank(message = "Name is required")
     private String name;
