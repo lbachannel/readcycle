@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.anlb.readcycle.domain.Book;
 import com.anlb.readcycle.dto.request.CreateBookRequestDto;
 import com.anlb.readcycle.dto.request.UpdateBookRequestDto;
-import com.anlb.readcycle.dto.response.BookResponseDTO;
+import com.anlb.readcycle.dto.response.BookResponseDto;
 import com.anlb.readcycle.dto.response.ResultPaginateDTO;
 import com.anlb.readcycle.mapper.BookMapper;
 import com.anlb.readcycle.repository.BookRepository;
@@ -150,7 +150,7 @@ public class BookService {
 
         response.setMeta(meta);
 
-        List<BookResponseDTO> listBook = pageBook.getContent()
+        List<BookResponseDto> listBook = pageBook.getContent()
                                             .stream()
                                             .map(item -> this.bookMapper.convertBookToBookResponseDTO(item))
                                             .collect(Collectors.toList());
@@ -179,7 +179,7 @@ public class BookService {
 
         response.setMeta(meta);
 
-        List<BookResponseDTO> listBook = pageBook.getContent()
+        List<BookResponseDto> listBook = pageBook.getContent()
                                             .stream()
                                             .map(item -> this.bookMapper.convertBookToBookResponseDTO(item))
                                             .collect(Collectors.toList());

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.anlb.readcycle.domain.Book;
 import com.anlb.readcycle.dto.request.CreateBorrowBookRequestDto.Details;
-import com.anlb.readcycle.dto.response.BookResponseDTO;
+import com.anlb.readcycle.dto.response.BookResponseDto;
 import com.anlb.readcycle.dto.response.CreateBookResponseDTO;
 import com.anlb.readcycle.dto.response.UpdateBookResponseDTO;
 
@@ -63,13 +63,13 @@ public class BookMapper {
     }
 
     /**
-     * Converts a {@link Book} entity to a {@link BookResponseDTO}.
+     * Converts a {@link Book} entity to a {@link BookResponseDto}.
      *
      * @param currentBook The {@link Book} entity to be converted.
-     * @return A {@link BookResponseDTO} containing the book's details.
+     * @return A {@link BookResponseDto} containing the book's details.
      */
-    public BookResponseDTO convertBookToBookResponseDTO(Book currentBook) {
-        BookResponseDTO response = new BookResponseDTO();
+    public BookResponseDto convertBookToBookResponseDTO(Book currentBook) {
+        BookResponseDto response = new BookResponseDto();
         response.setId(currentBook.getId());
         response.setCategory(currentBook.getCategory());
         response.setTitle(currentBook.getTitle());
@@ -88,14 +88,14 @@ public class BookMapper {
     }
 
     /**
-     * Converts a list of {@link Book} objects into a list of {@link BookResponseDTO} objects.
+     * Converts a list of {@link Book} objects into a list of {@link BookResponseDto} objects.
      *
      * @param books The list of {@link Book} objects to be converted.
-     * @return A list of {@link BookResponseDTO} objects created from the input list.
+     * @return A list of {@link BookResponseDto} objects created from the input list.
      */
-    public List<BookResponseDTO> convertBooksToBookResponseDTO(List<Book> books) {
-        List<BookResponseDTO> response = books.stream()
-                                            .map(item -> new BookResponseDTO(
+    public List<BookResponseDto> convertBooksToBookResponseDTO(List<Book> books) {
+        List<BookResponseDto> response = books.stream()
+                                            .map(item -> new BookResponseDto(
                                                 item.getId(),
                                                 item.getCategory(),
                                                 item.getTitle(),
