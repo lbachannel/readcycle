@@ -18,7 +18,7 @@ import com.anlb.readcycle.dto.request.CreatePermissionRequestDto;
 import com.anlb.readcycle.dto.request.UpdatePermissionRequestDto;
 import com.anlb.readcycle.dto.response.CreatePermissionResponseDto;
 import com.anlb.readcycle.dto.response.ResultPaginateDto;
-import com.anlb.readcycle.dto.response.UpdatePermissionResponseDTO;
+import com.anlb.readcycle.dto.response.UpdatePermissionResponseDto;
 import com.anlb.readcycle.mapper.PermissionMapper;
 import com.anlb.readcycle.service.PermissionService;
 import com.anlb.readcycle.utils.anotation.ApiMessage;
@@ -58,12 +58,12 @@ public class PermissionController {
      * {@code PUT  /permissions} : Updates an existing permission.
      *
      * @param permissionDTO The request data containing module, API path, and method for the permission update.
-     * @return A {@link ResponseEntity} containing the updated permission details in a {@link UpdatePermissionResponseDTO}.
+     * @return A {@link ResponseEntity} containing the updated permission details in a {@link UpdatePermissionResponseDto}.
      * @throws InvalidException If the permission does not exist or validation fails.
      */
     @PutMapping("/permissions")
     @ApiMessage("Update a permission")
-    public ResponseEntity<UpdatePermissionResponseDTO> updatePermission(@Valid @RequestBody UpdatePermissionRequestDto permissionDTO) throws InvalidException {
+    public ResponseEntity<UpdatePermissionResponseDto> updatePermission(@Valid @RequestBody UpdatePermissionRequestDto permissionDTO) throws InvalidException {
         // check if permission exists
         this.permissionService.permissionExists(permissionDTO.getModule(), permissionDTO.getApiPath(), permissionDTO.getMethod());
         Permission updatePermission = this.permissionService.handleUpdatePermission(permissionDTO);

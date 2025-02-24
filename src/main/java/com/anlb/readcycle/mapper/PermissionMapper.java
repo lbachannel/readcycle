@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 
 import com.anlb.readcycle.domain.Permission;
 import com.anlb.readcycle.dto.response.CreatePermissionResponseDto;
-import com.anlb.readcycle.dto.response.UpdatePermissionResponseDTO;
+import com.anlb.readcycle.dto.response.UpdatePermissionResponseDto;
 
 @Service
 public class PermissionMapper {
@@ -28,13 +28,13 @@ public class PermissionMapper {
     }
 
     /**
-     * Converts a {@link Permission} entity into an {@link UpdatePermissionResponseDTO}.
+     * Converts a {@link Permission} entity into an {@link UpdatePermissionResponseDto}.
      *
      * @param permission The {@link Permission} entity to be converted.
-     * @return An {@link UpdatePermissionResponseDTO} containing the permission details, including update information.
+     * @return An {@link UpdatePermissionResponseDto} containing the permission details, including update information.
      */
-    public UpdatePermissionResponseDTO convertPermissionToUpdatePermissionResponseDTO(Permission permission) {
-        UpdatePermissionResponseDTO response = new UpdatePermissionResponseDTO();
+    public UpdatePermissionResponseDto convertPermissionToUpdatePermissionResponseDTO(Permission permission) {
+        UpdatePermissionResponseDto response = new UpdatePermissionResponseDto();
         response.setId(permission.getId());
         response.setName(permission.getName());
         response.setApiPath(permission.getApiPath());
