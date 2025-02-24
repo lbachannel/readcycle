@@ -1,4 +1,4 @@
-package com.anlb.readcycle.service;
+package com.anlb.readcycle.service.impl;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,6 +17,8 @@ import com.anlb.readcycle.dto.response.ResultPaginateDto;
 import com.anlb.readcycle.mapper.BookMapper;
 import com.anlb.readcycle.repository.BookRepository;
 import com.anlb.readcycle.repository.specification.BookSpecifications;
+import com.anlb.readcycle.service.BookLogService;
+import com.anlb.readcycle.service.IBookService;
 import com.anlb.readcycle.utils.exception.InvalidException;
 
 import lombok.RequiredArgsConstructor;

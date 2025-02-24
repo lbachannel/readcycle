@@ -22,7 +22,7 @@ public class CartService {
 
     private final UserService userService;
     private final CartRepository cartRepository;
-    private final BorrowBookService borrowBookService;
+    private final IBorrowBookService borrowBookService;
     
     public Cart handleAddBookToCart(Book book) throws InvalidException {
         String email = SecurityUtil.getCurrentUserLogin()

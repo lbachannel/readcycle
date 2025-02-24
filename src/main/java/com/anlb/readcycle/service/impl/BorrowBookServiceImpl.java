@@ -1,4 +1,4 @@
-package com.anlb.readcycle.service;
+package com.anlb.readcycle.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +13,9 @@ import com.anlb.readcycle.dto.request.CreateBorrowBookRequestDto.Details;
 import com.anlb.readcycle.mapper.BookMapper;
 import com.anlb.readcycle.repository.BookRepository;
 import com.anlb.readcycle.repository.BorrowRepository;
+import com.anlb.readcycle.service.IBookService;
+import com.anlb.readcycle.service.IBorrowBookService;
+import com.anlb.readcycle.service.UserService;
 import com.anlb.readcycle.utils.constant.BookStatusEnum;
 import com.anlb.readcycle.utils.constant.BorrowStatusEnum;
 import com.anlb.readcycle.utils.exception.InvalidException;
@@ -21,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class BorrowBookService {
+public class BorrowBookServiceImpl implements IBorrowBookService {
 
     private final UserService userService;
     private final BookMapper bookMapper;
@@ -29,6 +32,7 @@ public class BorrowBookService {
     private final BookRepository bookRepository;
     private final BorrowRepository borrowRepository;
 
+    @Override
     public List<Borrow> handleBorrowBook(CreateBorrowBookRequestDto reqBorrow) throws InvalidException {
         List<Details> listBook = reqBorrow.getDetails();
         User user = userService.handleGetUserByUsername(reqBorrow.getUsername());
@@ -57,10 +61,12 @@ public class BorrowBookService {
         return borrowRepository.saveAll(borrows);
     }
 
+    @Override
     public Borrow handleFindBorrowByUserAndBookAndStatus(User user, Book book, BorrowStatusEnum borrowed) {
         return borrowRepository.findByUserAndBookAndStatus(user, book, borrowed);
     }
 
+    @Override
     public List<Borrow> findByUserAndStatus(User user, BorrowStatusEnum borrowed) {
         return borrowRepository.findByUserAndStatus(user, borrowed);
     }
