@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.anlb.readcycle.domain.Book;
 import com.anlb.readcycle.domain.Borrow;
 import com.anlb.readcycle.domain.Cart;
-import com.anlb.readcycle.dto.request.CreateBorrowBookRequestDTO;
+import com.anlb.readcycle.dto.request.CreateBorrowBookRequestDto;
 import com.anlb.readcycle.dto.response.CreateCartResponseDTO;
 import com.anlb.readcycle.mapper.CartMapper;
 import com.anlb.readcycle.service.BorrowBookService;
@@ -45,7 +45,7 @@ public class BorrowBookController {
 
     @PostMapping("/borrow")
     @ApiMessage("Borrow books")
-    public ResponseEntity<List<Borrow>> handleBorrowBook(@RequestBody CreateBorrowBookRequestDTO reqBorrow) throws InvalidException {
+    public ResponseEntity<List<Borrow>> handleBorrowBook(@RequestBody CreateBorrowBookRequestDto reqBorrow) throws InvalidException {
         return ResponseEntity
                     .status(HttpStatus.CREATED)
                     .body(this.borrowBookService.handleBorrowBook(reqBorrow));

@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Data
-public class CreateBorrowBookRequestDTO {
+public class CreateBorrowBookRequestDto {
     private String username;
     private List<Details> details;
 

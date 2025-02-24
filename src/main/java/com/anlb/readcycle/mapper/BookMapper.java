@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import com.anlb.readcycle.domain.Book;
-import com.anlb.readcycle.dto.request.CreateBorrowBookRequestDTO.Details;
+import com.anlb.readcycle.dto.request.CreateBorrowBookRequestDto.Details;
 import com.anlb.readcycle.dto.response.BookResponseDTO;
 import com.anlb.readcycle.dto.response.CreateBookResponseDTO;
 import com.anlb.readcycle.dto.response.UpdateBookResponseDTO;
