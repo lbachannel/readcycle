@@ -17,7 +17,7 @@ import com.anlb.readcycle.domain.Book;
 import com.anlb.readcycle.domain.Borrow;
 import com.anlb.readcycle.domain.Cart;
 import com.anlb.readcycle.dto.request.CreateBorrowBookRequestDto;
-import com.anlb.readcycle.dto.response.CreateCartResponseDTO;
+import com.anlb.readcycle.dto.response.CreateCartResponseDto;
 import com.anlb.readcycle.mapper.CartMapper;
 import com.anlb.readcycle.service.BorrowBookService;
 import com.anlb.readcycle.service.CartService;
@@ -53,9 +53,9 @@ public class BorrowBookController {
 
     @GetMapping("/carts")
     @ApiMessage("Get carts by user")
-    public ResponseEntity<List<CreateCartResponseDTO>> getCartsByUser() throws InvalidException {
+    public ResponseEntity<List<CreateCartResponseDto>> getCartsByUser() throws InvalidException {
         List<Cart> listCart = this.cartService.handleGetCartsByUser();
-        List<CreateCartResponseDTO> carts = listCart.stream()
+        List<CreateCartResponseDto> carts = listCart.stream()
                                             .map(cart -> this.cartMapper.convertCartToCreateCartResponseDTO(cart))
                                             .collect(Collectors.toList());
         return ResponseEntity
