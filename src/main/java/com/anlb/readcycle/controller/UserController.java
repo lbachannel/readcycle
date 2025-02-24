@@ -17,7 +17,7 @@ import com.anlb.readcycle.domain.User;
 import com.anlb.readcycle.dto.request.CreateUserRequestDto;
 import com.anlb.readcycle.dto.request.RegisterRequestDto;
 import com.anlb.readcycle.dto.request.UpdateUserRequestDto;
-import com.anlb.readcycle.dto.response.CreateUserResponseDTO;
+import com.anlb.readcycle.dto.response.CreateUserResponseDto;
 import com.anlb.readcycle.dto.response.RegisterResponseDTO;
 import com.anlb.readcycle.dto.response.ResultPaginateDTO;
 import com.anlb.readcycle.dto.response.UpdateUserResponseDTO;
@@ -85,7 +85,7 @@ public class UserController {
      */
     @PostMapping("/users")
     @ApiMessage("Create a user")
-    public ResponseEntity<CreateUserResponseDTO> createNewUser(@Valid @RequestBody CreateUserRequestDto userDTO) throws InvalidException {
+    public ResponseEntity<CreateUserResponseDto> createNewUser(@Valid @RequestBody CreateUserRequestDto userDTO) throws InvalidException {
         // convert DTO -> User
         User newUser = this.userMapper.convertCreateUserRequestDTOToUser(userDTO);
         // save user

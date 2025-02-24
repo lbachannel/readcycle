@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import com.anlb.readcycle.domain.User;
 import com.anlb.readcycle.dto.request.CreateUserRequestDto;
 import com.anlb.readcycle.dto.request.RegisterRequestDto;
-import com.anlb.readcycle.dto.response.CreateUserResponseDTO;
+import com.anlb.readcycle.dto.response.CreateUserResponseDto;
 import com.anlb.readcycle.dto.response.LoginResponseDTO;
 import com.anlb.readcycle.dto.response.LoginResponseDTO.UserLogin;
 import com.anlb.readcycle.dto.response.RegisterResponseDTO;
@@ -101,16 +101,16 @@ public class UserMapper {
     }
 
     /**
-     * Converts a {@link User} entity to a {@link CreateUserResponseDTO}.
+     * Converts a {@link User} entity to a {@link CreateUserResponseDto}.
      *
      * This method extracts relevant user information and maps it to a DTO
      * for user creation response purposes.
      *
      * @param user The {@link User} entity to be converted.
-     * @return A {@link CreateUserResponseDTO} containing user details.
+     * @return A {@link CreateUserResponseDto} containing user details.
      */
-    public CreateUserResponseDTO convertUserToCreateResponseDTO(User user) {
-        CreateUserResponseDTO response = new CreateUserResponseDTO();
+    public CreateUserResponseDto convertUserToCreateResponseDTO(User user) {
+        CreateUserResponseDto response = new CreateUserResponseDto();
         response.setId(user.getId());
         response.setName(user.getName());
         response.setEmail(user.getEmail());
