@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.anlb.readcycle.domain.Permission;
 import com.anlb.readcycle.domain.Role;
-import com.anlb.readcycle.dto.request.CreateRoleRequestDTO;
+import com.anlb.readcycle.dto.request.CreateRoleRequestDto;
 import com.anlb.readcycle.dto.request.UpdateRoleRequestDTO;
 import com.anlb.readcycle.dto.response.ResultPaginateDTO;
 import com.anlb.readcycle.dto.response.ResultPaginateDTO.Meta;
@@ -59,10 +59,10 @@ public class RoleService {
      * Creates a new role based on the provided role data.
      * If permissions are provided, they are retrieved from the database and assigned to the new role.
      *
-     * @param roleDTO The {@link CreateRoleRequestDTO} containing role details.
+     * @param roleDTO The {@link CreateRoleRequestDto} containing role details.
      * @return The newly created {@link Role} entity.
      */
-    public Role handleCreateRole(CreateRoleRequestDTO roleDTO) {
+    public Role handleCreateRole(CreateRoleRequestDto roleDTO) {
         Role newRole = new Role();
         newRole.setName(roleDTO.getName());
         newRole.setDescription(roleDTO.getDescription());

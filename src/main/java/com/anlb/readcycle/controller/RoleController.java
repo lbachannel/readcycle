@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.anlb.readcycle.domain.Role;
-import com.anlb.readcycle.dto.request.CreateRoleRequestDTO;
+import com.anlb.readcycle.dto.request.CreateRoleRequestDto;
 import com.anlb.readcycle.dto.request.UpdateRoleRequestDTO;
 import com.anlb.readcycle.dto.response.CreateRoleResponseDTO;
 import com.anlb.readcycle.dto.response.ResultPaginateDTO;
@@ -59,7 +59,7 @@ public class RoleController {
      */
     @PostMapping("/roles")
     @ApiMessage("Create a role")
-    public ResponseEntity<CreateRoleResponseDTO> createRole(@Valid @RequestBody CreateRoleRequestDTO roleDTO) throws InvalidException {
+    public ResponseEntity<CreateRoleResponseDTO> createRole(@Valid @RequestBody CreateRoleRequestDto roleDTO) throws InvalidException {
         this.roleService.existByName(roleDTO.getName());
         Role role = this.roleService.handleCreateRole(roleDTO);
         return ResponseEntity
