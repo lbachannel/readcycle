@@ -13,7 +13,7 @@ import com.anlb.readcycle.dto.request.RegisterRequestDto;
 import com.anlb.readcycle.dto.response.CreateUserResponseDto;
 import com.anlb.readcycle.dto.response.LoginResponseDto;
 import com.anlb.readcycle.dto.response.LoginResponseDto.UserLogin;
-import com.anlb.readcycle.dto.response.RegisterResponseDTO;
+import com.anlb.readcycle.dto.response.RegisterResponseDto;
 import com.anlb.readcycle.dto.response.UpdateUserResponseDTO;
 import com.anlb.readcycle.dto.response.UserResponseDTO;
 import com.anlb.readcycle.service.RoleService;
@@ -83,16 +83,16 @@ public class UserMapper {
     }
 
     /**
-     * Converts a {@link User} entity to a {@link RegisterResponseDTO}.
+     * Converts a {@link User} entity to a {@link RegisterResponseDto}.
      *
      * This method extracts relevant user information and maps it to a DTO
      * for registration response purposes.
      *
      * @param user The {@link User} entity to be converted.
-     * @return A {@link RegisterResponseDTO} containing user details.
+     * @return A {@link RegisterResponseDto} containing user details.
      */
-    public RegisterResponseDTO convertUserToRegisterResponseDTO(User user) {
-        RegisterResponseDTO response = new RegisterResponseDTO();
+    public RegisterResponseDto convertUserToRegisterResponseDTO(User user) {
+        RegisterResponseDto response = new RegisterResponseDto();
         response.setId(user.getId());
         response.setName(user.getName());
         response.setEmail(user.getEmail());
