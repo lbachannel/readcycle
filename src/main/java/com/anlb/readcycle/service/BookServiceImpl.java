@@ -24,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class BookService {
+public class BookServiceImpl implements IBookService {
 
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
@@ -38,6 +38,7 @@ public class BookService {
      * @throws InvalidException if the request is invalid.
      * @implNote This method logs the book creation event using {@code bookLogService}.
      */
+    @Override
     public Book handleCreateBook(CreateBookRequestDto requestBook) throws InvalidException {
         Book newBook = new Book();
         newBook.setCategory(requestBook.getCategory());
@@ -61,6 +62,7 @@ public class BookService {
      * @return The {@link Book} entity if found.
      * @throws InvalidException If no book with the given ID exists.
      */
+    @Override
     public Book handleGetBookById(long id) throws InvalidException {
         Book book = bookRepository.findById(id).orElse(null);
         if (book == null) {
@@ -77,6 +79,7 @@ public class BookService {
      * @return The {@link Book} entity that matches the given ID and active status.
      * @throws InvalidException if no book with the given ID and active status is found.
      */
+    @Override
     public Book handleGetBookByIdAndActive(long id, boolean isActive) throws InvalidException {
         Book currentBook = bookRepository.findByIdAndIsActive(id, isActive).orElse(null);
         if (currentBook == null) {
@@ -96,6 +99,7 @@ public class BookService {
      * @return the updated {@code Book} object after saving to the repository
      * @throws InvalidException if the book with the given ID does not exist
      */
+    @Override
     public Book handleUpdateBook(UpdateBookRequestDto requestBook) throws InvalidException {
         Book updateBook = handleGetBookById(requestBook.getId());
         Book oldBook = updateBook.clone();
@@ -121,6 +125,7 @@ public class BookService {
      * @return the updated {@link Book} entity with the new active status
      * @throws InvalidException if the book with the given ID does not exist
      */
+    @Override
     public Book handleSoftDelete(long id) throws InvalidException {
         Book isDeletedBook = handleGetBookById(id);
         boolean oldActive = isDeletedBook.isActive();
@@ -137,6 +142,7 @@ public class BookService {
      * @return A {@link ResultPaginateDto} containing the paginated list of books
      *         and associated metadata.
      */
+    @Override
     public ResultPaginateDto handleGetAllBooks(Specification<Book> spec, Pageable pageable) {
         Page<Book> pageBook = bookRepository.findAll(spec, pageable);
         ResultPaginateDto response = new ResultPaginateDto();
@@ -165,6 +171,7 @@ public class BookService {
      * @param pageable The pagination information including page number and size.
      * @return A {@link ResultPaginateDto} containing the paginated list of books and metadata.
      */
+    @Override
     public ResultPaginateDto handleGetAllBooksClient(Specification<Book> spec, Pageable pageable) {
         spec = spec.and(BookSpecifications.isActive());
         Page<Book> pageBook = bookRepository.findAll(spec, pageable);
@@ -194,6 +201,7 @@ public class BookService {
      *              then proceeds to remove the book from the repository.
      * @param id the ID of the book to be deleted
      */
+    @Override
     public void handleDeleteBookById(long id) {
         bookLogService.logDeleteBook(id);
         bookRepository.deleteById(id);
