@@ -8,7 +8,7 @@ import com.anlb.readcycle.domain.Role;
 import lombok.Data;
 
 @Data
-public class UpdateUserResponseDTO {
+public class UpdateUserResponseDto {
     private long id;
     private String name;
     private String email;

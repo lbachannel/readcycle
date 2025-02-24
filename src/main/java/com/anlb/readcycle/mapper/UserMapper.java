@@ -14,7 +14,7 @@ import com.anlb.readcycle.dto.response.CreateUserResponseDto;
 import com.anlb.readcycle.dto.response.LoginResponseDto;
 import com.anlb.readcycle.dto.response.LoginResponseDto.UserLogin;
 import com.anlb.readcycle.dto.response.RegisterResponseDto;
-import com.anlb.readcycle.dto.response.UpdateUserResponseDTO;
+import com.anlb.readcycle.dto.response.UpdateUserResponseDto;
 import com.anlb.readcycle.dto.response.UserResponseDTO;
 import com.anlb.readcycle.service.RoleService;
 import com.anlb.readcycle.utils.SecurityUtil;
@@ -186,8 +186,8 @@ public class UserMapper {
      * @param updateUser the User object to be converted
      * @return an UpdateUserResponseDTO containing the user's details
      */
-    public UpdateUserResponseDTO convertUserToUpdateUserResponseDTO(User updateUser) {
-        UpdateUserResponseDTO response = new UpdateUserResponseDTO();
+    public UpdateUserResponseDto convertUserToUpdateUserResponseDTO(User updateUser) {
+        UpdateUserResponseDto response = new UpdateUserResponseDto();
         response.setId(updateUser.getId());
         response.setName(updateUser.getName());
         response.setEmail(updateUser.getEmail());

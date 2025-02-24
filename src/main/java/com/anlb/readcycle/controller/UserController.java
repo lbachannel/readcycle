@@ -20,7 +20,7 @@ import com.anlb.readcycle.dto.request.UpdateUserRequestDto;
 import com.anlb.readcycle.dto.response.CreateUserResponseDto;
 import com.anlb.readcycle.dto.response.RegisterResponseDto;
 import com.anlb.readcycle.dto.response.ResultPaginateDto;
-import com.anlb.readcycle.dto.response.UpdateUserResponseDTO;
+import com.anlb.readcycle.dto.response.UpdateUserResponseDto;
 import com.anlb.readcycle.mapper.UserMapper;
 import com.anlb.readcycle.service.EmailService;
 import com.anlb.readcycle.service.UserService;
@@ -104,7 +104,7 @@ public class UserController {
      */
     @PutMapping("/users")
     @ApiMessage("Update user")
-    public ResponseEntity<UpdateUserResponseDTO> updateUser(@Valid @RequestBody UpdateUserRequestDto reqUser) throws InvalidException {
+    public ResponseEntity<UpdateUserResponseDto> updateUser(@Valid @RequestBody UpdateUserRequestDto reqUser) throws InvalidException {
         User updateUser = this.userService.handleUpdateUser(reqUser);
         return ResponseEntity
                     .ok(this.userMapper.convertUserToUpdateUserResponseDTO(updateUser));
