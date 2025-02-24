@@ -8,14 +8,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.anlb.readcycle.domain.User;
-import com.anlb.readcycle.dto.request.CreateUserRequestDTO;
-import com.anlb.readcycle.dto.request.RegisterRequestDTO;
-import com.anlb.readcycle.dto.response.CreateUserResponseDTO;
-import com.anlb.readcycle.dto.response.LoginResponseDTO;
-import com.anlb.readcycle.dto.response.LoginResponseDTO.UserLogin;
-import com.anlb.readcycle.dto.response.RegisterResponseDTO;
-import com.anlb.readcycle.dto.response.UpdateUserResponseDTO;
-import com.anlb.readcycle.dto.response.UserResponseDTO;
+import com.anlb.readcycle.dto.request.CreateUserRequestDto;
+import com.anlb.readcycle.dto.request.RegisterRequestDto;
+import com.anlb.readcycle.dto.response.CreateUserResponseDto;
+import com.anlb.readcycle.dto.response.LoginResponseDto;
+import com.anlb.readcycle.dto.response.LoginResponseDto.UserLogin;
+import com.anlb.readcycle.dto.response.RegisterResponseDto;
+import com.anlb.readcycle.dto.response.UpdateUserResponseDto;
+import com.anlb.readcycle.dto.response.UserResponseDto;
 import com.anlb.readcycle.service.RoleService;
 import com.anlb.readcycle.utils.SecurityUtil;
 import com.anlb.readcycle.utils.exception.InvalidException;
@@ -32,17 +32,17 @@ public class UserMapper {
     private final SecurityUtil securityUtil;
 
     /**
-     * Converts a {@link RegisterRequestDTO} object to a {@link User} entity.
+     * Converts a {@link RegisterRequestDto} object to a {@link User} entity.
      * 
      * This method extracts user details from the DTO and creates a new {@link User} entity.
      * It also hashes the password before storing it.
      * If the provided date of birth is in a valid format, it is parsed into a {@link LocalDate}.
      * The user's role is set to the default role with ID 2.
      *
-     * @param registerDTO The {@link RegisterRequestDTO} containing user registration details.
+     * @param registerDTO The {@link RegisterRequestDto} containing user registration details.
      * @return A {@link User} entity populated with data from the DTO.
      */
-    public User convertRegisterDTOToUser(RegisterRequestDTO registerDTO) {
+    public User convertRegisterDTOToUser(RegisterRequestDto registerDTO) {
         User user = new User();
         user.setName(registerDTO.getFirstName() + " " + registerDTO.getLastName());
         user.setEmail(registerDTO.getEmail());
@@ -60,13 +60,13 @@ public class UserMapper {
     }
 
     /**
-     * Converts a {@link CreateUserRequestDTO} object to a {@link User} entity.
+     * Converts a {@link CreateUserRequestDto} object to a {@link User} entity.
      *
      * @param userDTO the DTO containing user details
      * @return a {@link User} entity with the provided details
      * @throws InvalidException if any validation fails
      */
-    public User convertCreateUserRequestDTOToUser(CreateUserRequestDTO userDTO) throws InvalidException {
+    public User convertCreateUserRequestDTOToUser(CreateUserRequestDto userDTO) throws InvalidException {
         User user = new User();
         user.setName(userDTO.getFirstName() + " " + userDTO.getLastName());
         user.setEmail(userDTO.getEmail());
@@ -83,16 +83,16 @@ public class UserMapper {
     }
 
     /**
-     * Converts a {@link User} entity to a {@link RegisterResponseDTO}.
+     * Converts a {@link User} entity to a {@link RegisterResponseDto}.
      *
      * This method extracts relevant user information and maps it to a DTO
      * for registration response purposes.
      *
      * @param user The {@link User} entity to be converted.
-     * @return A {@link RegisterResponseDTO} containing user details.
+     * @return A {@link RegisterResponseDto} containing user details.
      */
-    public RegisterResponseDTO convertUserToRegisterResponseDTO(User user) {
-        RegisterResponseDTO response = new RegisterResponseDTO();
+    public RegisterResponseDto convertUserToRegisterResponseDTO(User user) {
+        RegisterResponseDto response = new RegisterResponseDto();
         response.setId(user.getId());
         response.setName(user.getName());
         response.setEmail(user.getEmail());
@@ -101,16 +101,16 @@ public class UserMapper {
     }
 
     /**
-     * Converts a {@link User} entity to a {@link CreateUserResponseDTO}.
+     * Converts a {@link User} entity to a {@link CreateUserResponseDto}.
      *
      * This method extracts relevant user information and maps it to a DTO
      * for user creation response purposes.
      *
      * @param user The {@link User} entity to be converted.
-     * @return A {@link CreateUserResponseDTO} containing user details.
+     * @return A {@link CreateUserResponseDto} containing user details.
      */
-    public CreateUserResponseDTO convertUserToCreateResponseDTO(User user) {
-        CreateUserResponseDTO response = new CreateUserResponseDTO();
+    public CreateUserResponseDto convertUserToCreateResponseDTO(User user) {
+        CreateUserResponseDto response = new CreateUserResponseDto();
         response.setId(user.getId());
         response.setName(user.getName());
         response.setEmail(user.getEmail());
@@ -121,14 +121,14 @@ public class UserMapper {
     }
 
     /**
-     * Converts a {@link User} entity to a {@link UserResponseDTO}.
+     * Converts a {@link User} entity to a {@link UserResponseDto}.
      *
      * @param user The {@link User} entity to convert.
-     * @return A {@link UserResponseDTO} containing user details.
+     * @return A {@link UserResponseDto} containing user details.
      */
-    public UserResponseDTO convertUserToUserResponseDTO(User user) {
-        UserResponseDTO response = new UserResponseDTO();
-        UserResponseDTO.RoleUser roleUser = new UserResponseDTO.RoleUser();
+    public UserResponseDto convertUserToUserResponseDTO(User user) {
+        UserResponseDto response = new UserResponseDto();
+        UserResponseDto.RoleUser roleUser = new UserResponseDto.RoleUser();
 
         response.setId(user.getId());
         response.setEmail(user.getEmail());
@@ -159,19 +159,19 @@ public class UserMapper {
     }
 
     /**
-     * Converts a {@link User} entity into a {@link LoginResponseDTO}, including user details and an access token.
+     * Converts a {@link User} entity into a {@link LoginResponseDto}, including user details and an access token.
      *
      * @param dbUser        The authenticated user entity.
      * @param authentication The authentication object containing user credentials.
-     * @return A {@link LoginResponseDTO} containing user details and an access token.
+     * @return A {@link LoginResponseDto} containing user details and an access token.
      */
-    public LoginResponseDTO convertUserToLoginResponseDTO(User dbUser, Authentication authentication) {
+    public LoginResponseDto convertUserToLoginResponseDTO(User dbUser, Authentication authentication) {
         UserLogin user = new UserLogin();
         user.setId(dbUser.getId());
         user.setEmail(dbUser.getEmail());
         user.setName(dbUser.getName());
         user.setRole(dbUser.getRole());
-        LoginResponseDTO response = new LoginResponseDTO();
+        LoginResponseDto response = new LoginResponseDto();
         response.setUser(user);
 
         // set access token
@@ -186,8 +186,8 @@ public class UserMapper {
      * @param updateUser the User object to be converted
      * @return an UpdateUserResponseDTO containing the user's details
      */
-    public UpdateUserResponseDTO convertUserToUpdateUserResponseDTO(User updateUser) {
-        UpdateUserResponseDTO response = new UpdateUserResponseDTO();
+    public UpdateUserResponseDto convertUserToUpdateUserResponseDTO(User updateUser) {
+        UpdateUserResponseDto response = new UpdateUserResponseDto();
         response.setId(updateUser.getId());
         response.setName(updateUser.getName());
         response.setEmail(updateUser.getEmail());

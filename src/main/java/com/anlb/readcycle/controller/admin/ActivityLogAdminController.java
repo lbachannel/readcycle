@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.anlb.readcycle.dto.activitylog.ActivityLog;
-import com.anlb.readcycle.dto.response.ResultPaginateDTO;
+import com.anlb.readcycle.dto.response.ResultPaginateDto;
 import com.anlb.readcycle.service.ActivityLogService;
 import com.anlb.readcycle.utils.anotation.ApiMessage;
 import com.turkraft.springfilter.boot.Filter;
@@ -28,11 +28,11 @@ public class ActivityLogAdminController {
      *
      * @param spec     The {@link Specification} used to filter the activity logs.
      * @param pageable The {@link Pageable} object containing pagination details.
-     * @return A {@link ResponseEntity} containing a {@link ResultPaginateDTO} with the list of activity logs and pagination metadata.
+     * @return A {@link ResponseEntity} containing a {@link ResultPaginateDto} with the list of activity logs and pagination metadata.
      */
     @GetMapping("/activity-log")
     @ApiMessage("Get all activity logs")
-    public ResponseEntity<ResultPaginateDTO> getAllActivityLog(@Filter Specification<ActivityLog> spec, Pageable pageable) {
+    public ResponseEntity<ResultPaginateDto> getAllActivityLog(@Filter Specification<ActivityLog> spec, Pageable pageable) {
         return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(this.activityLogService.handleGetAllActivityLog(spec, pageable));

@@ -9,7 +9,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CreateCartResponseDTO {
+public class CreateCartResponseDto {
     private long id;
     private int quantity;
     private User user;

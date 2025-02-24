@@ -10,7 +10,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CreateRoleResponseDTO {
+public class CreateRoleResponseDto {
     private long id;
     private String name;
     private String description;

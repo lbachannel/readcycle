@@ -21,7 +21,7 @@ import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.stereotype.Service;
 
-import com.anlb.readcycle.dto.response.LoginResponseDTO;
+import com.anlb.readcycle.dto.response.LoginResponseDto;
 import com.anlb.readcycle.utils.exception.InvalidException;
 import com.nimbusds.jose.util.Base64;
 
@@ -57,8 +57,8 @@ public class SecurityUtil {
     @Value("${anlb.jwt.access-token-validity-in-seconds}")
     private long accessTokenExpired;
 
-    public String createAccessToken(String email, LoginResponseDTO loginResponse) {
-        LoginResponseDTO.UserInsideToken userToken = new LoginResponseDTO.UserInsideToken();
+    public String createAccessToken(String email, LoginResponseDto loginResponse) {
+        LoginResponseDto.UserInsideToken userToken = new LoginResponseDto.UserInsideToken();
         userToken.setId(loginResponse.getUser().getId());
         userToken.setEmail(loginResponse.getUser().getEmail());
         userToken.setName(loginResponse.getUser().getName());
@@ -79,8 +79,8 @@ public class SecurityUtil {
     @Value("${anlb.jwt.refresh-token-validity-in-seconds}")
     private long refreshTokenExpired;
 
-    public String createRefreshToken(String email, LoginResponseDTO loginResponse) {
-        LoginResponseDTO.UserInsideToken userToken = new LoginResponseDTO.UserInsideToken();
+    public String createRefreshToken(String email, LoginResponseDto loginResponse) {
+        LoginResponseDto.UserInsideToken userToken = new LoginResponseDto.UserInsideToken();
         userToken.setId(loginResponse.getUser().getId());
         userToken.setEmail(loginResponse.getUser().getEmail());
         userToken.setName(loginResponse.getUser().getName());

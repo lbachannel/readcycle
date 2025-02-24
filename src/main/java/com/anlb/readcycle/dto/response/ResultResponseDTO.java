@@ -3,7 +3,7 @@ package com.anlb.readcycle.dto.response;
 import lombok.Data;
 
 @Data
-public class ResultResponseDTO<T> {
+public class ResultResponseDto<T> {
     private int statusCode;
     private String error;
 

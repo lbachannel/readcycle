@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CreatePermissionRequestDTO {
+public class CreatePermissionRequestDto {
     @NotBlank(message = "Name is required")
     private String name;
     @NotBlank(message = "Api path is required")

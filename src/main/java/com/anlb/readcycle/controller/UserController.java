@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.anlb.readcycle.domain.User;
-import com.anlb.readcycle.dto.request.CreateUserRequestDTO;
-import com.anlb.readcycle.dto.request.RegisterRequestDTO;
-import com.anlb.readcycle.dto.request.UpdateUserRequestDTO;
-import com.anlb.readcycle.dto.response.CreateUserResponseDTO;
-import com.anlb.readcycle.dto.response.RegisterResponseDTO;
-import com.anlb.readcycle.dto.response.ResultPaginateDTO;
-import com.anlb.readcycle.dto.response.UpdateUserResponseDTO;
+import com.anlb.readcycle.dto.request.CreateUserRequestDto;
+import com.anlb.readcycle.dto.request.RegisterRequestDto;
+import com.anlb.readcycle.dto.request.UpdateUserRequestDto;
+import com.anlb.readcycle.dto.response.CreateUserResponseDto;
+import com.anlb.readcycle.dto.response.RegisterResponseDto;
+import com.anlb.readcycle.dto.response.ResultPaginateDto;
+import com.anlb.readcycle.dto.response.UpdateUserResponseDto;
 import com.anlb.readcycle.mapper.UserMapper;
 import com.anlb.readcycle.service.EmailService;
 import com.anlb.readcycle.service.UserService;
@@ -50,7 +50,7 @@ public class UserController {
      */
     @GetMapping("/users")
     @ApiMessage("Get all users")
-    public ResponseEntity<ResultPaginateDTO> getAllUsers(@Filter Specification<User> spec, Pageable pageable) {
+    public ResponseEntity<ResultPaginateDto> getAllUsers(@Filter Specification<User> spec, Pageable pageable) {
         return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(this.userService.handleGetAllUsers(spec, pageable));
@@ -64,7 +64,7 @@ public class UserController {
      */
     @PostMapping("/user/register")
     @ApiMessage("Register account")
-    public ResponseEntity<RegisterResponseDTO> registerMember(@Valid @RequestBody RegisterRequestDTO registerDTO) {
+    public ResponseEntity<RegisterResponseDto> registerMember(@Valid @RequestBody RegisterRequestDto registerDTO) {
         // convert DTO -> User
         User newUser = this.userMapper.convertRegisterDTOToUser(registerDTO);
         // save user
@@ -85,7 +85,7 @@ public class UserController {
      */
     @PostMapping("/users")
     @ApiMessage("Create a user")
-    public ResponseEntity<CreateUserResponseDTO> createNewUser(@Valid @RequestBody CreateUserRequestDTO userDTO) throws InvalidException {
+    public ResponseEntity<CreateUserResponseDto> createNewUser(@Valid @RequestBody CreateUserRequestDto userDTO) throws InvalidException {
         // convert DTO -> User
         User newUser = this.userMapper.convertCreateUserRequestDTOToUser(userDTO);
         // save user
@@ -104,7 +104,7 @@ public class UserController {
      */
     @PutMapping("/users")
     @ApiMessage("Update user")
-    public ResponseEntity<UpdateUserResponseDTO> updateUser(@Valid @RequestBody UpdateUserRequestDTO reqUser) throws InvalidException {
+    public ResponseEntity<UpdateUserResponseDto> updateUser(@Valid @RequestBody UpdateUserRequestDto reqUser) throws InvalidException {
         User updateUser = this.userService.handleUpdateUser(reqUser);
         return ResponseEntity
                     .ok(this.userMapper.convertUserToUpdateUserResponseDTO(updateUser));

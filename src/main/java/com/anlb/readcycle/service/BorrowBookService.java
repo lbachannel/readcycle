@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 import com.anlb.readcycle.domain.Book;
 import com.anlb.readcycle.domain.Borrow;
 import com.anlb.readcycle.domain.User;
-import com.anlb.readcycle.dto.request.CreateBorrowBookRequestDTO;
-import com.anlb.readcycle.dto.request.CreateBorrowBookRequestDTO.Details;
+import com.anlb.readcycle.dto.request.CreateBorrowBookRequestDto;
+import com.anlb.readcycle.dto.request.CreateBorrowBookRequestDto.Details;
 import com.anlb.readcycle.mapper.BookMapper;
 import com.anlb.readcycle.repository.BookRepository;
 import com.anlb.readcycle.repository.BorrowRepository;
@@ -29,7 +29,7 @@ public class BorrowBookService {
     private final BookRepository bookRepository;
     private final BorrowRepository borrowRepository;
 
-    public List<Borrow> handleBorrowBook(CreateBorrowBookRequestDTO reqBorrow) throws InvalidException {
+    public List<Borrow> handleBorrowBook(CreateBorrowBookRequestDto reqBorrow) throws InvalidException {
         List<Details> listBook = reqBorrow.getDetails();
         User user = this.userService.handleGetUserByUsername(reqBorrow.getUsername());
 

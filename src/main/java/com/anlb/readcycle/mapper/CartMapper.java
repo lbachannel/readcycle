@@ -4,13 +4,13 @@ import org.springframework.stereotype.Service;
 
 import com.anlb.readcycle.domain.Book;
 import com.anlb.readcycle.domain.Cart;
-import com.anlb.readcycle.dto.response.CreateCartResponseDTO;
-import com.anlb.readcycle.dto.response.CreateCartResponseDTO.Details;
+import com.anlb.readcycle.dto.response.CreateCartResponseDto;
+import com.anlb.readcycle.dto.response.CreateCartResponseDto.Details;
 
 @Service
 public class CartMapper {
-    public CreateCartResponseDTO convertCartToCreateCartResponseDTO(Cart cart) {
-        CreateCartResponseDTO response = new CreateCartResponseDTO();
+    public CreateCartResponseDto convertCartToCreateCartResponseDTO(Cart cart) {
+        CreateCartResponseDto response = new CreateCartResponseDto();
         response.setId(cart.getId());
         response.setQuantity(cart.getSum());
         response.setUser(cart.getUser());

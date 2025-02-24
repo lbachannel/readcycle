@@ -13,7 +13,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class BookResponseDTO {
+public class BookResponseDto {
     private long id;
     private String category;
     private String title;

@@ -9,10 +9,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.anlb.readcycle.domain.Permission;
-import com.anlb.readcycle.dto.request.CreatePermissionRequestDTO;
-import com.anlb.readcycle.dto.request.UpdatePermissionRequestDTO;
-import com.anlb.readcycle.dto.response.ResultPaginateDTO;
-import com.anlb.readcycle.dto.response.ResultPaginateDTO.Meta;
+import com.anlb.readcycle.dto.request.CreatePermissionRequestDto;
+import com.anlb.readcycle.dto.request.UpdatePermissionRequestDto;
+import com.anlb.readcycle.dto.response.ResultPaginateDto;
+import com.anlb.readcycle.dto.response.ResultPaginateDto.Meta;
 import com.anlb.readcycle.repository.PermissionRepository;
 import com.anlb.readcycle.utils.exception.InvalidException;
 
@@ -52,7 +52,7 @@ public class PermissionService {
      * @param permissionDTO The request data containing permission details such as name, API path, method, and module.
      * @return The newly created {@link Permission} entity after being saved to the repository.
      */
-    public Permission handleCreatePermission(CreatePermissionRequestDTO permissionDTO) {
+    public Permission handleCreatePermission(CreatePermissionRequestDto permissionDTO) {
         Permission newPermission = new Permission();
         newPermission.setName(permissionDTO.getName());
         newPermission.setApiPath(permissionDTO.getApiPath());
@@ -81,11 +81,11 @@ public class PermissionService {
      * Updates an existing {@link Permission} entity based on the provided request data.
      * If the permission does not exist, an {@link InvalidException} is thrown.
      *
-     * @param permissionDTO The {@link UpdatePermissionRequestDTO} containing updated permission details.
+     * @param permissionDTO The {@link UpdatePermissionRequestDto} containing updated permission details.
      * @return The updated {@link Permission} entity after being saved to the repository.
      * @throws InvalidException if the permission with the given ID does not exist.
      */
-    public Permission handleUpdatePermission(UpdatePermissionRequestDTO permissionDTO) throws InvalidException {
+    public Permission handleUpdatePermission(UpdatePermissionRequestDto permissionDTO) throws InvalidException {
         Permission updatePermission = this.handleFindById(permissionDTO.getId());
         updatePermission.setName(permissionDTO.getName());
         updatePermission.setApiPath(permissionDTO.getApiPath());
@@ -99,11 +99,11 @@ public class PermissionService {
      *
      * @param spec The {@link Specification} used to filter permissions.
      * @param pageable The {@link Pageable} object defining pagination and sorting criteria.
-     * @return A {@link ResultPaginateDTO} containing the paginated list of permissions along with metadata.
+     * @return A {@link ResultPaginateDto} containing the paginated list of permissions along with metadata.
      */
-    public ResultPaginateDTO handleGetPermissions(Specification<Permission> spec, Pageable pageable) {
+    public ResultPaginateDto handleGetPermissions(Specification<Permission> spec, Pageable pageable) {
         Page<Permission> dbPermissions = this.permissionRepository.findAll(spec, pageable);
-        ResultPaginateDTO resultPaginateDTO = new ResultPaginateDTO();
+        ResultPaginateDto resultPaginateDTO = new ResultPaginateDto();
         Meta meta = new Meta();
         meta.setPage(pageable.getPageNumber() + 1);
         meta.setPageSize(pageable.getPageSize());

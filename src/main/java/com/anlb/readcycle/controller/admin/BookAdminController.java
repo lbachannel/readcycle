@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.anlb.readcycle.domain.Book;
-import com.anlb.readcycle.dto.request.CreateBookRequestDTO;
-import com.anlb.readcycle.dto.request.UpdateBookRequestDTO;
-import com.anlb.readcycle.dto.response.CreateBookResponseDTO;
-import com.anlb.readcycle.dto.response.ResultPaginateDTO;
-import com.anlb.readcycle.dto.response.UpdateBookResponseDTO;
+import com.anlb.readcycle.dto.request.CreateBookRequestDto;
+import com.anlb.readcycle.dto.request.UpdateBookRequestDto;
+import com.anlb.readcycle.dto.response.CreateBookResponseDto;
+import com.anlb.readcycle.dto.response.ResultPaginateDto;
+import com.anlb.readcycle.dto.response.UpdateBookResponseDto;
 import com.anlb.readcycle.mapper.BookMapper;
 import com.anlb.readcycle.service.BookService;
 import com.anlb.readcycle.utils.anotation.ApiMessage;
@@ -41,11 +41,11 @@ public class BookAdminController {
      *
      * @param spec     The specification used for filtering the books.
      * @param pageable The pagination information.
-     * @return A {@link ResponseEntity} containing a {@link ResultPaginateDTO} with the list of books.
+     * @return A {@link ResponseEntity} containing a {@link ResultPaginateDto} with the list of books.
      */
     @GetMapping("/books")
     @ApiMessage("Get all books")
-    public ResponseEntity<ResultPaginateDTO> getAllBooks(@Filter Specification<Book> spec, Pageable pageable) {
+    public ResponseEntity<ResultPaginateDto> getAllBooks(@Filter Specification<Book> spec, Pageable pageable) {
         return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(this.bookService.handleGetAllBooks(spec, pageable));
@@ -55,7 +55,7 @@ public class BookAdminController {
      * {@code POST  /books}  : Creates a new book.
      *
      * @param reqBook the request body containing book details.
-     * @return a {@link ResponseEntity} with the created {@link CreateBookResponseDTO}.
+     * @return a {@link ResponseEntity} with the created {@link CreateBookResponseDto}.
      * @throws InvalidException if the book creation process encounters an error.
      * 
      * @implNote This method delegates book creation to {@code bookService} and 
@@ -63,7 +63,7 @@ public class BookAdminController {
      */
     @PostMapping("/books")
     @ApiMessage("Create a book")
-    public ResponseEntity<CreateBookResponseDTO> createNewBook(@Valid @RequestBody CreateBookRequestDTO reqBook) throws InvalidException {
+    public ResponseEntity<CreateBookResponseDto> createNewBook(@Valid @RequestBody CreateBookRequestDto reqBook) throws InvalidException {
         Book newBook = this.bookService.handleCreateBook(reqBook);
         return ResponseEntity
                     .status(HttpStatus.CREATED)
@@ -74,12 +74,12 @@ public class BookAdminController {
      * {@code PUT  /books}  : Updates an existing Book.
      * 
      * @param reqBook The request body containing the updated book details.
-     * @return A {@link ResponseEntity} containing an {@link UpdateBookResponseDTO} with the updated book details.
+     * @return A {@link ResponseEntity} containing an {@link UpdateBookResponseDto} with the updated book details.
      * @throws InvalidException If the update request is invalid.
      */
     @PutMapping("/books")
     @ApiMessage("Update book")
-    public ResponseEntity<UpdateBookResponseDTO> updateBook(@RequestBody UpdateBookRequestDTO reqBook) throws InvalidException {
+    public ResponseEntity<UpdateBookResponseDto> updateBook(@RequestBody UpdateBookRequestDto reqBook) throws InvalidException {
         Book updateBook = this.bookService.handleUpdateBook(reqBook);
         return ResponseEntity
                     .ok(this.bookMapper.convertBookToUpdateBookResponseDTO(updateBook));

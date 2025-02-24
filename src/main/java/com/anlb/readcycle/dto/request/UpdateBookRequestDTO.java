@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @BookChecked
-public class UpdateBookRequestDTO {
+public class UpdateBookRequestDto {
     private long id;
     private String category;
     private String title;

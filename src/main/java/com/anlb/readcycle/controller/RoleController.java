@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.anlb.readcycle.domain.Role;
-import com.anlb.readcycle.dto.request.CreateRoleRequestDTO;
-import com.anlb.readcycle.dto.request.UpdateRoleRequestDTO;
-import com.anlb.readcycle.dto.response.CreateRoleResponseDTO;
-import com.anlb.readcycle.dto.response.ResultPaginateDTO;
-import com.anlb.readcycle.dto.response.UpdateRoleResponseDTO;
+import com.anlb.readcycle.dto.request.CreateRoleRequestDto;
+import com.anlb.readcycle.dto.request.UpdateRoleRequestDto;
+import com.anlb.readcycle.dto.response.CreateRoleResponseDto;
+import com.anlb.readcycle.dto.response.ResultPaginateDto;
+import com.anlb.readcycle.dto.response.UpdateRoleResponseDto;
 import com.anlb.readcycle.mapper.RoleMapper;
 import com.anlb.readcycle.service.RoleService;
 import com.anlb.readcycle.utils.anotation.ApiMessage;
@@ -54,12 +54,12 @@ public class RoleController {
      * {@code POST  /roles} : Creates a new role.
      *
      * @param roleDTO The request body containing role details.
-     * @return A {@link ResponseEntity} containing the created role as a {@link CreateRoleResponseDTO}.
+     * @return A {@link ResponseEntity} containing the created role as a {@link CreateRoleResponseDto}.
      * @throws InvalidException If a role with the same name already exists.
      */
     @PostMapping("/roles")
     @ApiMessage("Create a role")
-    public ResponseEntity<CreateRoleResponseDTO> createRole(@Valid @RequestBody CreateRoleRequestDTO roleDTO) throws InvalidException {
+    public ResponseEntity<CreateRoleResponseDto> createRole(@Valid @RequestBody CreateRoleRequestDto roleDTO) throws InvalidException {
         this.roleService.existByName(roleDTO.getName());
         Role role = this.roleService.handleCreateRole(roleDTO);
         return ResponseEntity
@@ -71,12 +71,12 @@ public class RoleController {
      * {@code PUT  /roles} : Updates an existing role.
      *
      * @param roleDTO The request body containing updated role details.
-     * @return A {@link ResponseEntity} containing the updated role as a {@link UpdateRoleResponseDTO}.
+     * @return A {@link ResponseEntity} containing the updated role as a {@link UpdateRoleResponseDto}.
      * @throws InvalidException If the role does not exist.
      */
     @PutMapping("/roles")
     @ApiMessage("Update a role")
-    public ResponseEntity<UpdateRoleResponseDTO> updateRole(@Valid @RequestBody UpdateRoleRequestDTO roleDTO) throws InvalidException {
+    public ResponseEntity<UpdateRoleResponseDto> updateRole(@Valid @RequestBody UpdateRoleRequestDto roleDTO) throws InvalidException {
         // check if role does not exits. then throw exception
         this.roleService.checkRoleExitsById(roleDTO.getId());
         Role updateRole = this.roleService.handleUpdateRole(roleDTO);
@@ -91,11 +91,11 @@ public class RoleController {
      *
      * @param spec     The filtering criteria for retrieving roles.
      * @param pageable The pagination information.
-     * @return A {@link ResponseEntity} containing a paginated list of roles as a {@link ResultPaginateDTO}.
+     * @return A {@link ResponseEntity} containing a paginated list of roles as a {@link ResultPaginateDto}.
      */
     @GetMapping("/roles")
     @ApiMessage("Get roles")
-    public ResponseEntity<ResultPaginateDTO> getPermissions(@Filter Specification<Role> spec, Pageable pageable) {
+    public ResponseEntity<ResultPaginateDto> getPermissions(@Filter Specification<Role> spec, Pageable pageable) {
         return ResponseEntity.ok(this.roleService.handleGetRoles(spec, pageable));
     }
 

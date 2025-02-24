@@ -17,13 +17,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.anlb.readcycle.domain.User;
-import com.anlb.readcycle.dto.request.UpdateUserRequestDTO;
-import com.anlb.readcycle.dto.response.LoginResponseDTO;
-import com.anlb.readcycle.dto.response.ResultPaginateDTO;
-import com.anlb.readcycle.dto.response.UserResponseDTO;
+import com.anlb.readcycle.dto.request.UpdateUserRequestDto;
+import com.anlb.readcycle.dto.response.LoginResponseDto;
+import com.anlb.readcycle.dto.response.ResultPaginateDto;
+import com.anlb.readcycle.dto.response.UserResponseDto;
 import com.anlb.readcycle.mapper.UserMapper;
-import com.anlb.readcycle.dto.response.LoginResponseDTO.UserGetAccount;
-import com.anlb.readcycle.dto.response.LoginResponseDTO.UserLogin;
+import com.anlb.readcycle.dto.response.LoginResponseDto.UserGetAccount;
+import com.anlb.readcycle.dto.response.LoginResponseDto.UserLogin;
 import com.anlb.readcycle.repository.UserRepository;
 import com.anlb.readcycle.utils.SecurityUtil;
 import com.anlb.readcycle.utils.exception.InvalidException;
@@ -199,13 +199,13 @@ public class UserService {
     }
 
     /**
-     * Generates a {@link LoginResponseDTO} from a decoded JWT token.
+     * Generates a {@link LoginResponseDto} from a decoded JWT token.
      *
      * @param decodedToken the decoded JWT containing the user's subject (email or username)
-     * @return a {@link LoginResponseDTO} containing user details and an access token
+     * @return a {@link LoginResponseDto} containing user details and an access token
      * @throws InvalidException if the user associated with the token does not exist
      */
-    public LoginResponseDTO generateLoginResponseFromToken (Jwt decodedToken) throws InvalidException {
+    public LoginResponseDto generateLoginResponseFromToken (Jwt decodedToken) throws InvalidException {
         User dbUser = this.handleGetUserByUsername(decodedToken.getSubject());
         UserLogin user = new UserLogin(
             dbUser.getId(),
@@ -214,7 +214,7 @@ public class UserService {
             dbUser.getRole()
         );
 
-        LoginResponseDTO response = new LoginResponseDTO();
+        LoginResponseDto response = new LoginResponseDto();
         response.setUser(user);
 
         // set access token
@@ -228,12 +228,12 @@ public class UserService {
      *
      * @param spec     The specification to filter users.
      * @param pageable The pagination and sorting information.
-     * @return A {@link ResultPaginateDTO} containing the paginated user list and metadata.
+     * @return A {@link ResultPaginateDto} containing the paginated user list and metadata.
      */
-    public ResultPaginateDTO handleGetAllUsers(Specification<User> spec, Pageable pageable) {
+    public ResultPaginateDto handleGetAllUsers(Specification<User> spec, Pageable pageable) {
         Page<User> pageUser = this.userRepository.findAll(spec, pageable);
-        ResultPaginateDTO rs = new ResultPaginateDTO();
-        ResultPaginateDTO.Meta mt = new ResultPaginateDTO.Meta();
+        ResultPaginateDto rs = new ResultPaginateDto();
+        ResultPaginateDto.Meta mt = new ResultPaginateDto.Meta();
 
         mt.setPage(pageable.getPageNumber() + 1);
         mt.setPageSize(pageable.getPageSize());
@@ -244,7 +244,7 @@ public class UserService {
         rs.setMeta(mt);
 
         // remove sensitive data
-        List<UserResponseDTO> listUser = pageUser.getContent()
+        List<UserResponseDto> listUser = pageUser.getContent()
                                             .stream()
                                             .map(item -> this.userMapper.convertUserToUserResponseDTO(item))
                                             .collect(Collectors.toList());
@@ -306,7 +306,7 @@ public class UserService {
      * @return the updated and saved {@link User} entity
      * @throws InvalidException if the access token is invalid or the current user cannot be retrieved
      */
-    public User handleUpdateUser(UpdateUserRequestDTO reqUser) throws InvalidException {
+    public User handleUpdateUser(UpdateUserRequestDto reqUser) throws InvalidException {
         User updateUser = this.handleGetUserById(reqUser.getId());
         User oldUser = updateUser.clone();
         updateUser.setName(reqUser.getName());

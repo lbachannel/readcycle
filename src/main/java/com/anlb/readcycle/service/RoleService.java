@@ -12,10 +12,10 @@ import org.springframework.stereotype.Service;
 
 import com.anlb.readcycle.domain.Permission;
 import com.anlb.readcycle.domain.Role;
-import com.anlb.readcycle.dto.request.CreateRoleRequestDTO;
-import com.anlb.readcycle.dto.request.UpdateRoleRequestDTO;
-import com.anlb.readcycle.dto.response.ResultPaginateDTO;
-import com.anlb.readcycle.dto.response.ResultPaginateDTO.Meta;
+import com.anlb.readcycle.dto.request.CreateRoleRequestDto;
+import com.anlb.readcycle.dto.request.UpdateRoleRequestDto;
+import com.anlb.readcycle.dto.response.ResultPaginateDto;
+import com.anlb.readcycle.dto.response.ResultPaginateDto.Meta;
 import com.anlb.readcycle.repository.PermissionRepository;
 import com.anlb.readcycle.repository.RoleRepository;
 import com.anlb.readcycle.utils.exception.InvalidException;
@@ -59,10 +59,10 @@ public class RoleService {
      * Creates a new role based on the provided role data.
      * If permissions are provided, they are retrieved from the database and assigned to the new role.
      *
-     * @param roleDTO The {@link CreateRoleRequestDTO} containing role details.
+     * @param roleDTO The {@link CreateRoleRequestDto} containing role details.
      * @return The newly created {@link Role} entity.
      */
-    public Role handleCreateRole(CreateRoleRequestDTO roleDTO) {
+    public Role handleCreateRole(CreateRoleRequestDto roleDTO) {
         Role newRole = new Role();
         newRole.setName(roleDTO.getName());
         newRole.setDescription(roleDTO.getDescription());
@@ -107,11 +107,11 @@ public class RoleService {
     /**
      * Updates an existing {@link Role} entity with the provided details.
      *
-     * @param roleDTO The {@link UpdateRoleRequestDTO} containing updated role information.
+     * @param roleDTO The {@link UpdateRoleRequestDto} containing updated role information.
      * @return The updated {@link Role} entity.
      * @throws NoSuchElementException if the role with the given ID does not exist.
      */
-    public Role handleUpdateRole(UpdateRoleRequestDTO roleDTO) {
+    public Role handleUpdateRole(UpdateRoleRequestDto roleDTO) {
         Role updateRole = this.roleRepository.findById(roleDTO.getId()).get();
         updateRole.setName(roleDTO.getName());
         updateRole.setDescription(roleDTO.getDescription());
@@ -133,11 +133,11 @@ public class RoleService {
      *
      * @param spec     The {@link Specification} used to filter roles.
      * @param pageable The {@link Pageable} object containing pagination and sorting information.
-     * @return A {@link ResultPaginateDTO} containing the paginated list of roles and metadata.
+     * @return A {@link ResultPaginateDto} containing the paginated list of roles and metadata.
      */
-    public ResultPaginateDTO handleGetRoles(Specification<Role> spec, Pageable pageable) {
+    public ResultPaginateDto handleGetRoles(Specification<Role> spec, Pageable pageable) {
         Page<Role> dbRoles = this.roleRepository.findAll(spec, pageable);
-        ResultPaginateDTO resultPaginateDTO = new ResultPaginateDTO();
+        ResultPaginateDto resultPaginateDTO = new ResultPaginateDto();
         Meta meta = new Meta();
         meta.setPage(pageable.getPageNumber() + 1);
         meta.setPageSize(pageable.getPageSize());
