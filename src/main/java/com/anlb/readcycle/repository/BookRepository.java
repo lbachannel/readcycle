@@ -14,4 +14,5 @@ public interface BookRepository extends JpaRepository<Book, Long>, JpaSpecificat
     Optional<Book> findByIdAndIsActive(long id, boolean isActive);
 
     List<Book> findAllByIsActive(boolean isActive);
+    Book findByTitle(String title);
 }

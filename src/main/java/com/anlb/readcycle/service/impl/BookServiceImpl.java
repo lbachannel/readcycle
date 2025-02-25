@@ -10,9 +10,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.anlb.readcycle.domain.Book;
+
 import com.anlb.readcycle.dto.request.CreateBookRequestDto;
 import com.anlb.readcycle.dto.request.UpdateBookRequestDto;
 import com.anlb.readcycle.dto.response.BookResponseDto;
+import com.anlb.readcycle.dto.response.BulkCreateResponseDto;
 import com.anlb.readcycle.dto.response.ResultPaginateDto;
 import com.anlb.readcycle.mapper.BookMapper;
 import com.anlb.readcycle.repository.BookRepository;
@@ -207,5 +209,30 @@ public class BookServiceImpl implements IBookService {
     public void handleDeleteBookById(long id) {
         bookLogService.logDeleteBook(id);
         bookRepository.deleteById(id);
+    }
+
+    @Override
+    public BulkCreateResponseDto handleBulkCreateBooksbooks(List<CreateBookRequestDto> books) {
+        int countSuccess = 0;
+        int countError = 0;
+        for (CreateBookRequestDto book : books) {
+            try {
+                Book dbBook = handleGetBookByTitle(book.getTitle());
+                if (dbBook != null) {
+                    countError++;
+                } else {
+                    handleCreateBook(book);
+                    countSuccess++;
+                }
+            } catch (Exception e) {
+                countError++;
+            }
+        }
+        return new BulkCreateResponseDto(countSuccess, countError);
+    }
+
+    @Override
+    public Book handleGetBookByTitle(String title) {
+        return bookRepository.findByTitle(title);
     }
 }
