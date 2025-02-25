@@ -365,4 +365,11 @@ public class UserServiceImpl implements IUserService {
         userLogService.logDeleteUser(id, userLogin);
         userRepository.deleteById(id);
     }
+
+	@Override
+	public User handleSoftDelete(long id) throws InvalidException {
+		User isDeletedUser = handleGetUserById(id);
+        isDeletedUser.setActive(!isDeletedUser.isActive());
+        return userRepository.save(isDeletedUser);
+	}
 }

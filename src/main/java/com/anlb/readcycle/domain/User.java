@@ -50,6 +50,9 @@ public class User {
     @Column(name = "verification_email_token", columnDefinition = "MEDIUMTEXT")
     private String verificationEmailToken;
 
+    @Column(name = "is_active")
+    private boolean isActive;
+
     @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;

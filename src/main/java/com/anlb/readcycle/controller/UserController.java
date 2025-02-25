@@ -124,4 +124,20 @@ public class UserController {
         userService.handleDeleteUserById(user.getId());
         return ResponseEntity.ok().body(user);
     }
+
+    /**
+     * {@code DELETE /users/{id}} : Deletes a user by its ID.
+     *
+     * @return A {@link ResponseEntity} containing the deleted {@link User}.
+     * @throws InvalidException If the user with the given ID is not found or the operation is invalid.
+     */
+    @PutMapping("/users/{id}")
+    @ApiMessage("Toggle soft delete a user")
+    public ResponseEntity<User> toggleSoftDeleteUser(@PathVariable("id") long id) throws InvalidException {
+        User isDeletedUser = userService.handleGetUserById(id);
+        isDeletedUser = userService.handleSoftDelete(isDeletedUser.getId());
+        return ResponseEntity
+                    .ok()
+                    .body(isDeletedUser);
+    }
 }

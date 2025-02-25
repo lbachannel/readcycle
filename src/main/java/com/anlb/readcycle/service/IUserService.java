@@ -31,4 +31,5 @@ public interface IUserService {
     User handleGetUserById(long id) throws InvalidException;
     User handleUpdateUser(UpdateUserRequestDto reqUser) throws InvalidException;
     void handleDeleteUserById(long id) throws InvalidException;
+    User handleSoftDelete(long id) throws InvalidException;
 }
