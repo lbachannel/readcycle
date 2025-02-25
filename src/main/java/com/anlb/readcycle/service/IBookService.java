@@ -1,11 +1,13 @@
 package com.anlb.readcycle.service;
 
+import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
 import com.anlb.readcycle.domain.Book;
 import com.anlb.readcycle.dto.request.CreateBookRequestDto;
 import com.anlb.readcycle.dto.request.UpdateBookRequestDto;
+import com.anlb.readcycle.dto.response.BulkCreateResponseDto;
 import com.anlb.readcycle.dto.response.ResultPaginateDto;
 import com.anlb.readcycle.utils.exception.InvalidException;
 
@@ -18,4 +20,6 @@ public interface IBookService {
     ResultPaginateDto handleGetAllBooks(Specification<Book> spec, Pageable pageable);
     ResultPaginateDto handleGetAllBooksClient(Specification<Book> spec, Pageable pageable);
     void handleDeleteBookById(long id);
+    BulkCreateResponseDto handleBulkCreateBooksbooks(List<CreateBookRequestDto> books);
+    Book handleGetBookByTitle(String title);
 }
