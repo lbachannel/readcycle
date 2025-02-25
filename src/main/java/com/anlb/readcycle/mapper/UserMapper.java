@@ -117,6 +117,7 @@ public class UserMapper {
         response.setDateOfBirth(user.getDateOfBirth());
         response.setCreatedAt(user.getCreatedAt());
         response.setRole(user.getRole());
+        response.setActive(user.isActive());
         return response;
     }
 
@@ -140,6 +141,7 @@ public class UserMapper {
             roleUser.setName(user.getRole().getName());
             response.setRole(roleUser);
         }
+        response.setActive(user.isActive());
         return response;
     }
 
@@ -194,6 +196,7 @@ public class UserMapper {
         response.setDateOfBirth(updateUser.getDateOfBirth());
         response.setCreatedAt(updateUser.getCreatedAt());
         response.setRole(updateUser.getRole());
+        response.setActive(updateUser.isActive());
         return response;
     }
 }

@@ -21,6 +21,8 @@ public class UserResponseDto {
     
     private RoleUser role;
 
+    private boolean active;
+
     @Getter
     @Setter
     @AllArgsConstructor

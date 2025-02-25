@@ -16,4 +16,5 @@ public class UpdateUserResponseDto {
     private Instant createdAt;
 
     private Role role;
+    private boolean active;
 }
