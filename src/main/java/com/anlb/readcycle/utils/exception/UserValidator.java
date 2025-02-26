@@ -103,45 +103,45 @@ public class UserValidator implements ConstraintValidator<UserChecked, CreateUse
         }
 
         // validation password
-        if (StringUtils.isBlank(user.getPassword())) {
-            context.buildConstraintViolationWithTemplate("Password is required")
-                    .addPropertyNode("password")
-                    .addConstraintViolation()
-                    .disableDefaultConstraintViolation();
-            valid = false;
-        } else if (2 >= user.getPassword().length()) {
-            context.buildConstraintViolationWithTemplate("Password must be greater than or equal to 3")
-                    .addPropertyNode("password")
-                    .addConstraintViolation()
-                    .disableDefaultConstraintViolation();
-            valid = false;
-        }
+        // if (StringUtils.isBlank(user.getPassword())) {
+        //     context.buildConstraintViolationWithTemplate("Password is required")
+        //             .addPropertyNode("password")
+        //             .addConstraintViolation()
+        //             .disableDefaultConstraintViolation();
+        //     valid = false;
+        // } else if (2 >= user.getPassword().length()) {
+        //     context.buildConstraintViolationWithTemplate("Password must be greater than or equal to 3")
+        //             .addPropertyNode("password")
+        //             .addConstraintViolation()
+        //             .disableDefaultConstraintViolation();
+        //     valid = false;
+        // }
 
          // validation confirm password
-        if (StringUtils.isBlank(user.getConfirmPassword())) {
-            context.buildConstraintViolationWithTemplate("Confirm password is required")
-                    .addPropertyNode("confirmPassword")
-                    .addConstraintViolation()
-                    .disableDefaultConstraintViolation();
-            valid = false;
-        } else if (2 >= user.getConfirmPassword().length()) {
-            context.buildConstraintViolationWithTemplate("Confirm password must be greater than or equal to 3")
-                    .addPropertyNode("confirmPassword")
-                    .addConstraintViolation()
-                    .disableDefaultConstraintViolation();
-            valid = false;
-        }
+        // if (StringUtils.isBlank(user.getConfirmPassword())) {
+        //     context.buildConstraintViolationWithTemplate("Confirm password is required")
+        //             .addPropertyNode("confirmPassword")
+        //             .addConstraintViolation()
+        //             .disableDefaultConstraintViolation();
+        //     valid = false;
+        // } else if (2 >= user.getConfirmPassword().length()) {
+        //     context.buildConstraintViolationWithTemplate("Confirm password must be greater than or equal to 3")
+        //             .addPropertyNode("confirmPassword")
+        //             .addConstraintViolation()
+        //             .disableDefaultConstraintViolation();
+        //     valid = false;
+        // }
 
         // compare password and confirm-password
-        if (valid) {
-            if (!user.getPassword().equals(user.getConfirmPassword())) {
-                context.buildConstraintViolationWithTemplate("Incorrect password, please check again")
-                        .addPropertyNode("password")
-                        .addConstraintViolation()
-                        .disableDefaultConstraintViolation();
-                valid = false;
-            }
-        }
+        // if (valid) {
+        //     if (!user.getPassword().equals(user.getConfirmPassword())) {
+        //         context.buildConstraintViolationWithTemplate("Incorrect password, please check again")
+        //                 .addPropertyNode("password")
+        //                 .addConstraintViolation()
+        //                 .disableDefaultConstraintViolation();
+        //         valid = false;
+        //     }
+        // }
 
         // validation role
         if (StringUtils.isBlank(user.getRole())) {

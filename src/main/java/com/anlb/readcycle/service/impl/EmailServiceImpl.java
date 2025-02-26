@@ -60,6 +60,7 @@ public class EmailServiceImpl implements IEmailService {
     @Override
     public void sendEmailFromTemplateSync(User user, String subject, String templateName) {
         Context context = new Context();
+        context.setVariable("password", user.getPassword());
         context.setVariable("email", user.getEmail());
         String verifyUrl = "http://localhost:8080/api/v1/auth/verify-email?token=" + user.getVerificationEmailToken();
         context.setVariable("verifyEmailToken", verifyUrl);
