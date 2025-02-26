@@ -90,6 +90,8 @@ public class UserController {
         User newUser = userMapper.convertCreateUserRequestDTOToUser(userDTO);
         // save user
         newUser = userService.handleCreateUser(newUser);
+        // send email
+        emailService.sendEmailFromTemplateSync(newUser, "ReadCycle - Verify your email", "verify-email");
         return ResponseEntity
                     .status(HttpStatus.CREATED)
                     .body(userMapper.convertUserToCreateResponseDTO(newUser));

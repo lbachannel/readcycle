@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtException;
@@ -64,20 +65,32 @@ public class UserServiceImpl implements IUserService {
 
     /**
      * Creates a new user and logs the creation activity.
-     *
-     * @param user the user to be created
-     * @return the saved user with updated information
-     * @throws InvalidException if the current user cannot be retrieved due to an invalid access token
      */
     @Override
     public User handleCreateUser(User user) throws InvalidException {
-        user.setEmailVerified(true);
+        String verifyEmailToken = securityUtil.createVerifyEmailToken(user.getEmail());
+        user.setEmailVerified(false);
+        user.setVerificationEmailToken(verifyEmailToken);
+        user.setPassword(generatePassword());
         user = userRepository.save(user);
         String email = SecurityUtil.getCurrentUserLogin()
                         .orElseThrow(() -> new InvalidException("Access Token invalid"));
         User userLogin = this.handleGetUserByUsername(email);
         userLogService.logCreateUser(user, userLogin);
         return user;
+    }
+
+    public static String generatePassword() {
+        final String LETTERS_AND_NUMBERS = "abcdefghijklmnopqrstuvwxyz0123456789";
+        final String SPECIAL_CHARACTERS = "!@#$%^&*()-_=+";
+        StringBuilder password = new StringBuilder();
+        for (int i = 0; i < 9; i++) {
+            int index = (int) (Math.random() * LETTERS_AND_NUMBERS.length());
+            password.append(LETTERS_AND_NUMBERS.charAt(index));
+        }
+        int specialIndex = (int) (Math.random() * SPECIAL_CHARACTERS.length());
+        password.append(SPECIAL_CHARACTERS.charAt(specialIndex));
+        return password.toString();
     }
 
     /**

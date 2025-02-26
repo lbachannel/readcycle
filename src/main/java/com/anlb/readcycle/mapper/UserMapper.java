@@ -71,9 +71,9 @@ public class UserMapper {
         user.setName(userDTO.getFirstName() + " " + userDTO.getLastName());
         user.setEmail(userDTO.getEmail());
         // hash password
-        String hashPassword = this.passwordEncoder.encode(userDTO.getPassword());
-        userDTO.setPassword(hashPassword);
-        user.setPassword(userDTO.getPassword());
+        // String hashPassword = this.passwordEncoder.encode(userDTO.getPassword());
+        // userDTO.setPassword(hashPassword);
+        // user.setPassword(userDTO.getPassword());
         if (RegisterValidator.isValidDateFormat(userDTO.getDateOfBirth())) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             user.setDateOfBirth(LocalDate.parse(userDTO.getDateOfBirth(), formatter));
