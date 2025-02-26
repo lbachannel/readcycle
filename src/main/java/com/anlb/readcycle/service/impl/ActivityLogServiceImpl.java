@@ -48,7 +48,7 @@ public class ActivityLogServiceImpl implements IActivityLogService {
         meta.setPage(pageable.getPageNumber() + 1);
         meta.setPageSize(pageable.getPageSize());
 
-        // meta.setPages(pageActivityLog.getTotalPages());
+        meta.setPages(pageActivityLog.getTotalPages());
         meta.setTotal(pageActivityLog.getTotalElements());
 
         response.setMeta(meta);
