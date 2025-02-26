@@ -29,6 +29,7 @@ dependencies {
 	implementation("com.turkraft.springfilter:jpa:3.1.7")
 	implementation("org.apache.commons:commons-lang3:3.17.0")
 	implementation("com.google.code.gson:gson:2.8.5")
+	implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
 
 
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
