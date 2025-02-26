@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtException;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.anlb.readcycle.domain.User;
+import com.anlb.readcycle.dto.request.ChangePasswordRequestDto;
 import com.anlb.readcycle.dto.request.UpdateUserRequestDto;
 import com.anlb.readcycle.dto.response.LoginResponseDto;
 import com.anlb.readcycle.dto.response.ResultPaginateDto;
@@ -44,6 +46,7 @@ public class UserServiceImpl implements IUserService {
     private final IRoleService roleService;
     private final UserMapper userMapper;
     private final IUserLogService userLogService;
+    private final PasswordEncoder passwordEncoder;
 
     /**
      * Handles the registration process for a new member.
@@ -71,6 +74,7 @@ public class UserServiceImpl implements IUserService {
         user.setEmailVerified(false);
         user.setVerificationEmailToken(verifyEmailToken);
         user.setPassword(generatePassword());
+        user.setActive(true);
         user = userRepository.save(user);
         String email = SecurityUtil.getCurrentUserLogin()
                         .orElseThrow(() -> new InvalidException("Access Token invalid"));
@@ -384,4 +388,16 @@ public class UserServiceImpl implements IUserService {
         isDeletedUser.setActive(!isDeletedUser.isActive());
         return userRepository.save(isDeletedUser);
 	}
+
+    @Override
+    public void handleChangePassword(ChangePasswordRequestDto changePasswordDto) throws InvalidException {
+        User dbUser = handleGetUserByUsername(changePasswordDto.getUsername());
+        if (changePasswordDto.getPassword().equals(dbUser.getPassword())) {
+            String hashPassword = this.passwordEncoder.encode(changePasswordDto.getNewPassword());
+            dbUser.setPassword(hashPassword);
+            userRepository.save(dbUser);
+        } else {
+            throw new InvalidException("Incorrect password. Please check again");
+        }
+    }
 }

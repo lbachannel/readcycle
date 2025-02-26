@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.anlb.readcycle.domain.User;
+import com.anlb.readcycle.dto.request.ChangePasswordRequestDto;
 import com.anlb.readcycle.dto.request.LoginRequestDto;
 import com.anlb.readcycle.dto.response.LoginResponseDto;
 import com.anlb.readcycle.mapper.UserMapper;
@@ -66,6 +67,15 @@ public class AuthController {
         return ResponseEntity
             .status(HttpStatus.FOUND)
             .location(URI.create("http://localhost:3000/verify-email-success"))
+            .build();
+    }
+
+    @PostMapping("/auth/change-password")
+    @ApiMessage("Change password")
+    public ResponseEntity<Void> changePassword(@RequestBody ChangePasswordRequestDto changePasswordDto) throws InvalidException {
+        userService.handleChangePassword(changePasswordDto);
+        return ResponseEntity
+            .status(HttpStatus.NO_CONTENT)
             .build();
     }
 

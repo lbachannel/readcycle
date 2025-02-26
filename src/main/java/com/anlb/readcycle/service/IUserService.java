@@ -5,6 +5,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.oauth2.jwt.Jwt;
 
 import com.anlb.readcycle.domain.User;
+import com.anlb.readcycle.dto.request.ChangePasswordRequestDto;
 import com.anlb.readcycle.dto.request.UpdateUserRequestDto;
 import com.anlb.readcycle.dto.response.LoginResponseDto;
 import com.anlb.readcycle.dto.response.LoginResponseDto.UserGetAccount;
@@ -32,4 +33,5 @@ public interface IUserService {
     User handleUpdateUser(UpdateUserRequestDto reqUser) throws InvalidException;
     void handleDeleteUserById(long id) throws InvalidException;
     User handleSoftDelete(long id) throws InvalidException;
+    void handleChangePassword(ChangePasswordRequestDto changePasswordDto) throws InvalidException;
 }
