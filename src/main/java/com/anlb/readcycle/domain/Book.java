@@ -17,6 +17,7 @@ import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
@@ -26,7 +27,8 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Book {
+@EqualsAndHashCode(callSuper = true) 
+public class Book extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -52,20 +54,6 @@ public class Book {
 
     @Column(name = "quantity")
     private int quantity;
-
-    // @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss a")
-    @Column(name = "created_at")
-    private Instant createdAt;
-
-    // @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss a")
-    @Column(name = "updated_at")
-    private Instant updatedAt;
-
-    @Column(name = "created_by")
-    private String createdBy;
-
-    @Column(name = "updated_by")
-    private String updatedBy;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
