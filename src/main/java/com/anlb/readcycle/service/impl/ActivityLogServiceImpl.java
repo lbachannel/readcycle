@@ -42,7 +42,6 @@ public class ActivityLogServiceImpl implements IActivityLogService {
     @Override
     public ResultPaginateDto handleGetAllActivityLog(Pageable pageable) {
         Page<ActivityLog> pageActivityLog = activityLogRepository.findAll(pageable);
-        // Page<ActivityLog> pageActivityLog = activityLogRepository.findAll(spec, pageable);
         ResultPaginateDto response = new ResultPaginateDto();
         ResultPaginateDto.Meta meta = new ResultPaginateDto.Meta();
 
