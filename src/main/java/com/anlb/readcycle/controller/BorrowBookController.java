@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -50,6 +51,14 @@ public class BorrowBookController {
                     .status(HttpStatus.CREATED)
                     .body(borrowBookService.handleBorrowBook(reqBorrow));
     }
+
+    @PutMapping("/return-book")
+    @ApiMessage("Return books")
+    public ResponseEntity<?> handleReturnBook(@RequestBody Borrow borrow) throws InvalidException {
+        return ResponseEntity
+                    .ok(borrowBookService.handleReturnBook(borrow));
+    }
+
 
     @GetMapping("/carts")
     @ApiMessage("Get carts by user")
