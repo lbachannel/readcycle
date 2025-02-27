@@ -3,14 +3,11 @@ package com.anlb.readcycle.dto.activitylog;
 import java.time.Instant;
 import java.util.List;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import com.anlb.readcycle.utils.JSON;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,29 +15,21 @@ import lombok.NoArgsConstructor;
 
 @Builder
 @Data
-@Entity
-@Table(name = "activitylogs")
 @NoArgsConstructor
 @AllArgsConstructor
+@Document(collection = "activitylogs")
 public class ActivityLog {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private long id;
+    private String id;
 
-    @Column(name = "activity_type")
     private String activityType;
 
-    @Column(name = "activity_group")
     private String activityGroup;
 
-    @Column(name = "execution_time")
     private Instant executionTime;
 
-    @Column(name = "description", columnDefinition = "MEDIUMTEXT")
     private String description;
 
-    @Column(name = "username")
     private String username;
 
     public static ActivityLog formatLogMessage(ActivityGroup group, ActivityType type, List<ActivityDescription> descriptions) {

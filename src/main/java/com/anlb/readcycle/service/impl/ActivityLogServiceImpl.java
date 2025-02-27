@@ -40,8 +40,8 @@ public class ActivityLogServiceImpl implements IActivityLogService {
      * @return A {@link ResultPaginateDto} containing the list of activity logs and pagination metadata.
      */
     @Override
-    public ResultPaginateDto handleGetAllActivityLog(Specification<ActivityLog> spec, Pageable pageable) {
-        Page<ActivityLog> pageActivityLog = activityLogRepository.findAll(spec, pageable);
+    public ResultPaginateDto handleGetAllActivityLog(Pageable pageable) {
+        Page<ActivityLog> pageActivityLog = activityLogRepository.findAll(pageable);
         ResultPaginateDto response = new ResultPaginateDto();
         ResultPaginateDto.Meta meta = new ResultPaginateDto.Meta();
 
