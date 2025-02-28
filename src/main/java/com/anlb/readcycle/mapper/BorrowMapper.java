@@ -14,6 +14,7 @@ public class BorrowMapper {
         response.setStatus(currentBorrow.getStatus());
         response.setBook(currentBorrow.getBook());
         response.setUser(currentBorrow.getUser());
+        response.setUpdatedAt(currentBorrow.getUpdatedAt());
         return response;
     }
     
