@@ -70,7 +70,7 @@ public class UserController {
         // save user
         newUser = userService.handleRegisterMember(newUser);
         // send email
-        emailService.sendEmailFromTemplateSync(newUser, "ReadCycle - Verify your email", "verify-email");
+        emailService.sendEmailFromTemplateSync(newUser, "ReadCycle - Verify your email", "verify-email-user");
         return ResponseEntity
                     .status(HttpStatus.CREATED)
                     .body(userMapper.convertUserToRegisterResponseDTO(newUser));
