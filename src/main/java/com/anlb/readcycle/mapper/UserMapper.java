@@ -34,7 +34,7 @@ public class UserMapper {
     /**
      * Converts a {@link RegisterRequestDto} object to a {@link User} entity.
      * 
-     * This method extracts user details from the DTO and creates a new {@link User} entity.
+     * This method extracts user details from the Dto and creates a new {@link User} entity.
      * It also hashes the password before storing it.
      * If the provided date of birth is in a valid format, it is parsed into a {@link LocalDate}.
      * The user's role is set to the default role with ID 2.
@@ -66,7 +66,7 @@ public class UserMapper {
      * @return a {@link User} entity with the provided details
      * @throws InvalidException if any validation fails
      */
-    public User convertCreateUserRequestDTOToUser(CreateUserRequestDto userDto) throws InvalidException {
+    public User convertCreateUserRequestDtoToUser(CreateUserRequestDto userDto) throws InvalidException {
         User user = new User();
         user.setName(userDto.getFirstName() + " " + userDto.getLastName());
         user.setEmail(userDto.getEmail());

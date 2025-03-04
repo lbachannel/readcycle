@@ -51,16 +51,16 @@ public class PermissionServiceImpl implements IPermissionService {
     /**
      * Creates a new permission based on the provided request data and saves it to the repository.
      *
-     * @param permissionDTO The request data containing permission details such as name, API path, method, and module.
+     * @param permissionDto The request data containing permission details such as name, API path, method, and module.
      * @return The newly created {@link Permission} entity after being saved to the repository.
      */
     @Override
-    public Permission handleCreatePermission(CreatePermissionRequestDto permissionDTO) {
+    public Permission handleCreatePermission(CreatePermissionRequestDto permissionDto) {
         Permission newPermission = new Permission();
-        newPermission.setName(permissionDTO.getName());
-        newPermission.setApiPath(permissionDTO.getApiPath());
-        newPermission.setMethod(permissionDTO.getMethod());
-        newPermission.setModule(permissionDTO.getModule());
+        newPermission.setName(permissionDto.getName());
+        newPermission.setApiPath(permissionDto.getApiPath());
+        newPermission.setMethod(permissionDto.getMethod());
+        newPermission.setModule(permissionDto.getModule());
         return permissionRepository.save(newPermission);
     }
 
@@ -109,7 +109,7 @@ public class PermissionServiceImpl implements IPermissionService {
     @Override
     public ResultPaginateDto handleGetPermissions(Specification<Permission> spec, Pageable pageable) {
         Page<Permission> dbPermissions = permissionRepository.findAll(spec, pageable);
-        ResultPaginateDto resultPaginateDTO = new ResultPaginateDto();
+        ResultPaginateDto resultPaginateDto = new ResultPaginateDto();
         Meta meta = new Meta();
         meta.setPage(pageable.getPageNumber() + 1);
         meta.setPageSize(pageable.getPageSize());
@@ -117,10 +117,10 @@ public class PermissionServiceImpl implements IPermissionService {
         meta.setPages(dbPermissions.getTotalPages());
         meta.setTotal(dbPermissions.getTotalElements());
 
-        resultPaginateDTO.setMeta(meta);
-        resultPaginateDTO.setResult(dbPermissions.getContent());
+        resultPaginateDto.setMeta(meta);
+        resultPaginateDto.setResult(dbPermissions.getContent());
 
-        return resultPaginateDTO;
+        return resultPaginateDto;
     }
 
     /**

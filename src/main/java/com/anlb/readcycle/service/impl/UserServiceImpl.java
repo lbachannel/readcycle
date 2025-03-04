@@ -282,7 +282,7 @@ public class UserServiceImpl implements IUserService {
         // remove sensitive data
         List<UserResponseDto> listUser = pageUser.getContent()
                                             .stream()
-                                            .map(item -> userMapper.convertUserToUserResponseDTO(item))
+                                            .map(item -> userMapper.convertUserToUserResponseDto(item))
                                             .collect(Collectors.toList());
 
         rs.setResult(listUser);
@@ -341,7 +341,7 @@ public class UserServiceImpl implements IUserService {
      * attributes based on the provided request data, validates the date format, and assigns 
      * the appropriate role. The update action is then logged before saving the changes to the database.
      *
-     * @param reqUser the DTO containing updated user information
+     * @param reqUser the Dto containing updated user information
      * @return the updated and saved {@link User} entity
      * @throws InvalidException if the access token is invalid or the current user cannot be retrieved
      */
