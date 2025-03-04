@@ -11,9 +11,9 @@ import com.anlb.readcycle.utils.exception.InvalidException;
 
 public interface IPermissionService {
     void permissionExists(String module, String apiPath, String method) throws InvalidException;
-    Permission handleCreatePermission(CreatePermissionRequestDto permissionDTO);
+    Permission handleCreatePermission(CreatePermissionRequestDto permissionDto);
     Permission handleFindById(long id) throws InvalidException;
-    Permission handleUpdatePermission(UpdatePermissionRequestDto permissionDTO) throws InvalidException;
+    Permission handleUpdatePermission(UpdatePermissionRequestDto permissionDto) throws InvalidException;
     ResultPaginateDto handleGetPermissions(Specification<Permission> spec, Pageable pageable);
     void delete(long id) throws InvalidException;
 }

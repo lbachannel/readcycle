@@ -20,7 +20,7 @@ public class BookMapper {
      * @param book The {@link Book} entity to be converted.
      * @return A {@link CreateBookResponseDto} containing the book's details.
      */
-    public CreateBookResponseDto convertBookToCreateBookResponseDTO(Book book) {
+    public CreateBookResponseDto convertBookToCreateBookResponseDto(Book book) {
         CreateBookResponseDto response = new CreateBookResponseDto();
         response.setId(book.getId());
         response.setCategory(book.getCategory());
@@ -43,7 +43,7 @@ public class BookMapper {
      * @param updateBook The {@link Book} entity to be converted.
      * @return An {@link UpdateBookResponseDto} containing the book's updated details.
      */
-    public UpdateBookResponseDto convertBookToUpdateBookResponseDTO(Book updateBook) {
+    public UpdateBookResponseDto convertBookToUpdateBookResponseDto(Book updateBook) {
         UpdateBookResponseDto response = new UpdateBookResponseDto();
         response.setId(updateBook.getId());
         response.setCategory(updateBook.getCategory());
@@ -68,7 +68,7 @@ public class BookMapper {
      * @param currentBook The {@link Book} entity to be converted.
      * @return A {@link BookResponseDto} containing the book's details.
      */
-    public BookResponseDto convertBookToBookResponseDTO(Book currentBook) {
+    public BookResponseDto convertBookToBookResponseDto(Book currentBook) {
         BookResponseDto response = new BookResponseDto();
         response.setId(currentBook.getId());
         response.setCategory(currentBook.getCategory());
@@ -93,7 +93,7 @@ public class BookMapper {
      * @param books The list of {@link Book} objects to be converted.
      * @return A list of {@link BookResponseDto} objects created from the input list.
      */
-    public List<BookResponseDto> convertBooksToBookResponseDTO(List<Book> books) {
+    public List<BookResponseDto> convertBooksToBookResponseDto(List<Book> books) {
         List<BookResponseDto> response = books.stream()
                                             .map(item -> new BookResponseDto(
                                                 item.getId(),

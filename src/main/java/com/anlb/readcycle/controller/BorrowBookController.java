@@ -65,7 +65,7 @@ public class BorrowBookController {
     public ResponseEntity<List<CreateCartResponseDto>> getCartsByUser() throws InvalidException {
         List<Cart> listCart = cartService.handleGetCartsByUser();
         List<CreateCartResponseDto> carts = listCart.stream()
-                                            .map(cart -> cartMapper.convertCartToCreateCartResponseDTO(cart))
+                                            .map(cart -> cartMapper.convertCartToCreateCartResponseDto(cart))
                                             .collect(Collectors.toList());
         return ResponseEntity
                     .ok()

@@ -39,37 +39,37 @@ public class PermissionController {
     /**
      * {@code POST  /permissions} : Creates a new permission.
      *
-     * @param permissionDTO The request data containing module, API path, and method for the permission.
+     * @param permissionDto The request data containing module, API path, and method for the permission.
      * @return A {@link ResponseEntity} containing the created permission details in a {@link CreatePermissionResponseDto}.
      * @throws InvalidException If the permission already exists or validation fails.
      */
     @PostMapping("/permissions")
     @ApiMessage("Create a permission")
-    public ResponseEntity<CreatePermissionResponseDto> createPermission(@Valid @RequestBody CreatePermissionRequestDto permissionDTO) throws InvalidException {
+    public ResponseEntity<CreatePermissionResponseDto> createPermission(@Valid @RequestBody CreatePermissionRequestDto permissionDto) throws InvalidException {
         // check if permission exists
-        permissionService.permissionExists(permissionDTO.getModule(), permissionDTO.getApiPath(), permissionDTO.getMethod());
-        Permission newPermission = this.permissionService.handleCreatePermission(permissionDTO);
+        permissionService.permissionExists(permissionDto.getModule(), permissionDto.getApiPath(), permissionDto.getMethod());
+        Permission newPermission = this.permissionService.handleCreatePermission(permissionDto);
         return ResponseEntity
                     .status(HttpStatus.CREATED)
-                    .body(permissionMapper.convertPermissionToCreatePermissionResponseDTO(newPermission));
+                    .body(permissionMapper.convertPermissionToCreatePermissionResponseDto(newPermission));
     }
 
     /**
      * {@code PUT  /permissions} : Updates an existing permission.
      *
-     * @param permissionDTO The request data containing module, API path, and method for the permission update.
+     * @param permissionDto The request data containing module, API path, and method for the permission update.
      * @return A {@link ResponseEntity} containing the updated permission details in a {@link UpdatePermissionResponseDto}.
      * @throws InvalidException If the permission does not exist or validation fails.
      */
     @PutMapping("/permissions")
     @ApiMessage("Update a permission")
-    public ResponseEntity<UpdatePermissionResponseDto> updatePermission(@Valid @RequestBody UpdatePermissionRequestDto permissionDTO) throws InvalidException {
+    public ResponseEntity<UpdatePermissionResponseDto> updatePermission(@Valid @RequestBody UpdatePermissionRequestDto permissionDto) throws InvalidException {
         // check if permission exists
-        permissionService.permissionExists(permissionDTO.getModule(), permissionDTO.getApiPath(), permissionDTO.getMethod());
-        Permission updatePermission = permissionService.handleUpdatePermission(permissionDTO);
+        permissionService.permissionExists(permissionDto.getModule(), permissionDto.getApiPath(), permissionDto.getMethod());
+        Permission updatePermission = permissionService.handleUpdatePermission(permissionDto);
         return ResponseEntity
                     .ok()
-                    .body(permissionMapper.convertPermissionToUpdatePermissionResponseDTO(updatePermission));
+                    .body(permissionMapper.convertPermissionToUpdatePermissionResponseDto(updatePermission));
     }
 
     /**

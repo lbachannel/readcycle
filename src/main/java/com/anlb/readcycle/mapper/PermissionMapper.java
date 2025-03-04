@@ -15,7 +15,7 @@ public class PermissionMapper {
      * @param permission The {@link Permission} entity to be converted.
      * @return A {@link CreatePermissionResponseDto} containing the permission details.
      */
-    public CreatePermissionResponseDto convertPermissionToCreatePermissionResponseDTO(Permission permission) {
+    public CreatePermissionResponseDto convertPermissionToCreatePermissionResponseDto(Permission permission) {
         CreatePermissionResponseDto response = new CreatePermissionResponseDto();
         response.setId(permission.getId());
         response.setName(permission.getName());
@@ -33,7 +33,7 @@ public class PermissionMapper {
      * @param permission The {@link Permission} entity to be converted.
      * @return An {@link UpdatePermissionResponseDto} containing the permission details, including update information.
      */
-    public UpdatePermissionResponseDto convertPermissionToUpdatePermissionResponseDTO(Permission permission) {
+    public UpdatePermissionResponseDto convertPermissionToUpdatePermissionResponseDto(Permission permission) {
         UpdatePermissionResponseDto response = new UpdatePermissionResponseDto();
         response.setId(permission.getId());
         response.setName(permission.getName());

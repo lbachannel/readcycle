@@ -40,7 +40,7 @@ public class BookServiceImpl implements IBookService {
     /**
      * Creates a new book and logs the creation event.
      *
-     * @param requestBook the DTO containing the book details.
+     * @param requestBook the Dto containing the book details.
      * @return the newly created and saved {@link Book} entity.
      * @throws InvalidException if the request is invalid.
      * @implNote This method logs the book creation event using {@code bookLogService}.
@@ -102,7 +102,7 @@ public class BookServiceImpl implements IBookService {
      * for logging purposes, updates its attributes with new values from the request, 
      * logs the changes, and then saves the updated book to the repository.</p>
      * 
-     * @param requestBook the {@code UpdateBookRequestDTO} containing the new book details
+     * @param requestBook the {@code UpdateBookRequestDto} containing the new book details
      * @return the updated {@code Book} object after saving to the repository
      * @throws InvalidException if the book with the given ID does not exist
      */
@@ -165,7 +165,7 @@ public class BookServiceImpl implements IBookService {
 
         List<BookResponseDto> listBook = pageBook.getContent()
                                             .stream()
-                                            .map(item -> this.bookMapper.convertBookToBookResponseDTO(item))
+                                            .map(item -> this.bookMapper.convertBookToBookResponseDto(item))
                                             .collect(Collectors.toList());
         response.setResult(listBook);
         return response;
@@ -195,7 +195,7 @@ public class BookServiceImpl implements IBookService {
 
         List<BookResponseDto> listBook = pageBook.getContent()
                                             .stream()
-                                            .map(item -> bookMapper.convertBookToBookResponseDTO(item))
+                                            .map(item -> bookMapper.convertBookToBookResponseDto(item))
                                             .collect(Collectors.toList());
         response.setResult(listBook);
         return response;
@@ -216,7 +216,7 @@ public class BookServiceImpl implements IBookService {
         response.setMeta(meta);
         List<BookResponseDto> listBook = pageBook.getContent()
                                                 .stream()
-                                                .map(item -> bookMapper.convertBookToBookResponseDTO(item))
+                                                .map(item -> bookMapper.convertBookToBookResponseDto(item))
                                                 .collect(Collectors.toList());
         response.setResult(listBook);
         return response;

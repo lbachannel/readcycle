@@ -59,7 +59,7 @@ public class BookAdminController {
      * @throws InvalidException if the book creation process encounters an error.
      * 
      * @implNote This method delegates book creation to {@code bookService} and 
-     *           converts the created book to a response DTO using {@code bookMapper}.
+     *           converts the created book to a response Dto using {@code bookMapper}.
      */
     @PostMapping("/books")
     @ApiMessage("Create a book")
@@ -67,7 +67,7 @@ public class BookAdminController {
         Book newBook = bookService.handleCreateBook(reqBook);
         return ResponseEntity
                     .status(HttpStatus.CREATED)
-                    .body(bookMapper.convertBookToCreateBookResponseDTO(newBook));
+                    .body(bookMapper.convertBookToCreateBookResponseDto(newBook));
     }
 
     /**
@@ -82,7 +82,7 @@ public class BookAdminController {
     public ResponseEntity<UpdateBookResponseDto> updateBook(@RequestBody UpdateBookRequestDto reqBook) throws InvalidException {
         Book updateBook = bookService.handleUpdateBook(reqBook);
         return ResponseEntity
-                    .ok(bookMapper.convertBookToUpdateBookResponseDTO(updateBook));
+                    .ok(bookMapper.convertBookToUpdateBookResponseDto(updateBook));
     }
 
     /**

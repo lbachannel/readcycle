@@ -62,17 +62,17 @@ public class RoleServiceImpl implements IRoleService {
      * Creates a new role based on the provided role data.
      * If permissions are provided, they are retrieved from the database and assigned to the new role.
      *
-     * @param roleDTO The {@link CreateRoleRequestDto} containing role details.
+     * @param roleDto The {@link CreateRoleRequestDto} containing role details.
      * @return The newly created {@link Role} entity.
      */
     @Override
-    public Role handleCreateRole(CreateRoleRequestDto roleDTO) {
+    public Role handleCreateRole(CreateRoleRequestDto roleDto) {
         Role newRole = new Role();
-        newRole.setName(roleDTO.getName());
-        newRole.setDescription(roleDTO.getDescription());
-        newRole.setActive(roleDTO.isActive());
-        if (roleDTO.getPermissions() != null) {
-            List<Long> reqPermissions = roleDTO.getPermissions()
+        newRole.setName(roleDto.getName());
+        newRole.setDescription(roleDto.getDescription());
+        newRole.setActive(roleDto.isActive());
+        if (roleDto.getPermissions() != null) {
+            List<Long> reqPermissions = roleDto.getPermissions()
                                             .stream()
                                             .map(x -> x.getId())
                                             .collect(Collectors.toList());
@@ -118,13 +118,13 @@ public class RoleServiceImpl implements IRoleService {
      * @throws NoSuchElementException if the role with the given ID does not exist.
      */
     @Override
-    public Role handleUpdateRole(UpdateRoleRequestDto roleDTO) {
-        Role updateRole = roleRepository.findById(roleDTO.getId()).get();
-        updateRole.setName(roleDTO.getName());
-        updateRole.setDescription(roleDTO.getDescription());
-        updateRole.setActive(roleDTO.isActive());
-        if (roleDTO.getPermissions() != null) {
-            List<Long> reqPermissions = roleDTO.getPermissions()
+    public Role handleUpdateRole(UpdateRoleRequestDto roleDto) {
+        Role updateRole = roleRepository.findById(roleDto.getId()).get();
+        updateRole.setName(roleDto.getName());
+        updateRole.setDescription(roleDto.getDescription());
+        updateRole.setActive(roleDto.isActive());
+        if (roleDto.getPermissions() != null) {
+            List<Long> reqPermissions = roleDto.getPermissions()
                                             .stream()
                                             .map(x -> x.getId())
                                             .collect(Collectors.toList());
@@ -145,7 +145,7 @@ public class RoleServiceImpl implements IRoleService {
     @Override
     public ResultPaginateDto handleGetRoles(Specification<Role> spec, Pageable pageable) {
         Page<Role> dbRoles = roleRepository.findAll(spec, pageable);
-        ResultPaginateDto resultPaginateDTO = new ResultPaginateDto();
+        ResultPaginateDto resultPaginateDto = new ResultPaginateDto();
         Meta meta = new Meta();
         meta.setPage(pageable.getPageNumber() + 1);
         meta.setPageSize(pageable.getPageSize());
@@ -153,10 +153,10 @@ public class RoleServiceImpl implements IRoleService {
         meta.setPages(dbRoles.getTotalPages());
         meta.setTotal(dbRoles.getTotalElements());
 
-        resultPaginateDTO.setMeta(meta);
-        resultPaginateDTO.setResult(dbRoles.getContent());
+        resultPaginateDto.setMeta(meta);
+        resultPaginateDto.setResult(dbRoles.getContent());
 
-        return resultPaginateDTO;
+        return resultPaginateDto;
     }
 
     /**

@@ -51,16 +51,16 @@ public class PermissionServiceImpl implements IPermissionService {
     /**
      * Creates a new permission based on the provided request data and saves it to the repository.
      *
-     * @param permissionDTO The request data containing permission details such as name, API path, method, and module.
+     * @param permissionDto The request data containing permission details such as name, API path, method, and module.
      * @return The newly created {@link Permission} entity after being saved to the repository.
      */
     @Override
-    public Permission handleCreatePermission(CreatePermissionRequestDto permissionDTO) {
+    public Permission handleCreatePermission(CreatePermissionRequestDto permissionDto) {
         Permission newPermission = new Permission();
-        newPermission.setName(permissionDTO.getName());
-        newPermission.setApiPath(permissionDTO.getApiPath());
-        newPermission.setMethod(permissionDTO.getMethod());
-        newPermission.setModule(permissionDTO.getModule());
+        newPermission.setName(permissionDto.getName());
+        newPermission.setApiPath(permissionDto.getApiPath());
+        newPermission.setMethod(permissionDto.getMethod());
+        newPermission.setModule(permissionDto.getModule());
         return permissionRepository.save(newPermission);
     }
 
@@ -85,17 +85,17 @@ public class PermissionServiceImpl implements IPermissionService {
      * Updates an existing {@link Permission} entity based on the provided request data.
      * If the permission does not exist, an {@link InvalidException} is thrown.
      *
-     * @param permissionDTO The {@link UpdatePermissionRequestDto} containing updated permission details.
+     * @param permissionDto The {@link UpdatePermissionRequestDto} containing updated permission details.
      * @return The updated {@link Permission} entity after being saved to the repository.
      * @throws InvalidException if the permission with the given ID does not exist.
      */
     @Override
-    public Permission handleUpdatePermission(UpdatePermissionRequestDto permissionDTO) throws InvalidException {
-        Permission updatePermission = handleFindById(permissionDTO.getId());
-        updatePermission.setName(permissionDTO.getName());
-        updatePermission.setApiPath(permissionDTO.getApiPath());
-        updatePermission.setMethod(permissionDTO.getMethod());
-        updatePermission.setModule(permissionDTO.getModule());
+    public Permission handleUpdatePermission(UpdatePermissionRequestDto permissionDto) throws InvalidException {
+        Permission updatePermission = handleFindById(permissionDto.getId());
+        updatePermission.setName(permissionDto.getName());
+        updatePermission.setApiPath(permissionDto.getApiPath());
+        updatePermission.setMethod(permissionDto.getMethod());
+        updatePermission.setModule(permissionDto.getModule());
         return permissionRepository.save(updatePermission);
     }
 
@@ -109,7 +109,7 @@ public class PermissionServiceImpl implements IPermissionService {
     @Override
     public ResultPaginateDto handleGetPermissions(Specification<Permission> spec, Pageable pageable) {
         Page<Permission> dbPermissions = permissionRepository.findAll(spec, pageable);
-        ResultPaginateDto resultPaginateDTO = new ResultPaginateDto();
+        ResultPaginateDto resultPaginateDto = new ResultPaginateDto();
         Meta meta = new Meta();
         meta.setPage(pageable.getPageNumber() + 1);
         meta.setPageSize(pageable.getPageSize());
@@ -117,10 +117,10 @@ public class PermissionServiceImpl implements IPermissionService {
         meta.setPages(dbPermissions.getTotalPages());
         meta.setTotal(dbPermissions.getTotalElements());
 
-        resultPaginateDTO.setMeta(meta);
-        resultPaginateDTO.setResult(dbPermissions.getContent());
+        resultPaginateDto.setMeta(meta);
+        resultPaginateDto.setResult(dbPermissions.getContent());
 
-        return resultPaginateDTO;
+        return resultPaginateDto;
     }
 
     /**

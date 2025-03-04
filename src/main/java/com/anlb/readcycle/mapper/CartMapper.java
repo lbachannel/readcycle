@@ -9,7 +9,7 @@ import com.anlb.readcycle.dto.response.CreateCartResponseDto.Details;
 
 @Service
 public class CartMapper {
-    public CreateCartResponseDto convertCartToCreateCartResponseDTO(Cart cart) {
+    public CreateCartResponseDto convertCartToCreateCartResponseDto(Cart cart) {
         CreateCartResponseDto response = new CreateCartResponseDto();
         response.setId(cart.getId());
         response.setQuantity(cart.getSum());

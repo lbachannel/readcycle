@@ -14,10 +14,10 @@ import com.anlb.readcycle.utils.exception.InvalidException;
 public interface IRoleService {
     void existByName(String name) throws InvalidException;
     void checkRoleExitsById(long id) throws InvalidException;
-    Role handleCreateRole(CreateRoleRequestDto roleDTO);
+    Role handleCreateRole(CreateRoleRequestDto roleDto);
     Optional<Role> handleFindById(long id);
     Role handleFindByName(String name) throws InvalidException;
-    Role handleUpdateRole(UpdateRoleRequestDto roleDTO);
+    Role handleUpdateRole(UpdateRoleRequestDto roleDto);
     ResultPaginateDto handleGetRoles(Specification<Role> spec, Pageable pageable);
     void handleDeleteRoleById(long id);
     Role handleGetRoleById(long id) throws InvalidException;

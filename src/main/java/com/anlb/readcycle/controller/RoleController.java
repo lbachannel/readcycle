@@ -53,18 +53,18 @@ public class RoleController {
     /**
      * {@code POST  /roles} : Creates a new role.
      *
-     * @param roleDTO The request body containing role details.
+     * @param roleDto The request body containing role details.
      * @return A {@link ResponseEntity} containing the created role as a {@link CreateRoleResponseDto}.
      * @throws InvalidException If a role with the same name already exists.
      */
     @PostMapping("/roles")
     @ApiMessage("Create a role")
-    public ResponseEntity<CreateRoleResponseDto> createRole(@Valid @RequestBody CreateRoleRequestDto roleDTO) throws InvalidException {
-        roleService.existByName(roleDTO.getName());
-        Role role = roleService.handleCreateRole(roleDTO);
+    public ResponseEntity<CreateRoleResponseDto> createRole(@Valid @RequestBody CreateRoleRequestDto roleDto) throws InvalidException {
+        roleService.existByName(roleDto.getName());
+        Role role = roleService.handleCreateRole(roleDto);
         return ResponseEntity
                     .status(HttpStatus.CREATED)
-                    .body(roleMapper.convertRoleToCreateRoleResponseDTO(role));
+                    .body(roleMapper.convertRoleToCreateRoleResponseDto(role));
     }
 
     /**
@@ -76,13 +76,13 @@ public class RoleController {
      */
     @PutMapping("/roles")
     @ApiMessage("Update a role")
-    public ResponseEntity<UpdateRoleResponseDto> updateRole(@Valid @RequestBody UpdateRoleRequestDto roleDTO) throws InvalidException {
+    public ResponseEntity<UpdateRoleResponseDto> updateRole(@Valid @RequestBody UpdateRoleRequestDto roleDto) throws InvalidException {
         // check if role does not exits. then throw exception
-        roleService.checkRoleExitsById(roleDTO.getId());
-        Role updateRole = roleService.handleUpdateRole(roleDTO);
+        roleService.checkRoleExitsById(roleDto.getId());
+        Role updateRole = roleService.handleUpdateRole(roleDto);
         return ResponseEntity
                     .ok()
-                    .body(roleMapper.convertRoleToUpdateRoleResponseDTO(updateRole));
+                    .body(roleMapper.convertRoleToUpdateRoleResponseDto(updateRole));
     }
 
     /**

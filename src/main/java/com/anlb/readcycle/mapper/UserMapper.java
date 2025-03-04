@@ -34,25 +34,25 @@ public class UserMapper {
     /**
      * Converts a {@link RegisterRequestDto} object to a {@link User} entity.
      * 
-     * This method extracts user details from the DTO and creates a new {@link User} entity.
+     * This method extracts user details from the Dto and creates a new {@link User} entity.
      * It also hashes the password before storing it.
      * If the provided date of birth is in a valid format, it is parsed into a {@link LocalDate}.
      * The user's role is set to the default role with ID 2.
      *
-     * @param registerDTO The {@link RegisterRequestDto} containing user registration details.
-     * @return A {@link User} entity populated with data from the DTO.
+     * @param registerDto The {@link RegisterRequestDto} containing user registration details.
+     * @return A {@link User} entity populated with data from the Dto.
      */
-    public User convertRegisterDTOToUser(RegisterRequestDto registerDTO) {
+    public User convertRegisterDtoToUser(RegisterRequestDto registerDto) {
         User user = new User();
-        user.setName(registerDTO.getFirstName() + " " + registerDTO.getLastName());
-        user.setEmail(registerDTO.getEmail());
+        user.setName(registerDto.getFirstName() + " " + registerDto.getLastName());
+        user.setEmail(registerDto.getEmail());
         // hash password
-        String hashPassword = this.passwordEncoder.encode(registerDTO.getPassword());
-        registerDTO.setPassword(hashPassword);
-        user.setPassword(registerDTO.getPassword());
-        if (RegisterValidator.isValidDateFormat(registerDTO.getDateOfBirth())) {
+        String hashPassword = this.passwordEncoder.encode(registerDto.getPassword());
+        registerDto.setPassword(hashPassword);
+        user.setPassword(registerDto.getPassword());
+        if (RegisterValidator.isValidDateFormat(registerDto.getDateOfBirth())) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            user.setDateOfBirth(LocalDate.parse(registerDTO.getDateOfBirth(), formatter));
+            user.setDateOfBirth(LocalDate.parse(registerDto.getDateOfBirth(), formatter));
         }
         user.setRole(this.roleService.handleFindById(2).get());
 
@@ -62,32 +62,32 @@ public class UserMapper {
     /**
      * Converts a {@link CreateUserRequestDto} object to a {@link User} entity.
      *
-     * @param userDTO the DTO containing user details
+     * @param userDto the Dto containing user details
      * @return a {@link User} entity with the provided details
      * @throws InvalidException if any validation fails
      */
-    public User convertCreateUserRequestDTOToUser(CreateUserRequestDto userDTO) throws InvalidException {
+    public User convertCreateUserRequestDtoToUser(CreateUserRequestDto userDto) throws InvalidException {
         User user = new User();
-        user.setName(userDTO.getFirstName() + " " + userDTO.getLastName());
-        user.setEmail(userDTO.getEmail());
-        if (RegisterValidator.isValidDateFormat(userDTO.getDateOfBirth())) {
+        user.setName(userDto.getFirstName() + " " + userDto.getLastName());
+        user.setEmail(userDto.getEmail());
+        if (RegisterValidator.isValidDateFormat(userDto.getDateOfBirth())) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            user.setDateOfBirth(LocalDate.parse(userDTO.getDateOfBirth(), formatter));
+            user.setDateOfBirth(LocalDate.parse(userDto.getDateOfBirth(), formatter));
         }
-        user.setRole(this.roleService.handleFindByName(userDTO.getRole()));
+        user.setRole(this.roleService.handleFindByName(userDto.getRole()));
         return user;
     }
 
     /**
      * Converts a {@link User} entity to a {@link RegisterResponseDto}.
      *
-     * This method extracts relevant user information and maps it to a DTO
+     * This method extracts relevant user information and maps it to a Dto
      * for registration response purposes.
      *
      * @param user The {@link User} entity to be converted.
      * @return A {@link RegisterResponseDto} containing user details.
      */
-    public RegisterResponseDto convertUserToRegisterResponseDTO(User user) {
+    public RegisterResponseDto convertUserToRegisterResponseDto(User user) {
         RegisterResponseDto response = new RegisterResponseDto();
         response.setId(user.getId());
         response.setName(user.getName());
@@ -99,13 +99,13 @@ public class UserMapper {
     /**
      * Converts a {@link User} entity to a {@link CreateUserResponseDto}.
      *
-     * This method extracts relevant user information and maps it to a DTO
+     * This method extracts relevant user information and maps it to a Dto
      * for user creation response purposes.
      *
      * @param user The {@link User} entity to be converted.
      * @return A {@link CreateUserResponseDto} containing user details.
      */
-    public CreateUserResponseDto convertUserToCreateResponseDTO(User user) {
+    public CreateUserResponseDto convertUserToCreateResponseDto(User user) {
         CreateUserResponseDto response = new CreateUserResponseDto();
         response.setId(user.getId());
         response.setName(user.getName());
@@ -123,7 +123,7 @@ public class UserMapper {
      * @param user The {@link User} entity to convert.
      * @return A {@link UserResponseDto} containing user details.
      */
-    public UserResponseDto convertUserToUserResponseDTO(User user) {
+    public UserResponseDto convertUserToUserResponseDto(User user) {
         UserResponseDto response = new UserResponseDto();
         UserResponseDto.RoleUser roleUser = new UserResponseDto.RoleUser();
 
@@ -163,7 +163,7 @@ public class UserMapper {
      * @param authentication The authentication object containing user credentials.
      * @return A {@link LoginResponseDto} containing user details and an access token.
      */
-    public LoginResponseDto convertUserToLoginResponseDTO(User dbUser, Authentication authentication) {
+    public LoginResponseDto convertUserToLoginResponseDto(User dbUser, Authentication authentication) {
         UserLogin user = new UserLogin();
         user.setId(dbUser.getId());
         user.setEmail(dbUser.getEmail());
@@ -179,12 +179,12 @@ public class UserMapper {
     }
 
     /**
-     * Converts a User entity to an UpdateUserResponseDTO.
+     * Converts a User entity to an UpdateUserResponseDto.
      *
      * @param updateUser the User object to be converted
-     * @return an UpdateUserResponseDTO containing the user's details
+     * @return an UpdateUserResponseDto containing the user's details
      */
-    public UpdateUserResponseDto convertUserToUpdateUserResponseDTO(User updateUser) {
+    public UpdateUserResponseDto convertUserToUpdateUserResponseDto(User updateUser) {
         UpdateUserResponseDto response = new UpdateUserResponseDto();
         response.setId(updateUser.getId());
         response.setName(updateUser.getName());
