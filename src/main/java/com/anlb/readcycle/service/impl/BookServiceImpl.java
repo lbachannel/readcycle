@@ -21,6 +21,8 @@ import com.anlb.readcycle.repository.BookRepository;
 import com.anlb.readcycle.repository.specification.BookSpecifications;
 import com.anlb.readcycle.service.IBookLogService;
 import com.anlb.readcycle.service.IBookService;
+import com.anlb.readcycle.service.criteria.BookCriteria;
+import com.anlb.readcycle.service.query.BookQueryService;
 import com.anlb.readcycle.utils.exception.InvalidException;
 
 import lombok.RequiredArgsConstructor;
@@ -33,6 +35,7 @@ public class BookServiceImpl implements IBookService {
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
     private final IBookLogService bookLogService;
+    private final BookQueryService bookQueryService;
 
     /**
      * Creates a new book and logs the creation event.
@@ -194,6 +197,27 @@ public class BookServiceImpl implements IBookService {
                                             .stream()
                                             .map(item -> bookMapper.convertBookToBookResponseDTO(item))
                                             .collect(Collectors.toList());
+        response.setResult(listBook);
+        return response;
+    }
+
+    @Override
+    public ResultPaginateDto handleGetAllBooksClientV2(BookCriteria bookCriteria, Pageable pageable) {
+        Page<Book> pageBook = bookQueryService.findByCriteria(bookCriteria, pageable);
+        ResultPaginateDto response = new ResultPaginateDto();
+        ResultPaginateDto.Meta meta = new ResultPaginateDto.Meta();
+
+        meta.setPage(pageable.getPageNumber() + 1);
+        meta.setPageSize(pageable.getPageSize());
+
+        meta.setPages(pageBook.getTotalPages());
+        meta.setTotal(pageBook.getTotalElements());
+
+        response.setMeta(meta);
+        List<BookResponseDto> listBook = pageBook.getContent()
+                                                .stream()
+                                                .map(item -> bookMapper.convertBookToBookResponseDTO(item))
+                                                .collect(Collectors.toList());
         response.setResult(listBook);
         return response;
     }

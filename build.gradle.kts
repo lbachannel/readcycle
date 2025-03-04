@@ -30,7 +30,9 @@ dependencies {
 	implementation("org.apache.commons:commons-lang3:3.17.0")
 	implementation("com.google.code.gson:gson:2.8.5")
 	implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
-
+	implementation("tech.jhipster:jhipster-framework:8.7.1")
+	implementation("org.springdoc:springdoc-openapi-ui:1.7.0")
+	annotationProcessor("org.hibernate.orm:hibernate-jpamodelgen:6.3.1.Final")
 
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	runtimeOnly("com.mysql:mysql-connector-j")
