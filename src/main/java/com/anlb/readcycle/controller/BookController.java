@@ -47,7 +47,7 @@ public class BookController {
         Book currentBook = bookService.handleGetBookByIdAndActive(id, true);
         return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(bookMapper.convertBookToBookResponseDTO(currentBook));
+                    .body(bookMapper.convertBookToBookResponseDto(currentBook));
     }
 
     /**

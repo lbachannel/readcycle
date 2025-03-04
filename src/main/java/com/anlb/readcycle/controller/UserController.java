@@ -87,7 +87,7 @@ public class UserController {
     @ApiMessage("Create a user")
     public ResponseEntity<CreateUserResponseDto> createNewUser(@Valid @RequestBody CreateUserRequestDto userDto) throws InvalidException {
         // convert DTO -> User
-        User newUser = userMapper.convertCreateUserRequestDTOToUser(userDto);
+        User newUser = userMapper.convertCreateUserRequestDtoToUser(userDto);
         // save user
         newUser = userService.handleCreateUser(newUser);
         // send email
