@@ -35,15 +35,15 @@ public class BookQueryService extends QueryService<Book> {
         Specification<Book> specification = Specification.where(null);
         if (criteria != null) {
             if (criteria.getTitle() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getTitle(), Book_.title));
+                specification = specification.or(buildStringSpecification(criteria.getTitle(), Book_.title));
             }
 
             if (criteria.getCategory() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getCategory(), Book_.category));
+                specification = specification.or(buildStringSpecification(criteria.getCategory(), Book_.category));
             }
 
             if (criteria.getAuthor() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getAuthor(), Book_.author));
+                specification = specification.or(buildStringSpecification(criteria.getAuthor(), Book_.author));
             }
         }
 
