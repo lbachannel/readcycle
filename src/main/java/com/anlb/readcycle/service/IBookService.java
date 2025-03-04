@@ -9,6 +9,7 @@ import com.anlb.readcycle.dto.request.CreateBookRequestDto;
 import com.anlb.readcycle.dto.request.UpdateBookRequestDto;
 import com.anlb.readcycle.dto.response.BulkCreateResponseDto;
 import com.anlb.readcycle.dto.response.ResultPaginateDto;
+import com.anlb.readcycle.service.criteria.BookCriteria;
 import com.anlb.readcycle.utils.exception.InvalidException;
 
 public interface IBookService {
@@ -19,6 +20,7 @@ public interface IBookService {
     Book handleSoftDelete(long id) throws InvalidException;
     ResultPaginateDto handleGetAllBooks(Specification<Book> spec, Pageable pageable);
     ResultPaginateDto handleGetAllBooksClient(Specification<Book> spec, Pageable pageable);
+    ResultPaginateDto handleGetAllBooksClientV2(BookCriteria criteria, Pageable pageable);
     void handleDeleteBookById(long id);
     BulkCreateResponseDto handleBulkCreateBooksbooks(List<CreateBookRequestDto> books);
     Book handleGetBookByTitle(String title);

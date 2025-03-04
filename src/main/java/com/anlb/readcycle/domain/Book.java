@@ -1,4 +1,6 @@
 package com.anlb.readcycle.domain;
+import java.io.Serializable;
+
 import com.anlb.readcycle.utils.constant.BookStatusEnum;
 
 import jakarta.persistence.Column;
@@ -22,7 +24,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true) 
-public class Book extends BaseEntity {
+public class Book extends BaseEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
