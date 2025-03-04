@@ -82,22 +82,22 @@ public class AuthController {
     /**
      * {@code POST  /auth/login} : login.
      *
-     * @param loginDTO The login request containing username and password.
+     * @param loginDto The login request containing username and password.
      * @return A {@link ResponseEntity} containing a {@link LoginResponseDto} 
      *         with user details and a refresh token cookie.
      * @throws InvalidException If authentication fails or the access token is invalid.
      */
     @PostMapping("/auth/login")
     @ApiMessage("Login")
-    public ResponseEntity<LoginResponseDto> login(@Valid @RequestBody LoginRequestDto loginDTO) throws InvalidException {
-        User dbUser = userService.handleGetUserByUsername(loginDTO.getUsername());
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginDTO.getUsername(), loginDTO.getPassword());
+    public ResponseEntity<LoginResponseDto> login(@Valid @RequestBody LoginRequestDto loginDto) throws InvalidException {
+        User dbUser = userService.handleGetUserByUsername(loginDto.getUsername());
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword());
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        LoginResponseDto response = userMapper.convertUserToLoginResponseDTO(dbUser, authentication);
+        LoginResponseDto response = userMapper.convertUserToLoginResponseDto(dbUser, authentication);
         // create refresh token
-        String refreshToken = securityUtil.createRefreshToken(loginDTO.getUsername(), response);
+        String refreshToken = securityUtil.createRefreshToken(loginDto.getUsername(), response);
         // save refresh token into user
         String email = SecurityUtil.getCurrentUserLogin()
                             .orElseThrow(() -> new InvalidException("Access Token invalid"));

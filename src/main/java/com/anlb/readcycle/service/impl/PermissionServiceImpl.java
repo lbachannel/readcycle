@@ -85,17 +85,17 @@ public class PermissionServiceImpl implements IPermissionService {
      * Updates an existing {@link Permission} entity based on the provided request data.
      * If the permission does not exist, an {@link InvalidException} is thrown.
      *
-     * @param permissionDTO The {@link UpdatePermissionRequestDto} containing updated permission details.
+     * @param permissionDto The {@link UpdatePermissionRequestDto} containing updated permission details.
      * @return The updated {@link Permission} entity after being saved to the repository.
      * @throws InvalidException if the permission with the given ID does not exist.
      */
     @Override
-    public Permission handleUpdatePermission(UpdatePermissionRequestDto permissionDTO) throws InvalidException {
-        Permission updatePermission = handleFindById(permissionDTO.getId());
-        updatePermission.setName(permissionDTO.getName());
-        updatePermission.setApiPath(permissionDTO.getApiPath());
-        updatePermission.setMethod(permissionDTO.getMethod());
-        updatePermission.setModule(permissionDTO.getModule());
+    public Permission handleUpdatePermission(UpdatePermissionRequestDto permissionDto) throws InvalidException {
+        Permission updatePermission = handleFindById(permissionDto.getId());
+        updatePermission.setName(permissionDto.getName());
+        updatePermission.setApiPath(permissionDto.getApiPath());
+        updatePermission.setMethod(permissionDto.getMethod());
+        updatePermission.setModule(permissionDto.getModule());
         return permissionRepository.save(updatePermission);
     }
 

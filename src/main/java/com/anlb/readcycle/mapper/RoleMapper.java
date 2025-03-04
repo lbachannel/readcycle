@@ -15,7 +15,7 @@ public class RoleMapper {
      * @param role The {@link Role} entity to be converted.
      * @return A {@link CreateRoleResponseDto} containing role details.
      */
-    public CreateRoleResponseDto convertRoleToCreateRoleResponseDTO(Role role) {
+    public CreateRoleResponseDto convertRoleToCreateRoleResponseDto(Role role) {
         CreateRoleResponseDto response = new CreateRoleResponseDto();
         response.setId(role.getId());
         response.setName(role.getName());
@@ -33,7 +33,7 @@ public class RoleMapper {
      * @param role The {@link Role} entity to be converted.
      * @return An {@link UpdateRoleResponseDto} containing updated role details.
      */
-    public UpdateRoleResponseDto convertRoleToUpdateRoleResponseDTO(Role role) {
+    public UpdateRoleResponseDto convertRoleToUpdateRoleResponseDto(Role role) {
         UpdateRoleResponseDto response = new UpdateRoleResponseDto();
         response.setId(role.getId());
         response.setName(role.getName());

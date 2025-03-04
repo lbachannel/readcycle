@@ -59,42 +59,42 @@ public class UserController {
     /**
      * {@code POST  /user/register} : Registers a new user account.
      *
-     * @param registerDTO The registration request data.
+     * @param registerDto The registration request data.
      * @return A {@link ResponseEntity} containing the registered user's details.
      */
     @PostMapping("/user/register")
     @ApiMessage("Register account")
-    public ResponseEntity<RegisterResponseDto> registerMember(@Valid @RequestBody RegisterRequestDto registerDTO) {
+    public ResponseEntity<RegisterResponseDto> registerMember(@Valid @RequestBody RegisterRequestDto registerDto) {
         // convert DTO -> User
-        User newUser = userMapper.convertRegisterDTOToUser(registerDTO);
+        User newUser = userMapper.convertRegisterDtoToUser(registerDto);
         // save user
         newUser = userService.handleRegisterMember(newUser);
         // send email
         emailService.sendEmailFromTemplateSync(newUser, "ReadCycle - Verify your email", "verify-email-user");
         return ResponseEntity
                     .status(HttpStatus.CREATED)
-                    .body(userMapper.convertUserToRegisterResponseDTO(newUser));
+                    .body(userMapper.convertUserToRegisterResponseDto(newUser));
     }
 
     /**
      * {@code POST  /users} : Creates a new user.
      *
-     * @param userDTO The request data containing user details.
+     * @param userDto The request data containing user details.
      * @return A {@link ResponseEntity} containing the created user's details.
      * @throws InvalidException If the user creation fails due to invalid data.
      */
     @PostMapping("/users")
     @ApiMessage("Create a user")
-    public ResponseEntity<CreateUserResponseDto> createNewUser(@Valid @RequestBody CreateUserRequestDto userDTO) throws InvalidException {
+    public ResponseEntity<CreateUserResponseDto> createNewUser(@Valid @RequestBody CreateUserRequestDto userDto) throws InvalidException {
         // convert DTO -> User
-        User newUser = userMapper.convertCreateUserRequestDTOToUser(userDTO);
+        User newUser = userMapper.convertCreateUserRequestDTOToUser(userDto);
         // save user
         newUser = userService.handleCreateUser(newUser);
         // send email
         emailService.sendEmailFromTemplateSync(newUser, "ReadCycle - Verify your email", "verify-email");
         return ResponseEntity
                     .status(HttpStatus.CREATED)
-                    .body(userMapper.convertUserToCreateResponseDTO(newUser));
+                    .body(userMapper.convertUserToCreateResponseDto(newUser));
     }
 
     /**
@@ -109,7 +109,7 @@ public class UserController {
     public ResponseEntity<UpdateUserResponseDto> updateUser(@Valid @RequestBody UpdateUserRequestDto reqUser) throws InvalidException {
         User updateUser = userService.handleUpdateUser(reqUser);
         return ResponseEntity
-                    .ok(userMapper.convertUserToUpdateUserResponseDTO(updateUser));
+                    .ok(userMapper.convertUserToUpdateUserResponseDto(updateUser));
     }
 
     /**
