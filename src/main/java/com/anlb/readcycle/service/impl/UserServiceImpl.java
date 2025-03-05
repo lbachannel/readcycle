@@ -30,6 +30,8 @@ import com.anlb.readcycle.repository.UserRepository;
 import com.anlb.readcycle.service.IRoleService;
 import com.anlb.readcycle.service.IUserLogService;
 import com.anlb.readcycle.service.IUserService;
+import com.anlb.readcycle.service.criteria.UserCriteria;
+import com.anlb.readcycle.service.query.UserQueryService;
 import com.anlb.readcycle.utils.SecurityUtil;
 import com.anlb.readcycle.utils.exception.InvalidException;
 import com.anlb.readcycle.utils.exception.RegisterValidator;
@@ -47,6 +49,7 @@ public class UserServiceImpl implements IUserService {
     private final UserMapper userMapper;
     private final IUserLogService userLogService;
     private final PasswordEncoder passwordEncoder;
+    private final UserQueryService userQueryService;
 
     /**
      * Handles the registration process for a new member.
@@ -399,5 +402,27 @@ public class UserServiceImpl implements IUserService {
         } else {
             throw new InvalidException("Incorrect password. Please check again");
         }
+    }
+
+    @Override
+    public ResultPaginateDto handleGetAllUsers(UserCriteria userCriteria, Pageable pageable) {
+        Page<User> pageUser = userQueryService.findByCriteria(userCriteria, pageable);
+        ResultPaginateDto response = new ResultPaginateDto();
+        ResultPaginateDto.Meta meta = new ResultPaginateDto.Meta();
+
+        meta.setPage(pageable.getPageNumber() + 1);
+        meta.setPageSize(pageable.getPageSize());
+
+        meta.setPages(pageUser.getTotalPages());
+        meta.setTotal(pageUser.getTotalElements());
+
+        response.setMeta(meta);
+        List<UserResponseDto> listUser = pageUser.getContent()
+                                            .stream()
+                                            .map(item -> userMapper.convertUserToUserResponseDto(item))
+                                            .collect(Collectors.toList());
+
+        response.setResult(listUser);
+        return response;
     }
 }
