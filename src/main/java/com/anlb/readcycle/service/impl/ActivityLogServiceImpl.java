@@ -12,13 +12,17 @@ import com.anlb.readcycle.dto.activitylog.ActivityLog;
 import com.anlb.readcycle.dto.response.ResultPaginateDto;
 import com.anlb.readcycle.repository.ActivityLogRepository;
 import com.anlb.readcycle.service.IActivityLogService;
+import com.anlb.readcycle.service.criteria.ActivityCriteria;
+import com.anlb.readcycle.service.query.ActivityLogQueryService;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class ActivityLogServiceImpl implements IActivityLogService {
+
     private final ActivityLogRepository activityLogRepository;
+    private final ActivityLogQueryService activityQueryService;
 
     /**
      * Logs an activity for the given user.
@@ -40,8 +44,8 @@ public class ActivityLogServiceImpl implements IActivityLogService {
      * @return A {@link ResultPaginateDto} containing the list of activity logs and pagination metadata.
      */
     @Override
-    public ResultPaginateDto handleGetAllActivityLog(Pageable pageable) {
-        Page<ActivityLog> pageActivityLog = activityLogRepository.findAll(pageable);
+    public ResultPaginateDto handleGetAllActivityLog(ActivityCriteria activityCriteria, Pageable pageable) {
+        Page<ActivityLog> pageActivityLog = activityQueryService.findByCriteria(activityCriteria, pageable);
         ResultPaginateDto response = new ResultPaginateDto();
         ResultPaginateDto.Meta meta = new ResultPaginateDto.Meta();
 

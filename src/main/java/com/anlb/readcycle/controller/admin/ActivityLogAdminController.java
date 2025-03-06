@@ -1,6 +1,8 @@
 package com.anlb.readcycle.controller.admin;
 
+import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.anlb.readcycle.dto.response.ResultPaginateDto;
 import com.anlb.readcycle.service.IActivityLogService;
+import com.anlb.readcycle.service.criteria.ActivityCriteria;
 import com.anlb.readcycle.utils.anotation.ApiMessage;
 
 import lombok.RequiredArgsConstructor;
@@ -29,9 +32,9 @@ public class ActivityLogAdminController {
      */
     @GetMapping("/activity-log")
     @ApiMessage("Get all activity logs")
-    public ResponseEntity<ResultPaginateDto> getAllActivityLog(Pageable pageable) {
+    public ResponseEntity<ResultPaginateDto> getAllActivityLog(@ParameterObject ActivityCriteria criteria, @ParameterObject Pageable pageable) {
         return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(activityLogService.handleGetAllActivityLog(pageable));
+                    .body(activityLogService.handleGetAllActivityLog(criteria, pageable));
     }
 }

@@ -11,6 +11,7 @@ import com.anlb.readcycle.dto.response.LoginResponseDto;
 import com.anlb.readcycle.dto.response.LoginResponseDto.UserGetAccount;
 import com.anlb.readcycle.dto.response.LoginResponseDto.UserLogin;
 import com.anlb.readcycle.dto.response.ResultPaginateDto;
+import com.anlb.readcycle.service.criteria.UserCriteria;
 import com.anlb.readcycle.utils.exception.InvalidException;
 
 public interface IUserService {
@@ -34,4 +35,5 @@ public interface IUserService {
     void handleDeleteUserById(long id) throws InvalidException;
     User handleSoftDelete(long id) throws InvalidException;
     void handleChangePassword(ChangePasswordRequestDto changePasswordDto) throws InvalidException;
+    ResultPaginateDto handleGetAllUsers(UserCriteria criteria, Pageable pageable);
 }
