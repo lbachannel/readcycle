@@ -35,10 +35,13 @@ public class ActivityLogQueryService extends QueryService<ActivityLog> {
             query.addCriteria(Criteria.where("activityGroup").is(activityCriteria.getActivityGroup().getEquals()));
         }
 
-        if (activityCriteria.getActivityType() != null && activityCriteria.getActivityType().getEquals() != null) {
-            query.addCriteria(Criteria.where("activityType").is(activityCriteria.getActivityType().getEquals()));
-        } else if (activityCriteria.getActivityType().getIn() != null && !activityCriteria.getActivityType().getIn().isEmpty()) {
-            query.addCriteria(Criteria.where("activityType").in(activityCriteria.getActivityType().getIn()));
+        if (activityCriteria.getActivityType() != null) {
+            if (activityCriteria.getActivityType().getEquals() != null) {
+                query.addCriteria(Criteria.where("activityType").is(activityCriteria.getActivityType().getEquals()));
+            } 
+            if (activityCriteria.getActivityType().getIn() != null && !activityCriteria.getActivityType().getIn().isEmpty()) {
+                query.addCriteria(Criteria.where("activityType").in(activityCriteria.getActivityType().getIn()));
+            }
         }
 
         long total = mongoTemplate.count(query, ActivityLog.class);
