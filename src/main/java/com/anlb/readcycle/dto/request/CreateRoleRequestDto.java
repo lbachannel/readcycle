@@ -17,4 +17,5 @@ public class CreateRoleRequestDto {
     private String description;
     private boolean active;
     private List<Permission> permissions;
+
 }

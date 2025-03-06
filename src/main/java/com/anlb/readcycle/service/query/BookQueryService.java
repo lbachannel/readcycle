@@ -25,7 +25,7 @@ public class BookQueryService extends QueryService<Book> {
     
     @Transactional(readOnly = true)
     public Page<Book> findByCriteria(BookCriteria criteria, Pageable pageable) {
-        log.debug("find by criteria : {}, page: {}", criteria, pageable);
+        log.debug("find by criteria: {}, page: {}", criteria, pageable);
         final Specification<Book> specification = createSpecification(criteria);
         return bookRepository.findAll(specification, pageable);
 
