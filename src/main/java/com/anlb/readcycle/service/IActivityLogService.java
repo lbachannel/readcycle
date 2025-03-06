@@ -1,7 +1,6 @@
 package com.anlb.readcycle.service;
 
 import org.springframework.data.domain.Pageable;
-// import org.springframework.data.jpa.domain.Specification;
 
 import com.anlb.readcycle.domain.User;
 import com.anlb.readcycle.dto.activitylog.ActivityLog;
