@@ -1,0 +1,42 @@
+spring:
+  application:
+    name: readcycle
+
+  # Config database MySQL
+  datasource:
+    url: jdbc:mysql://localhost:3306/readcycle
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  # Config database MongoDB
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/readcycle
+
+  # Config email with Gmail
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: tommysb123456@gmail.com
+    password: iouomfwzvixingpq
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+
+# Config JWT
+anlb:
+  jwt:
+    base64-secret: ${SECRET_KEY}
+    access-token-validity-in-seconds: 300
+    refresh-token-validity-in-seconds: 86400
+    verify-email-token-validity-in-seconds: 60
+
+  # Base path
+  upload-file:
+    base-uri: file:///D:/Java/readcycle/upload/
