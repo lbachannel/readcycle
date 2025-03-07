@@ -58,4 +58,18 @@ public class GlobalExceptionHandler {
         res.setError("Exception upload file...");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
     }
+
+    /*
+     * Indicates that the application is on maintenance
+     */
+    @ExceptionHandler(value = {
+        MaintenanceException.class,
+    })
+    public ResponseEntity<ResultResponseDto<Object>> maintenance() {
+        ResultResponseDto<Object> res = new ResultResponseDto<Object>();
+        res.setStatusCode(HttpStatus.I_AM_A_TEAPOT.value());
+        res.setMessage("Service currently in maintenance");
+        res.setError("Service currently in maintenance");
+        return ResponseEntity.status(HttpStatus.I_AM_A_TEAPOT).body(res);
+    }
 }
