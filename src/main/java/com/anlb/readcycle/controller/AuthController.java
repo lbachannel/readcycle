@@ -90,7 +90,7 @@ public class AuthController {
     @PostMapping("/auth/login")
     @ApiMessage("Login")
     public ResponseEntity<LoginResponseDto> login(@Valid @RequestBody LoginRequestDto loginDto) throws InvalidException {
-        User dbUser = userService.handleGetUserByUsername(loginDto.getUsername());
+        User dbUser = userService.handleGetUserByUsernameV2(loginDto.getUsername());
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword());
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
