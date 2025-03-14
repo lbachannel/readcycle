@@ -23,6 +23,16 @@ public class BookQueryService extends QueryService<Book> {
 
     private final BookRepository bookRepository;
     
+    /**
+     * Retrieves a paginated list of books that match the specified criteria.
+     *
+     * This method constructs a {@link Specification} based on the provided {@link BookCriteria} 
+     * and fetches matching books from the database with pagination.
+     *
+     * @param criteria the filtering criteria containing conditions for querying books.
+     * @param pageable the pagination information including page number and size.
+     * @return a {@link Page} containing books that match the specified criteria.
+     */
     @Transactional(readOnly = true)
     public Page<Book> findByCriteria(BookCriteria criteria, Pageable pageable) {
         log.debug("find by criteria: {}, page: {}", criteria, pageable);
@@ -31,6 +41,15 @@ public class BookQueryService extends QueryService<Book> {
 
     }
 
+    /**
+     * Builds a {@link Specification} for filtering books based on the given criteria.
+     *
+     * This method dynamically constructs query conditions based on the provided
+     * {@link BookCriteria}. It applies filters for title, category, and author.
+     *
+     * @param criteria the filtering criteria containing conditions for querying books.
+     * @return a {@link Specification} representing the filtering conditions.
+     */
     protected Specification<Book> createSpecification(BookCriteria criteria) {
         Specification<Book> specification = Specification.where(null);
         if (criteria != null) {
