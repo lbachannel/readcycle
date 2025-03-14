@@ -71,7 +71,15 @@ public class UserServiceImpl implements IUserService {
     }
 
     /**
-     * Creates a new user and logs the creation activity.
+     * Creates a new user and sets initial attributes.
+     *
+     * This method generates a verification email token, sets the email as unverified,
+     * assigns a generated password, and marks the user as active before saving it to the database.
+     * Additionally, it logs the user creation activity.
+     *
+     * @param user the {@link User} object containing user details.
+     * @return the saved {@link User} entity with updated attributes.
+     * @throws InvalidException if the access token is invalid.
      */
     @Override
     public User handleCreateUser(User user) throws InvalidException {
@@ -88,6 +96,14 @@ public class UserServiceImpl implements IUserService {
         return user;
     }
 
+    /**
+     * Generates a random password consisting of alphanumeric characters and one special character.
+     *
+     * The password is generated using a combination of lowercase letters (a-z),
+     * numbers (0-9), and a randomly selected special character from a predefined set.
+     *
+     * @return a randomly generated password as a {@link String}.
+     */
     public static String generatePassword() {
         final String LETTERS_AND_NUMBERS = "abcdefghijklmnopqrstuvwxyz0123456789";
         final String SPECIAL_CHARACTERS = "!@#$%^&*()-_=+";
@@ -133,6 +149,22 @@ public class UserServiceImpl implements IUserService {
         return user;
     }
 
+    /**
+     * Retrieves a user by their username (email) with additional validation checks.
+     *
+     * <p>This method fetches a user from the database using their email address.
+     * It performs the following validations:</p>
+     * <ul>
+     *     <li>Throws an exception if the user does not exist.</li>
+     *     <li>Throws an exception if the user's email has not been verified.</li>
+     *     <li>Throws an exception if the system is in maintenance mode and the user is a regular user.</li>
+     * </ul>
+     *
+     * @param username the email of the user to be retrieved.
+     * @return the {@link User} object if found and validated successfully.
+     * @throws InvalidException if the user does not exist, the email is not verified,
+     *                          or the system is in maintenance mode for regular users.
+     */
     @Override
     public User handleGetUserByUsernameV2(String username) throws InvalidException {
         User user = userRepository.findByEmail(username);
@@ -206,6 +238,15 @@ public class UserServiceImpl implements IUserService {
         }
     }
 
+    /**
+     * Retrieves a user by their email verification token.
+     *
+     * This method searches for a user in the database using the provided verification token.
+     * It is typically used during the email verification process.
+     *
+     * @param token the verification token associated with the user.
+     * @return the {@link User} object if a match is found, otherwise returns {@code null}.
+     */
     @Override
     public User handleFindUserByVerifyToken(String token) {
         return userRepository.findUserByVerificationEmailToken(token);
@@ -405,6 +446,17 @@ public class UserServiceImpl implements IUserService {
         userRepository.deleteById(id);
     }
 
+    /**
+     * Toggles the active status of a user (soft delete).
+     *
+     * This method retrieves a user by their ID and toggles their active status.
+     * If the user is currently active, they will be deactivated, and vice versa.
+     * This provides a soft delete mechanism without permanently removing the user from the database.
+     *
+     * @param id the unique identifier of the user to be soft deleted.
+     * @return the updated {@link User} object after toggling the active status.
+     * @throws InvalidException if the user is not found.
+     */
 	@Override
 	public User handleSoftDelete(long id) throws InvalidException {
 		User isDeletedUser = handleGetUserById(id);
@@ -412,6 +464,16 @@ public class UserServiceImpl implements IUserService {
         return userRepository.save(isDeletedUser);
 	}
 
+    /**
+     * Changes the password of a user.
+     *
+     * This method verifies the current password of the user and updates it with a new password.
+     * If the provided current password matches the stored password, the new password is hashed and saved.
+     * Otherwise, an {@link InvalidException} is thrown.
+     *
+     * @param changePasswordDto the DTO containing the username, current password, and new password.
+     * @throws InvalidException if the current password is incorrect.
+     */
     @Override
     public void handleChangePassword(ChangePasswordRequestDto changePasswordDto) throws InvalidException {
         User dbUser = handleGetUserByUsername(changePasswordDto.getUsername());
@@ -424,6 +486,16 @@ public class UserServiceImpl implements IUserService {
         }
     }
 
+    /**
+     * Retrieves a paginated list of users based on the specified criteria.
+     *
+     * This method queries users using {@link UserCriteria} and returns the results in a paginated format.
+     * It constructs metadata including the current page, page size, total pages, and total elements.
+     *
+     * @param userCriteria the filtering criteria for retrieving users.
+     * @param pageable     the pagination details.
+     * @return a {@link ResultPaginateDto} containing the paginated user list and metadata.
+     */
     @Override
     public ResultPaginateDto handleGetAllUsers(UserCriteria userCriteria, Pageable pageable) {
         Page<User> pageUser = userQueryService.findByCriteria(userCriteria, pageable);
