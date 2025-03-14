@@ -6,5 +6,4 @@ import org.springframework.stereotype.Repository;
 import com.anlb.readcycle.domain.SystemConfig;
 
 @Repository
-public interface SystemConfigRepository extends JpaRepository<SystemConfig, Long> {
-}
+public interface SystemConfigRepository extends JpaRepository<SystemConfig, Long> {}

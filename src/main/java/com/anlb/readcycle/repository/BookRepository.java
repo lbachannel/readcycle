@@ -12,7 +12,6 @@ import com.anlb.readcycle.domain.Book;
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long>, JpaSpecificationExecutor<Book>{
     Optional<Book> findByIdAndIsActive(long id, boolean isActive);
-
     List<Book> findAllByIsActive(boolean isActive);
     Book findByTitle(String title);
 }
