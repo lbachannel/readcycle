@@ -70,6 +70,16 @@ public class AuthController {
             .build();
     }
 
+    /**
+     * {@code POST  /auth/change-password} : Changes the password of the authenticated user.
+     *
+     * This endpoint allows users to update their password by providing the 
+     * required details in the request body.
+     *
+     * @param changePasswordDto a {@link ChangePasswordRequestDto} containing the old and new password.
+     * @return a {@link ResponseEntity} with {@link HttpStatus#NO_CONTENT} if the password change is successful.
+     * @throws InvalidException if the password change request is invalid.
+     */
     @PostMapping("/auth/change-password")
     @ApiMessage("Change password")
     public ResponseEntity<Void> changePassword(@RequestBody ChangePasswordRequestDto changePasswordDto) throws InvalidException {
