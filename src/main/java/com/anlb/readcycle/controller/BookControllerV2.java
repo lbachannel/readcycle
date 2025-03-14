@@ -22,6 +22,16 @@ public class BookControllerV2 {
 
     private final IBookService bookService;
 
+    /**
+     * {@code GET  /books} : Retrieves a paginated list of books based on the provided criteria.
+     *
+     * This endpoint allows fetching all books with optional filtering and pagination.
+     *
+     * @param criteria a {@link BookCriteria} object containing filters for querying books.
+     * @param pageable a {@link Pageable} object defining pagination and sorting parameters.
+     * @return a {@link ResponseEntity} containing a {@link ResultPaginateDto} 
+     *         with the paginated list of books.
+     */
     @GetMapping("/books")
     @ApiMessage("Get all books")
     public ResponseEntity<ResultPaginateDto> getAllBooks(@ParameterObject BookCriteria criteria, @ParameterObject Pageable pageable) {
