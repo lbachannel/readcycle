@@ -39,6 +39,7 @@ public class SecurityUtil {
     // verify email
     @Value("${anlb.jwt.verify-email-token-validity-in-seconds}")
     private long verifyEmailExpired;
+
     public String createVerifyEmailToken(String email) {
         Instant now = Instant.now();
         Instant validity = now.plus(verifyEmailExpired, ChronoUnit.SECONDS);
@@ -132,9 +133,9 @@ public class SecurityUtil {
     // decoder check token is real or fake
     public Jwt checkValidRefreshToken(String token) throws InvalidException {
         NimbusJwtDecoder jwtDecoder = NimbusJwtDecoder
-                                            .withSecretKey(getSecretKey())
-                                            .macAlgorithm(SecurityUtil.JWT_ALGORITHM)
-                                            .build();
+                .withSecretKey(getSecretKey())
+                .macAlgorithm(SecurityUtil.JWT_ALGORITHM)
+                .build();
         try {
             if ("abc".equals(token)) {
                 throw new InvalidException("You do not have refresh token in cookies");
