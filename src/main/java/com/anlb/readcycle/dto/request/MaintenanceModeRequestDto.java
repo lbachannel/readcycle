@@ -8,5 +8,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MaintenanceModeRequestDto {
-    boolean status;
+    boolean maintenanceMode;
 }

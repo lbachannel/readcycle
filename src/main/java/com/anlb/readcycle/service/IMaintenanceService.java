@@ -7,5 +7,5 @@ import com.anlb.readcycle.domain.SystemConfig;
 @Repository
 public interface IMaintenanceService {
     SystemConfig getMaintenance();
-    SystemConfig toggleMaintenanceMode(boolean status);
+    SystemConfig toggleMaintenanceMode(boolean maintenanceMode);
 }

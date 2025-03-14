@@ -28,6 +28,9 @@ public class StaticResourcesWebConfiguration implements WebMvcConfigurer {
         registry.addInterceptor(maintenanceInterceptor)
                 .addPathPatterns("/**")
                 .excludePathPatterns("/api/admin/maintenance")
+                .excludePathPatterns("/api/admin/toggle-maintenance")
+                .excludePathPatterns("/api/v1/auth/account")
+                .excludePathPatterns("/api/v1/auth/refresh")
                 .excludePathPatterns("/api/v1/auth/login")
                 .excludePathPatterns("/api/v1/auth/logout");
     }
