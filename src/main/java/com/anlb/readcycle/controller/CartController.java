@@ -21,6 +21,14 @@ public class CartController {
 
     private final ICartService cartService;
     
+    /**
+     * {@code POST  /remove-carts} : Deletes multiple carts by their IDs.
+     *
+     * <p>This endpoint allows users to delete multiple carts by providing a list of cart IDs.</p>
+     *
+     * @param ids a list of cart IDs to be deleted.
+     * @return a {@link ResponseEntity} with HTTP status {@code 204 No Content} indicating successful deletion.
+     */
     @PostMapping("/remove-carts")
     @ApiMessage("Delete carts")
     public ResponseEntity<Void> handleDeleteCarts(@RequestBody List<Long> ids) {
