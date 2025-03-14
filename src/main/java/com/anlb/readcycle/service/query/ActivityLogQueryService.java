@@ -26,6 +26,16 @@ public class ActivityLogQueryService extends QueryService<ActivityLog> {
     
     private final MongoTemplate mongoTemplate;
 
+    /**
+     * Retrieves a paginated list of activity logs that match the specified criteria.
+     *
+     * This method constructs a MongoDB {@link Query} based on the provided {@link ActivityCriteria} 
+     * and fetches matching activity logs with pagination.
+     *
+     * @param activityCriteria the filtering criteria containing conditions for querying activity logs.
+     * @param pageable the pagination information including page number and size.
+     * @return a {@link Page} containing activity logs that match the specified criteria.
+     */
     public Page<ActivityLog> findByCriteria(ActivityCriteria activityCriteria, Pageable pageable) {
         log.debug("find by criteria : {}, page: {}", activityCriteria, pageable);
 
