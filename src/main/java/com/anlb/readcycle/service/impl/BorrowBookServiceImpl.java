@@ -44,6 +44,17 @@ public class BorrowBookServiceImpl implements IBorrowBookService {
     private final BookRepository bookRepository;
     private final BorrowRepository borrowRepository;
 
+    /**
+     * Handles the book borrowing process for a user.
+     *
+     * <p>This method processes a borrowing request, checking book availability and updating 
+     * the inventory accordingly. If a book is unavailable, an exception is thrown.</p>
+     *
+     * @param reqBorrow a {@link CreateBorrowBookRequestDto} containing the borrowing details, 
+     *                  including the username and list of books to borrow.
+     * @return a list of {@link Borrow} objects representing the borrowed books.
+     * @throws InvalidException if any of the requested books are unavailable.
+     */
     @Override
     public List<Borrow> handleBorrowBook(CreateBorrowBookRequestDto reqBorrow) throws InvalidException {
         List<Details> listBook = reqBorrow.getDetails();
@@ -73,16 +84,48 @@ public class BorrowBookServiceImpl implements IBorrowBookService {
         return borrowRepository.saveAll(borrows);
     }
 
+    /**
+     * Finds a borrow record by user, book, and borrow status.
+     *
+     * This method retrieves a specific borrow entry based on the given user, book, 
+     * and borrow status.
+     *
+     * @param user the {@link User} who borrowed the book.
+     * @param book the {@link Book} that was borrowed.
+     * @param borrowed the {@link BorrowStatusEnum} status of the borrow record.
+     * @return a {@link Borrow} object if a matching record is found, otherwise {@code null}.
+     */
     @Override
     public Borrow handleFindBorrowByUserAndBookAndStatus(User user, Book book, BorrowStatusEnum borrowed) {
         return borrowRepository.findByUserAndBookAndStatus(user, book, borrowed);
     }
 
+    /**
+     * Retrieves a list of borrow records for a specific user with a given borrow status.
+     *
+     * This method fetches all borrow entries associated with the specified user 
+     * that match the provided borrow status.
+     *
+     * @param user the {@link User} whose borrow records are to be retrieved.
+     * @param borrowed the {@link BorrowStatusEnum} status of the borrow records to filter.
+     * @return a list of {@link Borrow} objects matching the criteria.
+     */
     @Override
     public List<Borrow> findByUserAndStatus(User user, BorrowStatusEnum borrowed) {
         return borrowRepository.findByUserAndStatus(user, borrowed);
     }
 
+    /**
+     * Retrieves the borrowing history of the currently authenticated user with pagination.
+     *
+     * This method fetches the borrow records for the logged-in user, applying 
+     * filtering criteria and pagination.
+     *
+     * @param spec the {@link Specification} for filtering borrow records.
+     * @param pageable the {@link Pageable} object for pagination details.
+     * @return a {@link ResultPaginateDto} containing paginated borrow history data.
+     * @throws InvalidException if the access token is invalid or the user cannot be found.
+     */
     @Override
     public ResultPaginateDto handleGetHistoryByUser(Specification<Borrow> spec, Pageable pageable) throws InvalidException {
         String email = SecurityUtil.getCurrentUserLogin()
@@ -109,6 +152,16 @@ public class BorrowBookServiceImpl implements IBorrowBookService {
         return response;
     }
 
+    /**
+     * Handles the return of a borrowed book.
+     *
+     * This method finds the corresponding borrow record for the given user and book,
+     * updates its status to {@code RETURNED}, and increments the book's quantity in stock.
+     *
+     * @param borrow the {@link Borrow} object containing user, book, and borrow status information.
+     * @return the updated {@link Borrow} entity after marking it as returned.
+     * @throws InvalidException if the borrow record cannot be found.
+     */
     @Override
     public Borrow handleReturnBook(Borrow borrow) throws InvalidException {
         Borrow dbBorrow = borrowRepository.findByUserAndBookAndStatus(borrow.getUser(), borrow.getBook(), borrow.getStatus());
