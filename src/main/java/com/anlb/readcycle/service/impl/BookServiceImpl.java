@@ -201,6 +201,13 @@ public class BookServiceImpl implements IBookService {
         return response;
     }
 
+    /**
+     * Retrieves a paginated list of books based on the given criteria.
+     *
+     * @param bookCriteria The criteria used to filter books.
+     * @param pageable The pagination information.
+     * @return A {@link ResultPaginateDto} containing the paginated list of books and metadata.
+     */
     @Override
     public ResultPaginateDto handleGetAllBooksClientV2(BookCriteria bookCriteria, Pageable pageable) {
         Page<Book> pageBook = bookQueryService.findByCriteria(bookCriteria, pageable);
@@ -235,6 +242,12 @@ public class BookServiceImpl implements IBookService {
         bookRepository.deleteById(id);
     }
 
+    /**
+     * Handles bulk creation of books. If a book with the same title already exists, it is skipped.
+     *
+     * @param books The list of books to be created.
+     * @return A {@link BulkCreateResponseDto} containing the count of successfully created books and errors.
+     */
     @Override
     public BulkCreateResponseDto handleBulkCreateBooksbooks(List<CreateBookRequestDto> books) {
         int countSuccess = 0;
@@ -255,6 +268,12 @@ public class BookServiceImpl implements IBookService {
         return new BulkCreateResponseDto(countSuccess, countError);
     }
 
+    /**
+     * Retrieves a book by its title.
+     *
+     * @param title The title of the book to search for.
+     * @return A {@link Book} object if found, otherwise {@code null}.
+     */
     @Override
     public Book handleGetBookByTitle(String title) {
         return bookRepository.findByTitle(title);
