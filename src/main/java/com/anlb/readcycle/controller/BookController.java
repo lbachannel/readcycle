@@ -66,6 +66,16 @@ public class BookController {
                     .body(bookService.handleGetAllBooksClient(spec, pageable));
     }
 
+    /**
+     * {@code POST  /books/bulk-create} : Imports multiple books in bulk.
+     *
+     * This endpoint allows creating multiple books at once by providing a list 
+     * of book creation requests in the request body.
+     *
+     * @param books a list of {@link CreateBookRequestDto} objects containing book details.
+     * @return a {@link ResponseEntity} containing a {@link BulkCreateResponseDto} 
+     *         with the result of the bulk creation process.
+     */
     @PostMapping("/books/bulk-create")
     @ApiMessage("Import books")
     public ResponseEntity<BulkCreateResponseDto> bulkCreateBooks(@RequestBody List<CreateBookRequestDto> books) {
