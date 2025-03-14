@@ -13,7 +13,7 @@ import com.anlb.readcycle.dto.response.UpdateBookResponseDto;
 
 @Service
 public class BookMapper {
-    
+
     /**
      * Converts a {@link Book} entity to a {@link CreateBookResponseDto}.
      *
@@ -41,7 +41,8 @@ public class BookMapper {
      * Converts a {@link Book} entity to an {@link UpdateBookResponseDto}.
      *
      * @param updateBook The {@link Book} entity to be converted.
-     * @return An {@link UpdateBookResponseDto} containing the book's updated details.
+     * @return An {@link UpdateBookResponseDto} containing the book's updated
+     *         details.
      */
     public UpdateBookResponseDto convertBookToUpdateBookResponseDto(Book updateBook) {
         UpdateBookResponseDto response = new UpdateBookResponseDto();
@@ -88,30 +89,31 @@ public class BookMapper {
     }
 
     /**
-     * Converts a list of {@link Book} objects into a list of {@link BookResponseDto} objects.
+     * Converts a list of {@link Book} objects into a list of
+     * {@link BookResponseDto} objects.
      *
      * @param books The list of {@link Book} objects to be converted.
-     * @return A list of {@link BookResponseDto} objects created from the input list.
+     * @return A list of {@link BookResponseDto} objects created from the input
+     *         list.
      */
     public List<BookResponseDto> convertBooksToBookResponseDto(List<Book> books) {
         List<BookResponseDto> response = books.stream()
-                                            .map(item -> new BookResponseDto(
-                                                item.getId(),
-                                                item.getCategory(),
-                                                item.getTitle(),
-                                                item.getAuthor(),
-                                                item.getPublisher(),
-                                                item.getThumb(),
-                                                item.getDescription(),
-                                                item.getQuantity(),
-                                                item.getStatus(),
-                                                item.isActive(),
-                                                item.getCreatedAt(),
-                                                item.getCreatedBy(),
-                                                item.getUpdatedAt(),
-                                                item.getUpdatedBy()
-                                            ))
-                                            .collect(Collectors.toList());
+                .map(item -> new BookResponseDto(
+                        item.getId(),
+                        item.getCategory(),
+                        item.getTitle(),
+                        item.getAuthor(),
+                        item.getPublisher(),
+                        item.getThumb(),
+                        item.getDescription(),
+                        item.getQuantity(),
+                        item.getStatus(),
+                        item.isActive(),
+                        item.getCreatedAt(),
+                        item.getCreatedBy(),
+                        item.getUpdatedAt(),
+                        item.getUpdatedBy()))
+                .collect(Collectors.toList());
         return response;
     }
 
