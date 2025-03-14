@@ -19,6 +19,7 @@ public interface IUserService {
     User handleCreateUser(User user) throws InvalidException;
     boolean handleCheckExistsByEmail(String email);
     User handleGetUserByUsername(String username) throws InvalidException;
+    User handleGetUserByUsernameV2(String username) throws InvalidException;
     User handleVerifyEmail(String token);
     boolean validateToken(String token);
     String extractEmailFromToken(String token);

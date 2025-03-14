@@ -27,6 +27,7 @@ import com.anlb.readcycle.mapper.UserMapper;
 import com.anlb.readcycle.dto.response.LoginResponseDto.UserGetAccount;
 import com.anlb.readcycle.dto.response.LoginResponseDto.UserLogin;
 import com.anlb.readcycle.repository.UserRepository;
+import com.anlb.readcycle.service.IMaintenanceService;
 import com.anlb.readcycle.service.IRoleService;
 import com.anlb.readcycle.service.IUserLogService;
 import com.anlb.readcycle.service.IUserService;
@@ -50,6 +51,7 @@ public class UserServiceImpl implements IUserService {
     private final IUserLogService userLogService;
     private final PasswordEncoder passwordEncoder;
     private final UserQueryService userQueryService;
+    private final IMaintenanceService maintenanceService;
 
     /**
      * Handles the registration process for a new member.
@@ -126,6 +128,24 @@ public class UserServiceImpl implements IUserService {
 
         if (!user.isEmailVerified()) {
             throw new InvalidException("Your account has not been verified");
+        }
+        
+        return user;
+    }
+
+    @Override
+    public User handleGetUserByUsernameV2(String username) throws InvalidException {
+        User user = userRepository.findByEmail(username);
+        if (user == null) {
+            throw new InvalidException("Bad credentials");
+        }
+
+        if (!user.isEmailVerified()) {
+            throw new InvalidException("Your account has not been verified");
+        }
+
+        if (maintenanceService.getMaintenance().isMaintenanceMode() && user.getRole().getName().equals("user")) {
+            throw new InvalidException("Maintenance mode, we will be back soon");
         }
         
         return user;
