@@ -24,6 +24,17 @@ public class BorrowHistoryController {
 
     private final IBorrowBookService borrowBookService;
 
+    /**
+     * {@code GET  /history} : Retrieves the borrowing history of the authenticated user.
+     *
+     * This endpoint fetches the user's borrowing history with optional filtering and pagination.
+     *
+     * @param spec a {@link Specification} of {@link Borrow} for filtering the borrowing history.
+     * @param pageable a {@link Pageable} object for pagination details.
+     * @return a {@link ResponseEntity} containing a {@link ResultPaginateDto} 
+     *         representing the paginated borrowing history.
+     * @throws InvalidException if the request is invalid or encounters an issue.
+     */
     @GetMapping("/history")
     @ApiMessage("Get history by user")
     public ResponseEntity<ResultPaginateDto> getHistory(@Filter Specification<Borrow> spec, Pageable pageable) throws InvalidException {
