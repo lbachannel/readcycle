@@ -16,7 +16,6 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.anlb.readcycle.domain.User;
 import com.anlb.readcycle.dto.request.ChangePasswordRequestDto;
 import com.anlb.readcycle.dto.request.UpdateUserRequestDto;
@@ -174,6 +173,10 @@ public class UserServiceImpl implements IUserService {
 
         if (!user.isEmailVerified()) {
             throw new InvalidException("Your account has not been verified");
+        }
+
+        if (!user.isActive()) {
+            throw new InvalidException("Your account has been locked.");
         }
 
         if (maintenanceService.getMaintenance().isMaintenanceMode() && user.getRole().getName().equals("user")) {
