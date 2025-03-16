@@ -54,15 +54,20 @@ public class BookQueryService extends QueryService<Book> {
         Specification<Book> specification = Specification.where(null);
         if (criteria != null) {
             if (criteria.getTitle() != null) {
-                specification = specification.or(buildStringSpecification(criteria.getTitle(), Book_.title));
+                specification = specification.and(buildStringSpecification(criteria.getTitle(), Book_.title));
             }
 
             if (criteria.getCategory() != null) {
-                specification = specification.or(buildStringSpecification(criteria.getCategory(), Book_.category));
+                specification = specification.and(buildStringSpecification(criteria.getCategory(), Book_.category));
             }
 
             if (criteria.getAuthor() != null) {
-                specification = specification.or(buildStringSpecification(criteria.getAuthor(), Book_.author));
+                specification = specification.and(buildStringSpecification(criteria.getAuthor(), Book_.author));
+            }
+
+            if (criteria.getIsActive() != null && criteria.getIsActive().getEquals() != null) {
+                Boolean isActiveValue = criteria.getIsActive().getEquals();
+                specification = specification.and((root, query, cb) -> cb.equal(root.get(Book_.isActive), isActiveValue));
             }
         }
 
