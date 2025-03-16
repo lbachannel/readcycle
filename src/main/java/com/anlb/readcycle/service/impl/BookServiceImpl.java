@@ -237,6 +237,7 @@ public class BookServiceImpl implements IBookService {
     }
 
     private ResultPaginateDto getBooks(BookCriteria bookCriteria, Pageable pageable) {
+        
         Page<Book> pageBook = bookQueryService.findByCriteria(bookCriteria, pageable);
         ResultPaginateDto response = new ResultPaginateDto();
         ResultPaginateDto.Meta meta = new ResultPaginateDto.Meta();

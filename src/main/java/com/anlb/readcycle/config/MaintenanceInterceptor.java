@@ -28,7 +28,7 @@ public class MaintenanceInterceptor implements HandlerInterceptor {
             response.setContentType("application/json");
 
             Map<String, Object> notifyMaintenanceMode = new HashMap<>();
-            notifyMaintenanceMode.put("status", HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+            notifyMaintenanceMode.put("statusCode", HttpServletResponse.SC_SERVICE_UNAVAILABLE);
             notifyMaintenanceMode.put("message", "Maintenance mode, we will be back soon");
 
             String jsonResponse = new ObjectMapper().writeValueAsString(notifyMaintenanceMode);
