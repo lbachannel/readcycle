@@ -26,6 +26,7 @@ import com.anlb.readcycle.service.query.BookQueryService;
 import com.anlb.readcycle.utils.exception.InvalidException;
 
 import lombok.RequiredArgsConstructor;
+import tech.jhipster.service.filter.BooleanFilter;
 
 @Service
 @Transactional
@@ -43,7 +44,8 @@ public class BookServiceImpl implements IBookService {
      * @param requestBook the Dto containing the book details.
      * @return the newly created and saved {@link Book} entity.
      * @throws InvalidException if the request is invalid.
-     * @implNote This method logs the book creation event using {@code bookLogService}.
+     * @implNote This method logs the book creation event using
+     *           {@code bookLogService}.
      */
     @Override
     public Book handleCreateBook(CreateBookRequestDto requestBook) throws InvalidException {
@@ -82,9 +84,11 @@ public class BookServiceImpl implements IBookService {
      * Retrieves a book by its ID and active status.
      *
      * @param id       The ID of the book to retrieve.
-     * @param isActive A boolean flag indicating whether the book should be active (true) or inactive (false).
+     * @param isActive A boolean flag indicating whether the book should be active
+     *                 (true) or inactive (false).
      * @return The {@link Book} entity that matches the given ID and active status.
-     * @throws InvalidException if no book with the given ID and active status is found.
+     * @throws InvalidException if no book with the given ID and active status is
+     *                          found.
      */
     @Override
     public Book handleGetBookByIdAndActive(long id, boolean isActive) throws InvalidException {
@@ -98,11 +102,16 @@ public class BookServiceImpl implements IBookService {
     /**
      * Updates an existing book's details based on the provided request data.
      * 
-     * <p>This method retrieves the book by its ID, creates a clone of the original book 
-     * for logging purposes, updates its attributes with new values from the request, 
-     * logs the changes, and then saves the updated book to the repository.</p>
+     * <p>
+     * This method retrieves the book by its ID, creates a clone of the original
+     * book
+     * for logging purposes, updates its attributes with new values from the
+     * request,
+     * logs the changes, and then saves the updated book to the repository.
+     * </p>
      * 
-     * @param requestBook the {@code UpdateBookRequestDto} containing the new book details
+     * @param requestBook the {@code UpdateBookRequestDto} containing the new book
+     *                    details
      * @return the updated {@code Book} object after saving to the repository
      * @throws InvalidException if the book with the given ID does not exist
      */
@@ -125,7 +134,8 @@ public class BookServiceImpl implements IBookService {
     /**
      * Toggles the soft delete status of a book by its ID.
      *
-     * If the book is currently active, it will be marked as inactive (soft deleted).
+     * If the book is currently active, it will be marked as inactive (soft
+     * deleted).
      * If the book is inactive, it will be reactivated.
      * 
      * @param id the ID of the book to toggle soft delete status
@@ -144,8 +154,10 @@ public class BookServiceImpl implements IBookService {
     /**
      * Retrieves all books based on the given specification and pagination details.
      *
-     * @param spec     The {@link Specification} used to filter books based on criteria.
-     * @param pageable The {@link Pageable} object containing pagination information.
+     * @param spec     The {@link Specification} used to filter books based on
+     *                 criteria.
+     * @param pageable The {@link Pageable} object containing pagination
+     *                 information.
      * @return A {@link ResultPaginateDto} containing the paginated list of books
      *         and associated metadata.
      */
@@ -164,19 +176,21 @@ public class BookServiceImpl implements IBookService {
         response.setMeta(meta);
 
         List<BookResponseDto> listBook = pageBook.getContent()
-                                            .stream()
-                                            .map(item -> this.bookMapper.convertBookToBookResponseDto(item))
-                                            .collect(Collectors.toList());
+                .stream()
+                .map(item -> this.bookMapper.convertBookToBookResponseDto(item))
+                .collect(Collectors.toList());
         response.setResult(listBook);
         return response;
     }
 
     /**
-     * Retrieves a paginated list of active books based on the given specification and pagination details.
+     * Retrieves a paginated list of active books based on the given specification
+     * and pagination details.
      *
      * @param spec     The specification used to filter books.
      * @param pageable The pagination information including page number and size.
-     * @return A {@link ResultPaginateDto} containing the paginated list of books and metadata.
+     * @return A {@link ResultPaginateDto} containing the paginated list of books
+     *         and metadata.
      */
     @Override
     public ResultPaginateDto handleGetAllBooksClient(Specification<Book> spec, Pageable pageable) {
@@ -194,38 +208,51 @@ public class BookServiceImpl implements IBookService {
         response.setMeta(meta);
 
         List<BookResponseDto> listBook = pageBook.getContent()
-                                            .stream()
-                                            .map(item -> bookMapper.convertBookToBookResponseDto(item))
-                                            .collect(Collectors.toList());
+                .stream()
+                .map(item -> bookMapper.convertBookToBookResponseDto(item))
+                .collect(Collectors.toList());
         response.setResult(listBook);
         return response;
     }
 
-    /**
-     * Retrieves a paginated list of books based on the given criteria.
-     *
-     * @param bookCriteria The criteria used to filter books.
-     * @param pageable The pagination information.
-     * @return A {@link ResultPaginateDto} containing the paginated list of books and metadata.
-     */
     @Override
     public ResultPaginateDto handleGetAllBooksClientV2(BookCriteria bookCriteria, Pageable pageable) {
+        BookCriteria criteriaCopy = bookCriteria.copy();
+        criteriaCopy.setIsAdmin(false);
+        
+        BooleanFilter activeFilter = new BooleanFilter();
+        activeFilter.setEquals(true);
+        criteriaCopy.setIsActive(activeFilter);
+
+        return getBooks(criteriaCopy, pageable);
+    }
+
+    @Override
+    public ResultPaginateDto handleGetAllBooksAdminV2(BookCriteria bookCriteria, Pageable pageable) {
+        BookCriteria criteriaCopy = bookCriteria.copy();
+        criteriaCopy.setIsAdmin(true);
+        criteriaCopy.setIsActive(null);
+
+        return getBooks(criteriaCopy, pageable);
+    }
+
+    private ResultPaginateDto getBooks(BookCriteria bookCriteria, Pageable pageable) {
+        
         Page<Book> pageBook = bookQueryService.findByCriteria(bookCriteria, pageable);
         ResultPaginateDto response = new ResultPaginateDto();
         ResultPaginateDto.Meta meta = new ResultPaginateDto.Meta();
 
         meta.setPage(pageable.getPageNumber() + 1);
         meta.setPageSize(pageable.getPageSize());
-
         meta.setPages(pageBook.getTotalPages());
         meta.setTotal(pageBook.getTotalElements());
 
         response.setMeta(meta);
-        List<BookResponseDto> listBook = pageBook.getContent()
-                                                .stream()
-                                                .map(item -> bookMapper.convertBookToBookResponseDto(item))
-                                                .collect(Collectors.toList());
-        response.setResult(listBook);
+        response.setResult(pageBook.getContent()
+                .stream()
+                .map(bookMapper::convertBookToBookResponseDto)
+                .collect(Collectors.toList()));
+
         return response;
     }
 
@@ -233,7 +260,8 @@ public class BookServiceImpl implements IBookService {
      * Deletes a book from the repository by its ID.
      *
      * This method first logs the deletion activity using {@code bookLogService}
-     *              then proceeds to remove the book from the repository.
+     * then proceeds to remove the book from the repository.
+     * 
      * @param id the ID of the book to be deleted
      */
     @Override
@@ -243,10 +271,12 @@ public class BookServiceImpl implements IBookService {
     }
 
     /**
-     * Handles bulk creation of books. If a book with the same title already exists, it is skipped.
+     * Handles bulk creation of books. If a book with the same title already exists,
+     * it is skipped.
      *
      * @param books The list of books to be created.
-     * @return A {@link BulkCreateResponseDto} containing the count of successfully created books and errors.
+     * @return A {@link BulkCreateResponseDto} containing the count of successfully
+     *         created books and errors.
      */
     @Override
     public BulkCreateResponseDto handleBulkCreateBooksbooks(List<CreateBookRequestDto> books) {

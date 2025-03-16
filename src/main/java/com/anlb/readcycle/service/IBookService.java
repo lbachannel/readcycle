@@ -21,6 +21,7 @@ public interface IBookService {
     ResultPaginateDto handleGetAllBooks(Specification<Book> spec, Pageable pageable);
     ResultPaginateDto handleGetAllBooksClient(Specification<Book> spec, Pageable pageable);
     ResultPaginateDto handleGetAllBooksClientV2(BookCriteria criteria, Pageable pageable);
+    ResultPaginateDto handleGetAllBooksAdminV2(BookCriteria criteria, Pageable pageable);
     void handleDeleteBookById(long id);
     BulkCreateResponseDto handleBulkCreateBooksbooks(List<CreateBookRequestDto> books);
     Book handleGetBookByTitle(String title);

@@ -16,7 +16,6 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.anlb.readcycle.domain.User;
 import com.anlb.readcycle.dto.request.ChangePasswordRequestDto;
 import com.anlb.readcycle.dto.request.UpdateUserRequestDto;
@@ -174,6 +173,10 @@ public class UserServiceImpl implements IUserService {
 
         if (!user.isEmailVerified()) {
             throw new InvalidException("Your account has not been verified");
+        }
+
+        if (!user.isActive()) {
+            throw new InvalidException("Your account has been locked.");
         }
 
         if (maintenanceService.getMaintenance().isMaintenanceMode() && user.getRole().getName().equals("user")) {
@@ -459,7 +462,12 @@ public class UserServiceImpl implements IUserService {
      */
 	@Override
 	public User handleSoftDelete(long id) throws InvalidException {
+        String email = SecurityUtil.getCurrentUserLogin()
+        .orElseThrow(() -> new InvalidException("Access Token invalid"));
 		User isDeletedUser = handleGetUserById(id);
+        if (isDeletedUser.getEmail().equals(email)) {
+            throw new InvalidException("You can not delete yourself");
+        }
         isDeletedUser.setActive(!isDeletedUser.isActive());
         return userRepository.save(isDeletedUser);
 	}

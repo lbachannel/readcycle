@@ -48,7 +48,7 @@ public class BookAdminController {
     public ResponseEntity<ResultPaginateDto> getAllBooks(@ParameterObject BookCriteria criteria, Pageable pageable) {
         return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(bookService.handleGetAllBooksClientV2(criteria, pageable));
+                    .body(bookService.handleGetAllBooksAdminV2(criteria, pageable));
     }
 
     /**
