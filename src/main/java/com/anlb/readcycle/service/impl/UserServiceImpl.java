@@ -462,7 +462,12 @@ public class UserServiceImpl implements IUserService {
      */
 	@Override
 	public User handleSoftDelete(long id) throws InvalidException {
+        String email = SecurityUtil.getCurrentUserLogin()
+        .orElseThrow(() -> new InvalidException("Access Token invalid"));
 		User isDeletedUser = handleGetUserById(id);
+        if (isDeletedUser.getEmail().equals(email)) {
+            throw new InvalidException("You can not delete yourself");
+        }
         isDeletedUser.setActive(!isDeletedUser.isActive());
         return userRepository.save(isDeletedUser);
 	}
