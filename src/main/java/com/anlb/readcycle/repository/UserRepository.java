@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
+import com.anlb.readcycle.domain.Role;
 import com.anlb.readcycle.domain.User;
 
 @Repository
@@ -16,4 +17,5 @@ public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificat
     void deleteByEmail(String email);
     User findByRefreshTokenAndEmail(String token, String email);
     User findUserByVerificationEmailToken(String token);
+    Long countByRole(Role role);
 }

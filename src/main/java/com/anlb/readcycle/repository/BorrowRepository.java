@@ -15,4 +15,5 @@ import com.anlb.readcycle.utils.constant.BorrowStatusEnum;
 public interface BorrowRepository extends JpaRepository<Borrow, Long>, JpaSpecificationExecutor<Borrow> {
     Borrow findByUserAndBookAndStatus(User user, Book book, BorrowStatusEnum borrowed);
     List<Borrow> findByUserAndStatus(User user, BorrowStatusEnum borrowed);
+    Long countByBook(Book book);
 }
