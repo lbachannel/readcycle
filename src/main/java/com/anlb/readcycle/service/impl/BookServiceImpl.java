@@ -215,6 +215,17 @@ public class BookServiceImpl implements IBookService {
         return response;
     }
 
+    /**
+     * Retrieves a paginated list of books for clients.
+     * This method modifies the given {@link BookCriteria} by setting the 
+     * admin flag to {@code false} and filtering only active books before 
+     * fetching the results.
+     *
+     * @param bookCriteria The criteria used to filter books.
+     * @param pageable     The pagination and sorting information.
+     * @return A {@link ResultPaginateDto} containing the paginated list of books 
+     *         and metadata such as total pages, current page, and total elements.
+     */
     @Override
     public ResultPaginateDto handleGetAllBooksClientV2(BookCriteria bookCriteria, Pageable pageable) {
         BookCriteria criteriaCopy = bookCriteria.copy();
@@ -227,6 +238,17 @@ public class BookServiceImpl implements IBookService {
         return getBooks(criteriaCopy, pageable);
     }
 
+    /**
+     * Retrieves a paginated list of all books for the admin panel.
+     * This method modifies the given {@link BookCriteria} by setting the 
+     * admin flag to {@code true} and removing any active status filter before 
+     * fetching the books.
+     *
+     * @param bookCriteria The criteria used to filter books.
+     * @param pageable     The pagination and sorting information.
+     * @return A {@link ResultPaginateDto} containing the paginated list of books 
+     *         and metadata such as total pages, current page, and total elements.
+     */
     @Override
     public ResultPaginateDto handleGetAllBooksAdminV2(BookCriteria bookCriteria, Pageable pageable) {
         BookCriteria criteriaCopy = bookCriteria.copy();
@@ -236,6 +258,14 @@ public class BookServiceImpl implements IBookService {
         return getBooks(criteriaCopy, pageable);
     }
 
+    /**
+     * Retrieves a paginated list of books based on the given criteria.
+     *
+     * @param bookCriteria The criteria used to filter books.
+     * @param pageable     The pagination and sorting information.
+     * @return A {@link ResultPaginateDto} containing the paginated list of books
+     *         and metadata such as total pages, current page, and total elements.
+     */
     private ResultPaginateDto getBooks(BookCriteria bookCriteria, Pageable pageable) {
         
         Page<Book> pageBook = bookQueryService.findByCriteria(bookCriteria, pageable);
