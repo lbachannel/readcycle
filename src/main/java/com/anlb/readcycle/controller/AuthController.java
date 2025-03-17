@@ -46,10 +46,12 @@ public class AuthController {
     private long refreshTokenExpired;
 
     /**
-     * {@code GET  /auth/verify-email} : Verifies a user's email using the provided token.
+     * {@code GET  /auth/verify-email} : Verifies a user's email using the provided
+     * token.
      *
      * @param token The email verification token.
-     * @return A {@link ResponseEntity} with a redirect to either the success or failure page.
+     * @return A {@link ResponseEntity} with a redirect to either the success or
+     *         failure page.
      */
     @GetMapping("/auth/verify-email")
     @ApiMessage("Verify email")
@@ -58,50 +60,57 @@ public class AuthController {
             User user = userService.handleFindUserByVerifyToken(token);
             userService.handleDeleteUserByEmail(user.getEmail());
             return ResponseEntity
-                .status(HttpStatus.FOUND)
-                .location(URI.create("http://localhost:3000/verify-email-failed"))
-                .build();
+                    .status(HttpStatus.FOUND)
+                    .location(URI.create("http://localhost:3000/verify-email-failed"))
+                    .build();
         }
-        
+
         userService.handleVerifyEmail(token);
         return ResponseEntity
-            .status(HttpStatus.FOUND)
-            .location(URI.create("http://localhost:3000/verify-email-success"))
-            .build();
+                .status(HttpStatus.FOUND)
+                .location(URI.create("http://localhost:3000/verify-email-success"))
+                .build();
     }
 
     /**
-     * {@code POST  /auth/change-password} : Changes the password of the authenticated user.
+     * {@code POST  /auth/change-password} : Changes the password of the
+     * authenticated user.
      *
-     * This endpoint allows users to update their password by providing the 
+     * This endpoint allows users to update their password by providing the
      * required details in the request body.
      *
-     * @param changePasswordDto a {@link ChangePasswordRequestDto} containing the old and new password.
-     * @return a {@link ResponseEntity} with {@link HttpStatus#NO_CONTENT} if the password change is successful.
+     * @param changePasswordDto a {@link ChangePasswordRequestDto} containing the
+     *                          old and new password.
+     * @return a {@link ResponseEntity} with {@link HttpStatus#NO_CONTENT} if the
+     *         password change is successful.
      * @throws InvalidException if the password change request is invalid.
      */
     @PostMapping("/auth/change-password")
     @ApiMessage("Change password")
-    public ResponseEntity<Void> changePassword(@RequestBody ChangePasswordRequestDto changePasswordDto) throws InvalidException {
+    public ResponseEntity<Void> changePassword(@RequestBody ChangePasswordRequestDto changePasswordDto)
+            throws InvalidException {
         userService.handleChangePassword(changePasswordDto);
         return ResponseEntity
-            .status(HttpStatus.NO_CONTENT)
-            .build();
+                .status(HttpStatus.NO_CONTENT)
+                .build();
     }
 
     /**
      * {@code POST  /auth/login} : login.
      *
      * @param loginDto The login request containing username and password.
-     * @return A {@link ResponseEntity} containing a {@link LoginResponseDto} 
+     * @return A {@link ResponseEntity} containing a {@link LoginResponseDto}
      *         with user details and a refresh token cookie.
-     * @throws InvalidException If authentication fails or the access token is invalid.
+     * @throws InvalidException If authentication fails or the access token is
+     *                          invalid.
      */
     @PostMapping("/auth/login")
     @ApiMessage("Login")
-    public ResponseEntity<LoginResponseDto> login(@Valid @RequestBody LoginRequestDto loginDto) throws InvalidException {
+    public ResponseEntity<LoginResponseDto> login(@Valid @RequestBody LoginRequestDto loginDto)
+            throws InvalidException {
         User dbUser = userService.handleGetUserByUsernameV2(loginDto.getUsername());
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword());
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                loginDto.getUsername(), loginDto.getPassword());
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
@@ -110,7 +119,7 @@ public class AuthController {
         String refreshToken = securityUtil.createRefreshToken(loginDto.getUsername(), response);
         // save refresh token into user
         String email = SecurityUtil.getCurrentUserLogin()
-                            .orElseThrow(() -> new InvalidException("Access Token invalid"));
+                .orElseThrow(() -> new InvalidException("Access Token invalid"));
         userService.handleUpdateRefreshTokenIntoUser(refreshToken, email);
 
         /**
@@ -118,19 +127,19 @@ public class AuthController {
          * .httpOnly(true): only server can use
          * .secure(true): cookies only use with https. for localhost it has no effect
          * .path("/"): allow all api using cookies
-         * .maxAge(60): cookies expiration time. defaullt is session 
+         * .maxAge(60): cookies expiration time. defaullt is session
          * .domain(): my website url
          */
         ResponseCookie responseCookie = ResponseCookie
-                                                .from("refresh_token", refreshToken)
-                                                .httpOnly(true)
-                                                .path("/")
-                                                .maxAge(refreshTokenExpired)
-                                                .build();
+                .from("refresh_token", refreshToken)
+                .httpOnly(true)
+                .path("/")
+                .maxAge(refreshTokenExpired)
+                .build();
         return ResponseEntity
-                    .ok()
-                    .header(HttpHeaders.SET_COOKIE, responseCookie.toString())
-                    .body(response);
+                .ok()
+                .header(HttpHeaders.SET_COOKIE, responseCookie.toString())
+                .body(response);
 
     }
 
@@ -138,7 +147,8 @@ public class AuthController {
      * {@code GET  /auth/account} : get the current user.
      *
      * @return the current user.
-     * @throws InvalidException If the user is not authenticated or the account cannot be retrieved.
+     * @throws InvalidException If the user is not authenticated or the account
+     *                          cannot be retrieved.
      */
     @GetMapping("/auth/account")
     @ApiMessage("Get current user login")
@@ -150,14 +160,16 @@ public class AuthController {
      * {@code GET  /auth/refresh} : Refreshes the authentication token.
      *
      * @param refreshTK The refresh token extracted from the "refresh_token" cookie.
-     *              Defaults to "abc" if the cookie is missing.
+     *                  Defaults to "abc" if the cookie is missing.
      * @return A {@link ResponseEntity} containing the new authentication tokens
-     *              in a {@link LoginResponseDto} along with a new refresh token cookie.
-     * @throws InvalidException If the refresh token is invalid or the user cannot be authenticated.
+     *         in a {@link LoginResponseDto} along with a new refresh token cookie.
+     * @throws InvalidException If the refresh token is invalid or the user cannot
+     *                          be authenticated.
      */
     @GetMapping("/auth/refresh")
     @ApiMessage("Get refresh token")
-    public ResponseEntity<LoginResponseDto> getRefreshToken(@CookieValue(name = "refresh_token", defaultValue = "abc") String refreshTK) throws InvalidException {
+    public ResponseEntity<LoginResponseDto> getRefreshToken(
+            @CookieValue(name = "refresh_token", defaultValue = "abc") String refreshTK) throws InvalidException {
         // decode check token is real or fake
         Jwt decodedToken = securityUtil.checkValidRefreshToken(refreshTK);
 
@@ -175,45 +187,46 @@ public class AuthController {
         userService.handleUpdateRefreshTokenIntoUser(new_refresh_token, email);
         // set cookies
         ResponseCookie responseCookie = ResponseCookie
-                                                .from("refresh_token", new_refresh_token)
-                                                .httpOnly(true)
-                                                .secure(true)
-                                                .path("/")
-                                                .maxAge(refreshTokenExpired)
-                                                .build();
+                .from("refresh_token", new_refresh_token)
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .maxAge(refreshTokenExpired)
+                .build();
 
         return ResponseEntity
-                        .ok()
-                        .header(HttpHeaders.SET_COOKIE, responseCookie.toString())
-                        .body(response);
+                .ok()
+                .header(HttpHeaders.SET_COOKIE, responseCookie.toString())
+                .body(response);
     }
 
     /**
      * {@code POST  /auth/logout} : Logout.
      *
      * @return A {@link ResponseEntity} with an empty body and a response header
-     *                to delete the refresh token cookie.
-     * @throws InvalidException If the user is not authenticated or the access token is invalid.
+     *         to delete the refresh token cookie.
+     * @throws InvalidException If the user is not authenticated or the access token
+     *                          is invalid.
      */
     @PostMapping("/auth/logout")
     public ResponseEntity<Void> logout() throws InvalidException {
         String email = SecurityUtil.getCurrentUserLogin()
-        .orElseThrow(() -> new InvalidException("Access Token invalid"));
+                .orElseThrow(() -> new InvalidException("Access Token invalid"));
         // update refresh token = null
         userService.handleUpdateRefreshTokenIntoUser(null, email);
 
         // remove refresh token cookie
         ResponseCookie deletResponseCookie = ResponseCookie
-                        .from("refresh_token", null)
-                        .httpOnly(true)
-                        .secure(true)
-                        .path("/")
-                        .maxAge(0)
-                        .build();
+                .from("refresh_token", null)
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .maxAge(0)
+                .build();
         return ResponseEntity
-                    .ok()
-                    .header(HttpHeaders.SET_COOKIE, deletResponseCookie.toString())
-                    .body(null);
+                .ok()
+                .header(HttpHeaders.SET_COOKIE, deletResponseCookie.toString())
+                .body(null);
 
     }
 }
