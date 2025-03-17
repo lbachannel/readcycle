@@ -55,6 +55,7 @@ public class UserMapper {
             user.setDateOfBirth(LocalDate.parse(registerDto.getDateOfBirth(), formatter));
         }
         user.setRole(this.roleService.handleFindById(2).get());
+        user.setActive(true);
 
         return user;
     }
