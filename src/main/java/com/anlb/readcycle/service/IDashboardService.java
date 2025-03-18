@@ -45,7 +45,7 @@ public class IDashboardService {
             String category = book.getCategory();
             String title = book.getTitle();
 
-            long borrowQty = borrowRepository.countByBook(book);
+            long borrowQty = borrowRepository.countByBook(book.getId());
 
             long currentQty = book.getQuantity();
 
